@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Brinme - Delivery marketplace. Save and Earn on delivery" />
+		<meta name="keywords" content="brinme, ride-sharing, travel, package delivery, mobility, app, delivery marketplace" />
+		<meta property="og:title" content="Brinme - Save and Earn on delivery" />
+		<meta property="og:description" content="Save with cheaper delivery options, or earn by delivering along your route" />
+		<meta property="og:image" content="images/bm4.webp" />
+		<meta property="og:url" content="https://brinme.pl" />
+		<title>Download Brinme - Save and Earn on delivery</title>
+		<link rel="icon" href="images/brinme_favicon.png" type="image/x-icon">
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-white text-[#0a0a0a] font-[Montserrat]">
+		<header class="max-w-[1200px] mx-auto px-6 py-4 my-[10px]">
+			<div class="flex flex-wrap items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] gap-4">
+				<h3 class="font-bold text-2xl md:text-3xl justify-self-start">
+					<a href="https://brinme.pl" class="no-underline text-[#25A8D9] flex items-center gap-2">
+						<img src="images/brinme_small_icon.webp" alt="Brinme Icon" class="h-[1.5em] w-[1.5em] rounded-full object-cover" />
+						brinme
+					</a>
+				</h3>
+				
+				<div class="md:hidden flex items-center" id="burgerMenuButton">
+					<button class="flex flex-col gap-1">
+						<span class="w-6 h-0.5 bg-[#0a0a0a]"></span>
+						<span class="w-6 h-0.5 bg-[#0a0a0a]"></span>
+						<span class="w-6 h-0.5 bg-[#0a0a0a]"></span>
+					</button>
+				</div>
+
+				<nav class="w-full md:w-auto hidden md:flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 justify-self-center" id="navMenu">
+					<a href="https://brinme.pl" class="text-[#0a0a0a] text-md font-medium hover:font-bold">Home</a>
+					<a href="https://brinme.pl/download" class="text-[#0a0a0a] text-md font-medium hover:font-bold">Download</a>
+					<a href="https://brinme.pl/contacts" class="text-[#0a0a0a] text-md font-medium hover:font-bold">Contact</a>
+					<a href="https://brinme.pl/contacts" class="md:hidden px-6 py-3 bg-[#25A8D9] text-white text-sm font-medium rounded-full hover:bg-[#1e90c7] transition-all whitespace-nowrap shadow-lg">Contacts</a>
+				</nav>
+			
+				<div class="hidden md:block justify-self-end relative">
+					<div class="ripple-circle"></div>
+					<div class="ripple-circle"></div>
+					<a href="https://brinme.pl/contacts" class="inline-block relative z-10 px-6 py-3 bg-[#25A8D9] text-white text-sm font-medium rounded-full hover:bg-[#1e90c7] transition-all whitespace-nowrap shadow-lg">Try our app</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Marquee Section -->
+		<section class="bg-[#032B3F] py-3 overflow-hidden">
+			<a href="https://brinme.pl/download">
+				<div class="relative flex whitespace-nowrap">
+					<div class="animate-marquee flex space-x-24">
+						<span class="text-white font-semibold text-lg">MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀</span>
+						<span class="text-white font-semibold text-lg"></span>
+					</div>
+					<div class="animate-marquee flex space-x-24" aria-hidden="true">
+						<span class="text-white font-semibold text-lg"></span>
+						<span class="text-white font-semibold text-lg">🚀 MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀&nbsp;&nbsp;</span>
+						<span class="text-white font-semibold text-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚀 MVP is available now 🚀</span>
+					</div>
+				</div>
+			</a>
+		</section>
+
+		<style>
+			@keyframes marquee {
+				0%   { transform: translateX(0%); }
+				100% { transform: translateX(-100%); }
+			}
+			.animate-marquee {
+				display: flex;
+				animation: marquee 15s linear infinite;
+			}
+		</style>
+
+		<!-- Download Section -->
+		<section class="px-[5%] py-16 md:py-24 lg:py-28">
+			<div class="container">
+				<div class="mx-auto w-full max-w-3xl text-center">
+					<h2 class="mb-4 text-2xl md:text-4xl lg:text-4xl font-bold">
+						🚀 MVP Release Available
+					</h2>
+					<p class="mb-8 md:text-md">
+						The MVP version of our <span class="font-semibold">Brinme app</span> for <span class="font-semibold">Android</span> is now available.  
+						You can download and try it out by clicking the button below.
+					</p>
+
+					<a href="https://firebasestorage.googleapis.com/v0/b/your-project-id.appspot.com/o/app-release.apk?alt=media"
+						class="inline-flex items-center px-8 py-2 bg-[#25A8D9] text-white text-bold font-medium rounded-full hover:bg-[#1e90c7] transition-all whitespace-nowrap shadow-lg">
+						<svg fill="#FFFFFF" width="36px" height="40px" viewBox="0 0 48 34" version="1.1" xmlns="http://www.w3.org/2000/svg">
+							<path d="M23.35 12.653l2.496-4.323c0.044-0.074 0.070-0.164 0.070-0.26 0-0.287-0.232-0.519-0.519-0.519-0.191 0-0.358 0.103-0.448 0.257l-0.001 0.002-2.527 4.377c-1.887-0.867-4.094-1.373-6.419-1.373s-4.532 0.506-6.517 1.413l0.098-0.040-2.527-4.378c-0.091-0.156-0.259-0.26-0.45-0.26-0.287 0-0.519 0.232-0.519 0.519 0 0.096 0.026 0.185 0.071 0.262l-0.001-0.002 2.496 4.323c-4.286 2.367-7.236 6.697-7.643 11.744l-0.003 0.052h29.991c-0.41-5.099-3.36-9.429-7.57-11.758l-0.076-0.038zM9.098 20.176c-0 0-0 0-0 0-0.69 0-1.249-0.559-1.249-1.249s0.559-1.249 1.249-1.249c0.69 0 1.249 0.559 1.249 1.249v0c-0.001 0.689-0.559 1.248-1.249 1.249h-0zM22.902 20.176c-0 0-0 0-0 0-0.69 0-1.249-0.559-1.249-1.249s0.559-1.249 1.249-1.249c0.69 0 1.249 0.559 1.249 1.249v0c-0.001 0.689-0.559 1.248-1.249 1.249h-0z"></path>
+						</svg>
+						Download for Android
+					</a>
+					
+					<p class="mb-8 mt-12 md:text-md">
+						Or you can test our MVP bots in popular <span class="font-semibold">Messengers</span>
+					</p>
+					
+					<div class="space-x-6">
+						<a href="https://firebasestorage.googleapis.com/v0/b/your-project-id.appspot.com/o/app-release.apk?alt=media"
+							class="inline-flex items-center px-6 py-1 bg-[#25A8D9] text-white text-bold font-medium rounded-full hover:bg-[#1e90c7] transition-all whitespace-nowrap shadow-lg">
+							<svg fill="#FFFFFF" width="36px" height="40px" viewBox="0 0 64 50" xmlns="http://www.w3.org/2000/svg">
+								<path d="M41.4193 7.30899C41.4193 7.30899 45.3046 5.79399 44.9808 9.47328C44.8729 10.9883 43.9016 16.2908 43.1461 22.0262L40.5559 39.0159C40.5559 39.0159 40.3401 41.5048 38.3974 41.9377C36.4547 42.3705 33.5408 40.4227 33.0011 39.9898C32.5694 39.6652 24.9068 34.7955 22.2086 32.4148C21.4531 31.7655 20.5897 30.4669 22.3165 28.9519L33.6487 18.1305C34.9438 16.8319 36.2389 13.8019 30.8426 17.4812L15.7331 27.7616C15.7331 27.7616 14.0063 28.8437 10.7686 27.8698L3.75342 25.7055C3.75342 25.7055 1.16321 24.0823 5.58815 22.459C16.3807 17.3729 29.6555 12.1786 41.4193 7.30899Z"/>
+							</svg>
+							Use in Telegram
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<footer class="px-[7%] py-12 md:py-18 lg:py-20 bg-[#032B3F] text-white">
+			<div class="container">
+				<div class="grid grid-cols-1 items-start justify-between gap-x-[8vw] gap-y-12 pb-12 sm:gap-y-10 md:gap-y-14 md:pb-18 lg:grid-cols-[1fr_0.5fr] lg:pb-20">
+					<div class="flex flex-col items-start gap-3 text-white">
+						<a href="https://brinme.pl" class="text-white text-sm font-medium hover:text-[#25A8D9]">Home</a>
+						<a href="https://brinme.pl/download" class="text-white text-sm font-medium hover:text-[#25A8D9]">Download</a>
+						<a href="https://brinme.pl/contacts" class="text-white text-sm font-medium hover:text-[#25A8D9]">Contact</a>
+					</div>
+
+					<div class="max-w-md lg:min-w-[25rem]">
+						<p class="mb-3 font-semibold md:mb-4">
+							Subscribe
+						</p>
+						<form class="mb-3 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_max-content] sm:gap-y-4 md:gap-4" id="form">
+							<div class="relative flex w-full items-center">
+								<input
+									type="email"
+									class="rounded-[1.75rem] flex size-full py-2 align-middle transition-all duration-200 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border border-white bg-[#052F41] text-white placeholder:text-gray-300 min-h-11 px-3"
+									id="email"
+									placeholder="Enter your email"
+									value=""
+									name="email"/>
+							</div>
+							<button
+								type="submit"
+								class="rounded-[1.75rem] inline-flex gap-3 items-center justify-center whitespace-nowrap transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none border border-white text-white bg-[#052F41] hover:bg-[#1e90c7] px-5 py-2"
+								title="Subscribe">
+								Subscribe
+							</button>
+						</form>
+						<p class="text-xs text-gray-300">
+							By subscribing you agree with our Privacy Policy
+						</p>
+					</div>
+				</div>
+
+				<div class="h-px w-full bg-white/20"></div>
+
+				<div class="flex flex-col items-start justify-start pt-6 pb-4 text-sm text-white md:flex-row md:items-center md:justify-between md:pt-8 md:pb-0 md:text-center">
+					<ul class="grid grid-flow-row grid-cols-[max-content] gap-y-4 text-sm md:grid-flow-col md:gap-x-6 md:gap-y-0 lg:justify-center">
+						<li>
+							<a href="https://brinme.pl/terms" target="_blank" class="hover:text-[#25A8D9] transition-colors">
+								Terms & Conditions
+							</a>
+						</li>
+						<li>
+							<a href="https://brinme.pl/privacy" target="_blank" class="hover:text-[#25A8D9] transition-colors">
+								Privacy Policy
+							</a>
+						</li>
+						<li>
+							<a href="https://brinme.pl/cookies" target="_blank" class="hover:text-[#25A8D9] transition-colors">
+								Cookies Settings
+							</a>
+						</li>
+					</ul>
+					<p class="text-sm text-gray-400 mt-4 md:mt-0">
+						© 2025 Brinme. All rights reserved
+					</p>
+				</div>
+			</div>
+		</footer>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+	</body>
+</html>

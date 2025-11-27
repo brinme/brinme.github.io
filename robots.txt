@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /privacy_policy.md
+Disallow: /cookies_settings.md
+
+Sitemap: https://brinme.pl/sitemap.xml
