@@ -5,6 +5,32 @@ if (burgerMenuButton) {
 	});
 }
 
+const messages = {
+	en: {
+		enterEmail: 'Please enter your email address.',
+		newsletterSuccess: 'You are added to our newsletter, Thank you!',
+		error: 'Error, please write email to us: biuro@brinme.pl',
+		enterName: 'Please enter your name.',
+		enterMessage: 'Please enter your message.',
+		acceptTerms: 'You need to accept the Terms',
+		contactSuccess: 'Sent, Thank you! We will contact you soon.'
+	},
+	pl: {
+		enterEmail: 'Proszę podać adres e-mail.',
+		newsletterSuccess: 'Zostałeś dodany do naszego newslettera, dziękujemy!',
+		error: 'Błąd, prosimy o kontakt mailowy: biuro@brinme.pl',
+		enterName: 'Proszę podać swoje imię.',
+		enterMessage: 'Proszę wpisać wiadomość.',
+		acceptTerms: 'Musisz zaakceptować Regulamin',
+		contactSuccess: 'Wysłano, dziękujemy! Skontaktujemy się wkrótce.'
+	}
+};
+
+function getMessage(key) {
+	const lang = document.documentElement.lang || 'en';
+	return (messages[lang] || messages['en'])[key];
+}
+
 emailjs.init({
 	publicKey: 'cHgdAfRLWl7UDIbbX',
 	blockHeadless: true,
@@ -21,7 +47,7 @@ if (form) {
 
 		const emailInput = this.querySelector('input[name="email"]');
 		if (!emailInput || !emailInput.value.trim()) {
-			alert('Please enter your email address.');
+			alert(getMessage('enterEmail'));
 			return;
 		}
 
@@ -30,10 +56,10 @@ if (form) {
 	   
 		emailjs.sendForm(serviceID, templateID, this)
 			.then(() => {
-				alert('You are added to our newsletter, Thank you!');
+				alert(getMessage('newsletterSuccess'));
 				this.reset();
 			}, (err) => {
-				alert('Error, please write email to us: biuro@brinme.pl');
+				alert(getMessage('error'));
 			});
 	});
 }
@@ -48,15 +74,15 @@ if (formSend) {
 		const messageInput = this.querySelector('textarea[name="message"]');
 
 		if (!nameInput || !nameInput.value.trim()) {
-			alert('Please enter your name.');
+			alert(getMessage('enterName'));
 			return;
 		}
 		if (!emailInput || !emailInput.value.trim()) {
-			alert('Please enter your email address.');
+			alert(getMessage('enterEmail'));
 			return;
 		}
 		if (!messageInput || !messageInput.value.trim()) {
-			alert('Please enter your message.');
+			alert(getMessage('enterMessage'));
 			return;
 		}
 
@@ -65,16 +91,16 @@ if (formSend) {
 
 		const terms = document.getElementById('terms');
 		if (terms && !terms.checked) { 
-			alert('You need to accept the Terms');
+			alert(getMessage('acceptTerms'));
 			return false; 
 		}
 	   
 		emailjs.sendForm(serviceID, templateID2, this)
 			.then(() => {
-				alert('Sent, Thank you! We will contact you soon.');
+				alert(getMessage('contactSuccess'));
 				this.reset();
 			}, (err) => {
-				alert('Error, please write email to us: biuro@brinme.pl');
+				alert(getMessage('error'));
 			});
 	});
 }
