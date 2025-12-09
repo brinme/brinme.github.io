@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brinme App - Ride Details</title>
+    <link rel="icon" href="../images/brinme_favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Desktop Sidebar -->
+        <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200">
+            <div class="p-6 flex items-center gap-2 border-b border-gray-100">
+                <img src="../images/brinme_small_icon.webp" alt="Brinme" class="h-8 w-8 rounded-full">
+                <span class="font-bold text-xl text-[#25A8D9]">brinme</span>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Home
+                </a>
+                <a href="rides.html" class="flex items-center gap-3 px-4 py-3 text-[#25A8D9] bg-blue-50 rounded-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    Rides
+                </a>
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Profile
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-100">
+                <button id="logoutBtnDesktop" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium w-full transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden">
+            <!-- Mobile Header -->
+            <header class="md:hidden bg-white shadow-sm p-4 flex items-center gap-4 sticky top-0 z-10">
+                <a href="javascript:history.back()" class="text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </a>
+                <h1 class="font-bold text-lg text-gray-800">Ride Details</h1>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-4 pb-32 md:p-8 md:pb-32">
+                <div class="max-w-2xl mx-auto space-y-6" id="rideContent">
+                    <!-- Loading State -->
+                    <div class="animate-pulse space-y-4">
+                        <div class="h-32 bg-gray-200 rounded-xl"></div>
+                        <div class="h-48 bg-gray-200 rounded-xl"></div>
+                        <div class="h-24 bg-gray-200 rounded-xl"></div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Action Bar -->
+            <div class="fixed bottom-0 left-0 right-0 md:left-64 bg-white border-t border-gray-200 p-4 shadow-lg z-20" id="actionBar">
+                <!-- Dynamic Action Buttons -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const rideContent = document.getElementById('rideContent');
+        const actionBar = document.getElementById('actionBar');
+        const logoutBtnDesktop = document.getElementById('logoutBtnDesktop');
+
+        // Helper: Format Date
+        const formatDate = (dateString) => {
+            if (!dateString) return "Unknown Date";
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            let suffix = 'th';
+            if (day % 10 === 1 && day !== 11) suffix = 'st';
+            else if (day % 10 === 2 && day !== 12) suffix = 'nd';
+            else if (day % 10 === 3 && day !== 13) suffix = 'rd';
+
+            return `${day}${suffix} of ${month}, ${year}, ${hours}:${minutes}`;
+        };
+
+        // Helper: Render Stars
+        const getStarsHTML = (rating) => {
+            let html = '<div class="flex text-yellow-400 text-xs">';
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i) {
+                    html += `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                } else {
+                    html += `<svg class="w-4 h-4 text-gray-200" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                }
+            }
+            html += '</div>';
+            return html;
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const rideId = urlParams.get('id');
+
+                if (!rideId) {
+                    alert("No ride specified.");
+                    window.location.href = 'rides.html';
+                    return;
+                }
+
+                try {
+                    // 1. Fetch Ride
+                    const rideDoc = await getDoc(doc(db, "rides", rideId));
+                    if (!rideDoc.exists()) {
+                        alert("Ride not found.");
+                        window.location.href = 'rides.html';
+                        return;
+                    }
+                    const ride = rideDoc.data();
+                    ride.rideId = rideDoc.id; // Ensure ID is available
+
+                    // 2. Fetch Driver
+                    const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
+                    const driver = driverDoc.exists() ? driverDoc.data() : { firstName: "Unknown", lastName: "Driver" };
+
+                    // 3. Fetch Current User's Request (if any)
+                    let myRequest = null;
+                    const q = query(collection(db, "requests"), where("rideId", "==", rideId), where("userId", "==", user.uid));
+                    const requestSnapshot = await getDocs(q);
+                    if (!requestSnapshot.empty) {
+                        myRequest = requestSnapshot.docs[0].data();
+                        myRequest.id = requestSnapshot.docs[0].id;
+                    }
+
+                    renderRideDetails(user, ride, driver, myRequest);
+
+                } catch (error) {
+                    console.error("Error loading details:", error);
+                    rideContent.innerHTML = `<p class="text-red-500">Error loading ride details.</p>`;
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        function renderRideDetails(currentUser, ride, driver, myRequest) {
+            const isOwner = currentUser.uid === ride.ownerId;
+            
+            // --- Driver Info ---
+            const driverName = `${driver.firstName || ''} ${driver.lastName || ''}`;
+            const driverPhoto = (driver.profile && driver.profile.photo) ? driver.profile.photo : `https://ui-avatars.com/api/?name=${driverName}&background=random`;
+            
+            // Calculate Rating
+            let driverRating = 0;
+            if (driver.scores && driver.scores.length > 0) {
+                driverRating = (driver.scores.reduce((a, b) => a + b, 0) / driver.scores.length).toFixed(1);
+            }
+
+            // --- Route Info ---
+            const fromPoint = ride.points[0];
+            const toPoint = ride.points[ride.points.length - 1];
+            const fromTime = formatDate(ride.times[0]);
+            const toTime = formatDate(ride.times[ride.times.length - 1]);
+            const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
+
+            // --- Details ---
+            const segment = ride.rideSegments[0] || {};
+            const price = segment.packagePrice || 0;
+            const currency = segment.currency || "";
+            const maxPackages = segment.maxPackages || 0;
+            const currentPackages = segment.packages ? segment.packages.length : 0; // Assuming this array tracks accepted packages
+
+            // --- Render Content ---
+            rideContent.innerHTML = `
+                <!-- Driver Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-6">
+                        <!-- Picture -->
+                        <div class="relative flex-shrink-0">
+                            <img src="${driverPhoto}" alt="${driverName}" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md">
+                        </div>
+                        
+                        <!-- Name & Rating Column -->
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-bold text-gray-900">${driverName}</h2>
+                            <p class="text-gray-500 text-sm mb-2">${driver.email || ''}</p>
+                            
+                            <!-- Rating -->
+                            <div class="flex items-center gap-1">
+                                ${getStarsHTML(driverRating)}
+                                <a href="reviews.html?userId=${ride.ownerId}" class="text-xs text-[#25A8D9] hover:underline ml-2 focus:outline-none">
+                                    (${driver.scores ? driver.scores.length : 0} reviews)
+                                </a>
+                            </div>
+                        </div>
+
+                        ${!isOwner ? `
+                        <button onclick="window.location.href='chat.html?userId=${ride.ownerId}'" class="px-4 py-2 text-[#25A8D9] border border-[#25A8D9] hover:bg-blue-50 rounded-xl transition-colors flex items-center gap-2 font-bold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            <span>Chat</span>
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Itinerary Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-900 mb-6">Itinerary</h3>
+                    <div class="flex flex-col gap-0 relative">
+                        <div class="absolute left-[11px] top-3 bottom-3 w-0.5 bg-gray-100 -z-10"></div>
+                        
+                        <!-- From -->
+                        <div class="flex gap-4 pb-8">
+                            <div class="flex flex-col items-center pt-1">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-[#25A8D9]"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">From</p>
+                                <p class="font-bold text-lg text-gray-900 leading-tight">${fromPoint.name}</p>
+                                <p class="text-sm text-gray-500 mt-1 font-medium">${fromTime}</p>
+                            </div>
+                        </div>
+
+                        <!-- Stops -->
+                        ${stops ? `
+                        <div class="flex gap-4 pb-8">
+                            <div class="flex flex-col items-center pt-1">
+                                <div class="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">Stops</p>
+                                <p class="text-sm text-gray-700 leading-relaxed">${stops}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <!-- To -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center pt-1">
+                                <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">To</p>
+                                <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
+                                <p class="text-sm text-gray-500 mt-1 font-medium">${toTime}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
+                    <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                        <span class="text-gray-600">Price per parcel</span>
+                        <span class="font-bold text-[#25A8D9] text-lg">${price} ${currency}</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                        <span class="text-gray-600">Available Space</span>
+                        <span class="font-bold text-gray-900">${maxPackages - currentPackages} <span class="text-sm font-normal text-gray-500">/ ${maxPackages} parcels</span></span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                        <span class="text-gray-600">Car Plate</span>
+                        <span class="font-mono bg-gray-100 px-2 py-1 rounded text-gray-800 font-bold">${ride.plate || 'N/A'}</span>
+                    </div>
+                    ${ride.comment ? `
+                    <div class="pt-2">
+                        <p class="text-xs text-gray-500 uppercase mb-2">Comment</p>
+                        <p class="text-gray-700 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg">${ride.comment}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${isOwner ? `
+                    <div class="pt-4 mt-4 border-t border-gray-100">
+                        <button onclick="window.location.href='requests.html?rideId=${ride.rideId}'" class="w-full py-3 bg-white border border-[#25A8D9] text-[#25A8D9] font-bold rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            View Requests (${ride.requests ? ride.requests.length : 0})
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // --- Render Action Bar ---
+            renderActionBar(isOwner, ride, myRequest, currentUser);
+        }
+
+        function renderActionBar(isOwner, ride, myRequest, currentUser) {
+            actionBar.innerHTML = '';
+            const container = document.createElement('div');
+            container.className = 'max-w-2xl mx-auto flex flex-col gap-3';
+
+            if (isOwner) {
+                // --- Owner Actions ---
+                
+                // Status Actions
+                if (ride.status === 'IDLE') {
+                    const startTime = new Date(ride.times[0]);
+                    const now = new Date();
+                    
+                    if (now >= startTime) {
+                        // Show Start Button
+                        const startBtn = document.createElement('button');
+                        startBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
+                        startBtn.textContent = 'Start Ride';
+                        startBtn.onclick = () => updateRideStatus(ride.rideId, 'STARTED');
+                        container.appendChild(startBtn);
+                    } else {
+                        // Show Cancel Button
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
+                        cancelBtn.textContent = 'Cancel Ride';
+                        cancelBtn.onclick = () => deleteRide(ride.rideId);
+                        container.appendChild(cancelBtn);
+                        
+                        // Optional: Show countdown or message
+                        const msg = document.createElement('div');
+                        msg.className = 'text-center text-xs text-gray-400';
+                        msg.textContent = 'You can start the ride once the departure time is reached.';
+                        container.appendChild(msg);
+                    }
+
+                } else if (ride.status === 'STARTED') {
+                    const endBtn = document.createElement('button');
+                    endBtn.className = 'w-full py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-900 transition-colors';
+                    endBtn.textContent = 'End Ride';
+                    endBtn.onclick = () => updateRideStatus(ride.rideId, 'ENDED');
+                    container.appendChild(endBtn);
+                } else if (ride.status === 'ENDED') {
+                    const rateBtn = document.createElement('button');
+                    rateBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
+                    rateBtn.textContent = 'Rate Senders';
+                    rateBtn.onclick = () => alert('Rating feature coming soon');
+                    container.appendChild(rateBtn);
+                }
+
+            } else {
+                // --- Requester Actions ---
+                
+                if (myRequest) {
+                    // Request Exists
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = 'flex justify-between items-center';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'text-gray-600 font-medium';
+                    label.textContent = 'Request Status';
+                    
+                    const statusBadge = document.createElement('span');
+                    let statusColorClass = 'bg-gray-100 text-gray-600';
+                    if (myRequest.status === 'PENDING') statusColorClass = 'bg-orange-100 text-orange-600';
+                    else if (myRequest.status === 'ACCEPTED') statusColorClass = 'bg-green-100 text-green-600';
+                    else if (myRequest.status === 'REJECTED') statusColorClass = 'bg-red-100 text-red-600';
+
+                    statusBadge.className = `px-4 py-2 rounded-full text-sm font-bold ${statusColorClass}`;
+                    statusBadge.textContent = myRequest.status;
+
+                    statusDiv.appendChild(label);
+                    statusDiv.appendChild(statusBadge);
+                    container.appendChild(statusDiv);
+
+                    if (myRequest.status === 'PENDING' || myRequest.status === 'ACCEPTED') {
+                        const cancelReqBtn = document.createElement('button');
+                        cancelReqBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
+                        cancelReqBtn.textContent = 'Cancel Request';
+                        cancelReqBtn.onclick = () => cancelRequest(ride, myRequest);
+                        container.appendChild(cancelReqBtn);
+                    }
+                    
+                    if (ride.status === 'ENDED' && myRequest.status === 'ACCEPTED') {
+                         const rateDriverBtn = document.createElement('button');
+                        rateDriverBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
+                        rateDriverBtn.textContent = 'Rate Driver';
+                        rateDriverBtn.onclick = () => alert('Rating feature coming soon');
+                        container.appendChild(rateDriverBtn);
+                    }
+
+                } else {
+                    // No Request - Create One
+                    if (ride.status === 'IDLE') {
+                        const inputGroup = document.createElement('div');
+                        inputGroup.className = 'flex gap-4 items-end';
+                        
+                        inputGroup.innerHTML = `
+                            <div class="flex-1">
+                                <label class="block text-xs text-gray-500 mb-1">Packages</label>
+                                <input type="number" id="packageCount" value="1" min="1" max="10" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-[#25A8D9] focus:border-[#25A8D9]">
+                            </div>
+                        `;
+                        
+                        const requestBtn = document.createElement('button');
+                        requestBtn.className = 'flex-1 py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
+                        requestBtn.textContent = 'Request delivery';
+                        requestBtn.onclick = async () => {
+                            const count = document.getElementById('packageCount').value;
+                            await createRequest(ride, currentUser, parseInt(count));
+                        };
+
+                        inputGroup.appendChild(requestBtn);
+                        container.appendChild(inputGroup);
+                    } else {
+                        const msg = document.createElement('div');
+                        msg.className = 'text-center text-gray-500 font-medium';
+                        msg.textContent = 'This ride is no longer accepting requests.';
+                        container.appendChild(msg);
+                    }
+                }
+            }
+
+            actionBar.appendChild(container);
+        }
+
+        async function deleteRide(rideId) {
+            if(!confirm('Are you sure you want to delete this ride? This action cannot be undone.')) return;
+
+            try {
+                // 1. Reject all pending/accepted requests
+                const qRequests = query(collection(db, "requests"), where("rideId", "==", rideId));
+                const requestsSnapshot = await getDocs(qRequests);
+                
+                const updatePromises = requestsSnapshot.docs.map(doc => 
+                    updateDoc(doc.ref, { status: 'REJECTED' })
+                );
+                await Promise.all(updatePromises);
+
+                // 2. Delete startPoints entries
+                const qStartPoints = query(collection(db, "startPoints"), where("rideId", "==", rideId));
+                const startPointsSnapshot = await getDocs(qStartPoints);
+                
+                const deleteStartPointsPromises = startPointsSnapshot.docs.map(doc => 
+                    deleteDoc(doc.ref)
+                );
+                await Promise.all(deleteStartPointsPromises);
+
+                // 3. Delete the ride document
+                await deleteDoc(doc(db, "rides", rideId));
+
+                alert('Ride deleted successfully.');
+                window.location.href = 'rides.html';
+
+            } catch (error) {
+                console.error("Error deleting ride:", error);
+                alert("Error deleting ride: " + error.message);
+            }
+        }
+
+        async function cancelRequest(ride, request) {
+            if (!confirm("Are you sure you want to cancel this request?")) return;
+
+            try {
+                const rideRef = doc(db, "rides", ride.rideId);
+                const requestRef = doc(db, "requests", request.id);
+
+                // 1. Delete Request Document
+                await deleteDoc(requestRef);
+
+                // 2. Remove from Ride's requests array
+                await updateDoc(rideRef, {
+                    requests: arrayRemove(request.id)
+                });
+
+                // 3. If Accepted, remove from packages
+                if (request.status === 'ACCEPTED') {
+                    const rideDoc = await getDoc(rideRef);
+                    const rideData = rideDoc.data();
+                    
+                    if (rideData.rideSegments && rideData.rideSegments.length > 0) {
+                        const segment = rideData.rideSegments[0];
+                        if (segment.packages) {
+                            const originalLength = segment.packages.length;
+                            segment.packages = segment.packages.filter(p => p.requestId !== request.id);
+                            
+                            if (segment.packages.length !== originalLength) {
+                                await updateDoc(rideRef, { rideSegments: rideData.rideSegments });
+                            }
+                        }
+                    }
+                }
+
+                alert("Request cancelled.");
+                window.location.reload();
+
+            } catch (error) {
+                console.error("Error cancelling request:", error);
+                alert("Error cancelling request.");
+            }
+        }
+
+        async function updateRideStatus(rideId, status) {
+            try {
+                await updateDoc(doc(db, "rides", rideId), { status: status });
+                window.location.reload();
+            } catch (e) {
+                console.error(e);
+                alert("Error updating status");
+            }
+        }
+
+        async function createRequest(ride, user, packages) {
+            try {
+                // Create Request Document
+                const requestData = {
+                    rideId: ride.rideId,
+                    userId: user.uid,
+                    packages: packages,
+                    status: 'PENDING',
+                    createdAt: new Date().toISOString()
+                };
+                
+                const docRef = await addDoc(collection(db, "requests"), requestData);
+                
+                // Update Ride's requests array
+                await updateDoc(doc(db, "rides", ride.rideId), {
+                    requests: arrayUnion(docRef.id)
+                });
+                
+                alert("Request sent!");
+                window.location.reload();
+
+            } catch (e) {
+                console.error(e);
+                alert("Error sending request");
+            }
+        }
+
+        if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
