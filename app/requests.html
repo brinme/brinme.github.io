@@ -177,8 +177,12 @@
 
             // Get Price Info
             const segment = (ride.rideSegments && ride.rideSegments.length > 0) ? ride.rideSegments[0] : {};
-            const price = segment.packagePrice || 0;
             const currency = segment.currency || "";
+            
+            let price = segment.packagePrice || 0;
+            if (request.packageType === 'S' && segment.priceS) price = segment.priceS;
+            if (request.packageType === 'M' && segment.priceM) price = segment.priceM;
+            if (request.packageType === 'L' && segment.priceL) price = segment.priceL;
 
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100';
@@ -187,10 +191,10 @@
             if (request.status === 'PENDING') {
                 actionButtons = `
                     <div class="flex gap-3 mt-4 pt-4 border-t border-gray-100">
-                        <button onclick="handleAction('${request.id}', '${request.userId}', ${request.packages}, 'REJECTED')" class="flex-1 py-2 bg-red-50 text-red-500 font-bold rounded-lg hover:bg-red-100 transition-colors">
+                        <button onclick="handleAction('${request.id}', '${request.userId}', ${request.packages}, '${request.packageType || 'S'}', 'REJECTED')" class="flex-1 py-2 bg-red-50 text-red-500 font-bold rounded-lg hover:bg-red-100 transition-colors">
                             Reject
                         </button>
-                        <button onclick="handleAction('${request.id}', '${request.userId}', ${request.packages}, 'ACCEPTED')" class="flex-1 py-2 bg-green-50 text-green-500 font-bold rounded-lg hover:bg-green-100 transition-colors">
+                        <button onclick="handleAction('${request.id}', '${request.userId}', ${request.packages}, '${request.packageType || 'S'}', 'ACCEPTED')" class="flex-1 py-2 bg-green-50 text-green-500 font-bold rounded-lg hover:bg-green-100 transition-colors">
                             Accept
                         </button>
                     </div>
@@ -222,7 +226,7 @@
                     </div>
                     <div class="text-right">
                         <span class="block text-xl font-bold text-[#25A8D9]">${request.packages} x ${price} ${currency}</span>
-                        <span class="text-xs text-gray-500">Parcels</span>
+                        <span class="text-xs text-gray-500">Parcels (${request.packageType || 'S'})</span>
                     </div>
                 </div>
                 ${actionButtons}
@@ -231,7 +235,7 @@
             requestsList.appendChild(card);
         }
 
-        window.handleAction = async (requestId, userId, packages, status) => {
+        window.handleAction = async (requestId, userId, packages, packageType, status) => {
             try {
                 // 1. Update Request Status
                 await updateDoc(doc(db, "requests", requestId), { status: status });
@@ -257,24 +261,29 @@
                         if (!segment.packages) segment.packages = [];
                         
                         // Check capacity
-                        if (segment.packages.length + packages > segment.maxPackages) {
-                            alert("Not enough space!");
+                        let currentCount = 0;
+                        if (segment.packages) {
+                            currentCount = segment.packages.filter(p => p.type === packageType).length;
+                        }
+                        
+                        let maxCapacity = 0;
+                        if (packageType === 'S') maxCapacity = segment.maxS || 0;
+                        else if (packageType === 'M') maxCapacity = segment.maxM || 0;
+                        else if (packageType === 'L') maxCapacity = segment.maxL || 0;
+
+                        if (currentCount + packages > maxCapacity) {
+                            alert(`Not enough space for ${packageType} packages!`);
                             // Revert request status?
                             await updateDoc(doc(db, "requests", requestId), { status: 'PENDING' });
                             return;
                         }
 
-                        // Add package entries (one per package count, or just one entry with count?)
-                        // The model implies `packages` is a list. 
-                        // If `packages` is just a list of IDs or objects, let's push objects.
-                        // Based on `ride-details.html` using `segment.packages.length`, it seems it counts items.
-                        // So if I request 2 packages, I should probably push 2 items or 1 item with weight 2?
-                        // Let's assume 1 item per package for simplicity of length check.
-                        
+                        // Add package entries
                         for(let i=0; i<packages; i++) {
                             segment.packages.push({
                                 requestId: requestId,
                                 userId: userId,
+                                type: packageType,
                                 addedAt: new Date().toISOString()
                             });
                         }

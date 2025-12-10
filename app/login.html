@@ -68,7 +68,7 @@
     <script type="module">
         console.log("Login script loaded");
         import { auth, db } from './js/firebase-config.js';
-        import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
 
@@ -83,7 +83,14 @@
             const password = document.getElementById('password').value;
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (!user.emailVerified) {
+                    await signOut(auth);
+                    throw new Error("Please verify your email address before logging in.");
+                }
+
                 console.log("Login successful");
                 window.location.href = 'index.html';
             } catch (error) {
@@ -99,6 +106,12 @@
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
+                
+                if (!user.emailVerified) {
+                    await signOut(auth);
+                    throw new Error("Please verify your email address before logging in.");
+                }
+
                 console.log("Google login successful", user);
 
                 // Check if user exists in Firestore

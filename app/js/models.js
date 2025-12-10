@@ -39,12 +39,16 @@ export function createUser(userId, email, firstName = "", lastName = "") {
     };
 }
 
-export function createRideSegment(packages = [], maxPackages = 0, packagePrice = 0, currency = "") {
+export function createRideSegment(packages = [], currency = "", maxS = 0, maxM = 0, maxL = 0, priceS = 0, priceM = 0, priceL = 0) {
     return {
         packages,
-        maxPackages,
-        packagePrice,
-        currency
+        currency,
+        maxS,
+        maxM,
+        maxL,
+        priceS,
+        priceM,
+        priceL
     };
 }
 
@@ -62,13 +66,14 @@ export function createRide(rideId, ownerId, points = [], times = [], rideSegment
     };
 }
 
-export function createRequest(requestId, userId, rideId, packages = 0, points = []) {
+export function createRequest(requestId, userId, rideId, packages = 0, points = [], packageType = "S") {
     return {
         requestId,
         userId,
         rideId,
         packages,
         points, // List of Location objects
-        status: RequestStatus.PENDING
+        status: RequestStatus.PENDING,
+        packageType
     };
 }
