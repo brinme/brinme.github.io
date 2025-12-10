@@ -141,6 +141,35 @@
 
         // Check Auth State
         onAuthStateChanged(auth, async (user) => {
+            // Telegram Auto-Registration / Login Check
+            if (!user && window.isTelegramApp && window.telegramUser) {
+                const tgId = window.telegramUser.id;
+                console.log("Checking Telegram User:", tgId);
+                
+                try {
+                    // Query by telegramId
+                    const q = query(collection(db, "users"), where("telegramId", "==", tgId));
+                    const snapshot = await getDocs(q);
+                    
+                    if (snapshot.empty) {
+                        // New User -> Go to Registration
+                        console.log("New Telegram user, redirecting to register");
+                        window.location.href = 'register-telegram.html';
+                        return;
+                    } else {
+                        // Existing User but not logged in -> Go to Login
+                        console.log("Existing Telegram user not logged in, redirecting to login");
+                        // Optional: Pass email if we want to pre-fill
+                        // const userData = snapshot.docs[0].data();
+                        // window.location.href = `login.html?email=${userData.email}`;
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Error checking TG user:", e);
+                }
+            }
+
             if (user) {
                 if (!user.emailVerified) {
                     await signOut(auth);
@@ -286,7 +315,7 @@
                 
                 // Label
                 packagesHtml += `
-                    <div class="text-left pl-4 text-xs font-bold text-gray-400 uppercase leading-tight">
+                    <div class="text-left pl-1 md:pl-4 text-[10px] md:text-xs font-bold text-gray-400 uppercase leading-tight">
                         Capacity<br>& Price
                     </div>
                 `;

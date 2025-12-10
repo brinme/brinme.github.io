@@ -69,6 +69,15 @@
                     Sign up with Google
                 </button>
             </div>
+
+            <div class="mt-4 flex justify-center">
+                <script async src="https://telegram.org/js/telegram-widget.js?22" 
+                        data-telegram-login="brinme_bot" 
+                        data-size="large" 
+                        data-radius="20" 
+                        data-onauth="onTelegramAuth(user)" 
+                        data-request-access="write"></script>
+            </div>
         </div>
 
         <p class="mt-4 text-center text-sm text-gray-600">
@@ -80,8 +89,32 @@
         console.log("Register script loaded");
         import { auth, db } from './js/firebase-config.js';
         import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
+
+        // Expose Telegram Auth Callback
+        window.onTelegramAuth = async (user) => {
+            console.log("Telegram Auth Callback:", user);
+            
+            try {
+                // Check if user exists by telegramId
+                const q = query(collection(db, "users"), where("telegramId", "==", user.id));
+                const snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    // User exists -> Redirect to Login
+                    alert("You already have an account linked to this Telegram. Please log in.");
+                    window.location.href = 'login.html';
+                } else {
+                    // User does not exist -> Redirect to Register with params
+                    localStorage.setItem('tg_register_data', JSON.stringify(user));
+                    window.location.href = 'register-telegram.html';
+                }
+            } catch (e) {
+                console.error("Error handling Telegram Auth:", e);
+                alert("Error processing Telegram login.");
+            }
+        };
 
         const registerForm = document.getElementById('registerForm');
         const googleRegisterBtn = document.getElementById('googleRegisterBtn');

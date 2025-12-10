@@ -12,6 +12,10 @@
         // 2. Check if running inside Telegram
         // tg.initData is empty string if not in Telegram
         const isTelegram = tg.initData !== "" || (tg.platform && tg.platform !== 'unknown');
+        
+        // Expose to global scope
+        window.isTelegramApp = isTelegram;
+        window.telegramUser = tg.initDataUnsafe?.user;
 
         if (isTelegram) {
             console.log("Telegram Web App detected");
