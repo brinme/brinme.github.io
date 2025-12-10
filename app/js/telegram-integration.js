@@ -44,6 +44,12 @@
 
                 .text-gray-600, .text-gray-500, .text-gray-400 {
                     color: var(--tg-theme-hint-color, #999999) !important;
+                    opacity: 1 !important;
+                }
+
+                /* Ensure buttons are not transparent */
+                button {
+                    opacity: 1 !important;
                 }
 
                 /* Primary Brand Color (#25A8D9) Mapping */
@@ -63,7 +69,6 @@
                 /* Borders */
                 .border-gray-100, .border-gray-200, .border-gray-300 {
                     border-color: var(--tg-theme-hint-color, #cccccc) !important;
-                    opacity: 0.2;
                 }
                 
                 /* Inputs */
@@ -77,6 +82,8 @@
                 nav.fixed.bottom-0 {
                     background-color: var(--tg-theme-secondary-bg-color, #ffffff) !important;
                     border-top-color: var(--tg-theme-hint-color, #cccccc) !important;
+                    opacity: 1 !important;
+                    z-index: 50 !important;
                 }
             `;
             document.head.appendChild(style);
