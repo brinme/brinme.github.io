@@ -18,7 +18,7 @@
             <img src="../images/brinme_small_icon.webp" alt="Brinme" class="h-12 w-12 rounded-full">
         </div>
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Welcome, <span id="tgName">User</span>!</h2>
-        <p class="text-center text-gray-500 mb-8 text-sm">Please complete your registration to continue.</p>
+        <p class="text-center text-gray-500 mb-8 text-sm">To use the app please provide and confirm your email.</p>
         
         <form id="regForm" class="space-y-6">
             <!-- Hidden fields for TG data -->
@@ -31,25 +31,20 @@
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                 <input type="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                <p class="text-xs text-gray-400 mt-1">We need this to verify your account.</p>
-            </div>
-            
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Create Password</label>
-                <input type="password" id="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
+                <p class="text-xs text-gray-400 mt-1">We will send a confirmation link to this email.</p>
             </div>
 
             <div id="errorMessage" class="text-red-500 text-sm hidden"></div>
 
             <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]">
-                Create Account
+                Confirm Email
             </button>
         </form>
     </div>
 
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
-        import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { updateEmail, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
 
@@ -58,39 +53,49 @@
         const errorMessage = document.getElementById('errorMessage');
 
         // Initialize with TG Data
-        let user = null;
+        let tgUser = null;
         
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             // Mini App Flow
-            user = tg.initDataUnsafe.user;
+            tgUser = tg.initDataUnsafe.user;
         } else {
             // Browser Flow (from localStorage)
             const storedData = localStorage.getItem('tg_register_data');
             if (storedData) {
-                user = JSON.parse(storedData);
-                // Clear it so it doesn't persist unnecessarily
-                // localStorage.removeItem('tg_register_data'); 
+                tgUser = JSON.parse(storedData);
             }
         }
 
-        if (user) {
-            document.getElementById('tgName').textContent = user.first_name;
+        if (tgUser) {
+            document.getElementById('tgName').textContent = tgUser.first_name;
             
-            document.getElementById('tgId').value = user.id;
-            document.getElementById('tgUsername').value = user.username || '';
-            document.getElementById('tgFirstName').value = user.first_name || '';
-            document.getElementById('tgLastName').value = user.last_name || '';
-            document.getElementById('tgPhoto').value = user.photo_url || '';
+            document.getElementById('tgId').value = tgUser.id;
+            document.getElementById('tgUsername').value = tgUser.username || '';
+            document.getElementById('tgFirstName').value = tgUser.first_name || '';
+            document.getElementById('tgLastName').value = tgUser.last_name || '';
+            document.getElementById('tgPhoto').value = tgUser.photo_url || '';
         } else {
-            // Fallback for testing in browser without TG
-            // window.location.href = 'register.html';
             console.warn("No Telegram data found");
         }
 
+        // Check Auth State
+        let currentUser = null;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            }
+        });
+
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if (!currentUser) {
+                errorMessage.textContent = "Authentication session missing. Please restart the app.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
             const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
             
             const tgData = {
                 id: document.getElementById('tgId').value,
@@ -101,33 +106,26 @@
             };
 
             try {
-                // 1. Create Auth User
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // 1. Update Email on the Auth User
+                await updateEmail(currentUser, email);
 
                 // 2. Create User Document
-                const newUser = createUser(user.uid, email, tgData.firstName, tgData.lastName);
+                const newUser = createUser(currentUser.uid, email, tgData.firstName, tgData.lastName);
                 
                 // Add Telegram specific fields
                 newUser.telegramId = parseInt(tgData.id);
                 newUser.telegramUsername = tgData.username;
                 if (tgData.photo) newUser.profile.photo = tgData.photo;
                 
-                await setDoc(doc(db, "users", user.uid), newUser);
+                await setDoc(doc(db, "users", currentUser.uid), newUser);
 
                 // 3. Send Verification
-                await sendEmailVerification(user);
+                await sendEmailVerification(currentUser);
 
-                // 4. Sign Out (force login to verify) or Auto Login?
-                // User asked for "appear an email input field to confirm it"
-                // Usually this means send verification email.
-                
                 alert("Account created! Please check your email to verify.");
                 
-                // For better UX in TMA, we might want to keep them logged in but restrict access?
-                // But standard flow is verify first.
-                // Let's redirect to login.
-                window.location.href = 'login.html';
+                // Redirect to dashboard immediately (stay logged in)
+                window.location.href = 'index.html';
 
             } catch (error) {
                 console.error("Registration error:", error);

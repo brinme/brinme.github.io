@@ -89,6 +89,11 @@
                     opacity: 1 !important;
                     z-index: 50 !important;
                 }
+
+                /* Hide Logout Buttons in Telegram */
+                #logoutBtnDesktop, #logoutBtnMobile {
+                    display: none !important;
+                }
             `;
             document.head.appendChild(style);
         }

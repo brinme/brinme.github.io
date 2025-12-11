@@ -117,9 +117,10 @@
     </div>
 
     <script type="module">
-        import { auth, db } from './js/firebase-config.js';
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { auth, db, functions } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
 
         const userNameElement = document.getElementById('userName');
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
@@ -139,38 +140,187 @@
             return `${month} ${day}, ${year}. ${hours}:${minutes}`;
         };
 
+        // Telegram Login Logic
+        let isLoggingIn = false;
+        const loginWithTelegram = async () => {
+            if (isLoggingIn) return;
+            
+            const tg = window.Telegram.WebApp;
+            if (!tg.initData) {
+                console.log("No Telegram data found");
+                return;
+            }
+
+            isLoggingIn = true;
+            console.log("Authenticating via Telegram...");
+            
+            try {
+                const authTelegramFn = httpsCallable(functions, 'authTelegram');
+                const result = await authTelegramFn({ initData: tg.initData });
+                const token = result.data.token;
+                
+                console.log("Token received, signing in...");
+                await signInWithCustomToken(auth, token);
+                console.log("Signed in successfully");
+            } catch (error) {
+                console.error("Telegram Auth Error:", error);
+            } finally {
+                isLoggingIn = false;
+            }
+        };
+
         // Check Auth State
         onAuthStateChanged(auth, async (user) => {
-            // Telegram Auto-Registration / Login Check
-            if (!user && window.isTelegramApp && window.telegramUser) {
-                const tgId = window.telegramUser.id;
-                console.log("Checking Telegram User:", tgId);
+            // 1. Handle Telegram Environment
+            if (window.isTelegramApp) {
+                const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
                 
-                try {
-                    // Query by telegramId
-                    const q = query(collection(db, "users"), where("telegramId", "==", tgId));
-                    const snapshot = await getDocs(q);
-                    
-                    if (snapshot.empty) {
-                        // New User -> Go to Registration
-                        console.log("New Telegram user, redirecting to register");
-                        window.location.href = 'register-telegram.html';
-                        return;
-                    } else {
-                        // Existing User but not logged in -> Go to Login
-                        console.log("Existing Telegram user not logged in, redirecting to login");
-                        // Optional: Pass email if we want to pre-fill
-                        // const userData = snapshot.docs[0].data();
-                        // window.location.href = `login.html?email=${userData.email}`;
-                        window.location.href = 'login.html';
-                        return;
+                if (!user) {
+                    // Not logged in -> Login via Telegram
+                    await loginWithTelegram();
+                    return;
+                }
+
+                // User is logged in. Verify it matches the current Telegram user.
+                if (tgUser) {
+                    try {
+                        const userDoc = await getDoc(doc(db, "users", user.uid));
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            // If the Firestore user's telegramId doesn't match the current TG App user
+                            if (userData.telegramId !== tgUser.id) {
+                                console.warn("User mismatch! Signing out old user...");
+                                await signOut(auth);
+                                await loginWithTelegram();
+                                return;
+                            }
+                        } else {
+                            // User authenticated but no doc? Weird. Re-login might fix or go to register.
+                            // Let the flow below handle "no profile" case.
+                        }
+                    } catch (e) {
+                        console.error("Error verifying TG user match:", e);
                     }
-                } catch (e) {
-                    console.error("Error checking TG user:", e);
                 }
             }
 
+            // 2. Handle Logged In User
             if (user) {
+                // Browser Users: Enforce Email Verification
+                if (!window.isTelegramApp && !user.emailVerified) {
+                    await signOut(auth);
+                    alert("Please verify your email address to access the dashboard.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                try {
+                    // Check if profile exists (Registration Check)
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    
+                    if (!userDoc.exists()) {
+                        // User authenticated but no profile -> Redirect to finish registration
+                        console.log("User authenticated but no profile, redirecting to register");
+                        
+                        if (window.isTelegramApp) {
+                            window.location.href = 'register-telegram.html';
+                        } else {
+                            await signOut(auth);
+                            window.location.href = 'login.html';
+                        }
+                        return;
+                    }
+
+                    // Profile exists -> Show Dashboard
+                    const userData = userDoc.data();
+                    userNameElement.textContent = userData.firstName || user.email;
+                    
+                    // 1. Fetch Offered Rides
+                    const offeredQuery = query(collection(db, "rides"), where("ownerId", "==", user.uid));
+                    const offeredSnapshot = await getDocs(offeredQuery);
+                    const offeredRides = offeredSnapshot.docs.map(doc => ({
+                        type: 'offered',
+                        id: doc.id,
+                        ...doc.data(),
+                        sortDate: new Date(doc.data().times[0])
+                    }));
+
+                    // 2. Fetch Requests
+                    const requestsQuery = query(collection(db, "requests"), where("userId", "==", user.uid));
+                    const requestsSnapshot = await getDocs(requestsQuery);
+                    const requests = [];
+                    
+                    for (const reqDoc of requestsSnapshot.docs) {
+                        const request = reqDoc.data();
+                        // Fetch associated ride
+                        try {
+                            const rideDoc = await getDoc(doc(db, "rides", request.rideId));
+                            if (rideDoc.exists()) {
+                                const ride = rideDoc.data();
+                                ride.rideId = rideDoc.id; // Ensure ID is available
+                                requests.push({
+                                    type: 'requested',
+                                    id: reqDoc.id,
+                                    request: request,
+                                    ride: ride,
+                                    sortDate: new Date(ride.times[0])
+                                });
+                            }
+                        } catch (e) {
+                            console.error("Error fetching ride for request", e);
+                        }
+                    }
+
+                    // 3. Combine, Filter & Sort
+                    const allRides = [...offeredRides, ...requests];
+                    const now = new Date();
+                    
+                    // Filter for future rides (or active ones)
+                    const upcomingRides = allRides.filter(item => item.sortDate > now);
+                    
+                    upcomingRides.sort((a, b) => a.sortDate - b.sortDate);
+
+                    const nextRide = upcomingRides[0];
+
+                    if (!nextRide) {
+                        ridesList.innerHTML = `
+                            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
+                                <div class="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900">No upcoming rides</h3>
+                                <p class="text-gray-500 mt-1 mb-4">You don't have any rides scheduled.</p>
+                                <div class="flex justify-center gap-3">
+                                    <a href="search-ride.html" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-full shadow-sm text-gray-700 bg-white hover:bg-gray-50">
+                                        Find Ride
+                                    </a>
+                                    <a href="add-ride.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-[#25A8D9] hover:bg-[#1e90c7]">
+                                        Offer Ride
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        ridesList.innerHTML = '';
+                        
+                        if (nextRide.type === 'offered') {
+                            renderOfferedCard(nextRide);
+                        } else {
+                            renderRequestedCard(nextRide);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    ridesList.innerHTML = `<p class="text-red-500 text-center p-4">Error loading rides. Please try refreshing.</p>`;
+                }
+            } else {
+                // User is signed out
+                if (!window.isTelegramApp) {
+                    window.location.href = 'login.html';
+                }
+            }
+        });
                 if (!user.emailVerified) {
                     await signOut(auth);
                     alert("Please verify your email address to access the dashboard.");

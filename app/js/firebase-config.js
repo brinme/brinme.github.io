@@ -3,6 +3,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getFunctions } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNzy5tUgXTKXLs2w0h-JA9InU9Wx_tB8Q",
@@ -20,5 +21,6 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
+const functions = getFunctions(app);
 
-export { app, db, auth, analytics, storage };
+export { app, db, auth, analytics, storage, functions };
