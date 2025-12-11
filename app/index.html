@@ -13,6 +13,12 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#25A8D9] mb-4"></div>
+        <p class="text-gray-500 font-medium">Loading...</p>
+    </div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Desktop Sidebar (Hidden on Mobile) -->
         <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200">
@@ -128,6 +134,7 @@
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
         const logoutBtnDesktop = document.getElementById('logoutBtnDesktop');
         const ridesList = document.getElementById('ridesList');
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
         // Helper: Format Date
         const formatDate = (dateString) => {
@@ -174,29 +181,32 @@
         // Check Auth State
         onAuthStateChanged(auth, async (user) => {
             console.log("Auth State Changed:", user ? "User Logged In" : "No User");
+            // 1. Robust Telegram Detection
+            let isTelegram = window.isTelegramApp;
             
-            // Detect Telegram Environment (Race Condition Fix)
-            const isTelegramUA = navigator.userAgent.includes('Telegram') || navigator.userAgent.includes('TME');
-            if (isTelegramUA && !window.isTelegramApp) {
-                console.log("Telegram UA detected, waiting for SDK...");
-                let attempts = 0;
-                while (!window.isTelegramApp && attempts < 20) {
-                    await new Promise(r => setTimeout(r, 100));
-                    attempts++;
+            // Fallback: Check User Agent if global var is not set yet
+            if (typeof isTelegram === 'undefined') {
+                if (navigator.userAgent.includes('Telegram') || navigator.userAgent.includes('TME')) {
+                    isTelegram = true;
+                    console.log("Telegram detected via UserAgent");
                 }
             }
 
-            // 1. Handle Telegram Environment
-            if (window.isTelegramApp) {
+            if (isTelegram) {
                 console.log("Environment: Telegram Mini App");
+                loadingOverlay.classList.remove('hidden'); // Show loading immediately
                 
-                // Ensure SDK is ready
+                // Wait for SDK if needed
                 if (!window.Telegram || !window.Telegram.WebApp) {
-                     console.error("Telegram SDK not loaded despite flag.");
-                     return;
+                    console.log("Waiting for Telegram SDK...");
+                    let attempts = 0;
+                    while ((!window.Telegram || !window.Telegram.WebApp) && attempts < 30) {
+                        await new Promise(r => setTimeout(r, 100));
+                        attempts++;
+                    }
                 }
 
-                const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+                const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
                 
                 if (!user) {
                     // Not logged in -> Login via Telegram
@@ -211,15 +221,12 @@
                         if (userDoc.exists()) {
                             const userData = userDoc.data();
                             // If the Firestore user's telegramId doesn't match the current TG App user
-                            if (userData.telegramId !== tgUser.id) {
+                            if (userData.telegramId && userData.telegramId !== tgUser.id) {
                                 console.warn("User mismatch! Signing out old user...");
                                 await signOut(auth);
                                 await loginWithTelegram();
                                 return;
                             }
-                        } else {
-                            // User authenticated but no doc? Weird. Re-login might fix or go to register.
-                            // Let the flow below handle "no profile" case.
                         }
                     } catch (e) {
                         console.error("Error verifying TG user match:", e);
@@ -232,7 +239,7 @@
             // 2. Handle Logged In User
             if (user) {
                 // Browser Users: Enforce Email Verification
-                if (!window.isTelegramApp && !user.emailVerified) {
+                if (!isTelegram && !user.emailVerified) {
                     await signOut(auth);
                     alert("Please verify your email address to access the dashboard.");
                     window.location.href = 'login.html';
@@ -248,7 +255,7 @@
                         // User authenticated but no profile -> Redirect to finish registration
                         console.log("User authenticated but no profile, redirecting to register");
                         
-                        if (window.isTelegramApp) {
+                        if (isTelegram) {
                             window.location.href = 'register-telegram.html';
                         } else {
                             await signOut(auth);
@@ -261,7 +268,7 @@
                     const userData = userDoc.data();
 
                     // Telegram Users: Enforce Email Collection if missing
-                    if (window.isTelegramApp) {
+                    if (isTelegram) {
                         if (!userData.email) {
                             console.log("User has profile but no email. Redirecting to completion...");
                             window.location.href = 'register-telegram.html';
@@ -276,6 +283,12 @@
                         }
                     }
 
+                    // Hide loading overlay only if we are staying on this page
+                    if (isTelegram) {
+                        loadingOverlay.classList.add('hidden');
+                    }
+
+                    console.log("User profile loaded:", userData.firstName);
                     console.log("User profile loaded:", userData.firstName);
                     if(userNameElement) userNameElement.textContent = userData.firstName || user.email;
                     
