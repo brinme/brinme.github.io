@@ -10,8 +10,9 @@
         const tg = window.Telegram.WebApp;
         
         // 2. Check if running inside Telegram
-        // tg.initData is empty string if not in Telegram
-        const isTelegram = tg.initData !== "" || (tg.platform && tg.platform !== 'unknown');
+        // We rely strictly on initData being present. 
+        // In a standard browser, initData is an empty string.
+        const isTelegram = !!tg.initData;
         
         // Expose to global scope
         window.isTelegramApp = isTelegram;
