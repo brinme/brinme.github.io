@@ -175,9 +175,27 @@
         onAuthStateChanged(auth, async (user) => {
             console.log("Auth State Changed:", user ? "User Logged In" : "No User");
             
+            // Detect Telegram Environment (Race Condition Fix)
+            const isTelegramUA = navigator.userAgent.includes('Telegram') || navigator.userAgent.includes('TME');
+            if (isTelegramUA && !window.isTelegramApp) {
+                console.log("Telegram UA detected, waiting for SDK...");
+                let attempts = 0;
+                while (!window.isTelegramApp && attempts < 20) {
+                    await new Promise(r => setTimeout(r, 100));
+                    attempts++;
+                }
+            }
+
             // 1. Handle Telegram Environment
             if (window.isTelegramApp) {
                 console.log("Environment: Telegram Mini App");
+                
+                // Ensure SDK is ready
+                if (!window.Telegram || !window.Telegram.WebApp) {
+                     console.error("Telegram SDK not loaded despite flag.");
+                     return;
+                }
+
                 const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
                 
                 if (!user) {
