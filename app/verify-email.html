@@ -26,7 +26,7 @@
         </p>
 
         <div class="space-y-3">
-            <button id="checkBtn" class="w-full py-3.5 px-4 bg-[#25A8D9] hover:bg-[#1e90c7] text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-100">
+            <button id="checkBtn" class="w-full py-3.5 px-4 bg-[#25A8D9] hover:bg-[#1e90c7] text-white font-bold rounded-xl transition-colors">
                 I've verified my email
             </button>
             
@@ -39,12 +39,8 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, sendEmailVerification, reload } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { firebaseConfig } from './js/firebase-config.js';
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        import { onAuthStateChanged, sendEmailVerification, reload } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { auth } from './js/firebase-config.js';
         
         const userEmailSpan = document.getElementById('userEmail');
         const checkBtn = document.getElementById('checkBtn');
