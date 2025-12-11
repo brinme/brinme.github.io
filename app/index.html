@@ -241,6 +241,23 @@
 
                     // Profile exists -> Show Dashboard
                     const userData = userDoc.data();
+
+                    // Telegram Users: Enforce Email Collection if missing
+                    if (window.isTelegramApp) {
+                        if (!userData.email) {
+                            console.log("User has profile but no email. Redirecting to completion...");
+                            window.location.href = 'register-telegram.html';
+                            return;
+                        }
+                        
+                        // Enforce Email Verification for Telegram Users
+                        if (!user.emailVerified) {
+                            console.log("User email not verified. Redirecting to verification...");
+                            window.location.href = 'verify-email.html';
+                            return;
+                        }
+                    }
+
                     console.log("User profile loaded:", userData.firstName);
                     if(userNameElement) userNameElement.textContent = userData.firstName || user.email;
                     

@@ -254,7 +254,11 @@
             if (user) {
                 currentUser = user;
             } else {
-                window.location.href = 'login.html';
+                if (window.isTelegramApp) {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
             }
         });
 

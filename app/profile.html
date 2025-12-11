@@ -261,7 +261,11 @@
                     console.error("Error fetching profile:", error);
                 }
             } else {
-                window.location.href = 'login.html';
+                if (window.isTelegramApp) {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
             }
         });
 

@@ -148,7 +148,11 @@
                     rideContent.innerHTML = `<p class="text-red-500">Error loading ride details.</p>`;
                 }
             } else {
-                window.location.href = 'login.html';
+                if (window.isTelegramApp) {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
             }
         });
 
