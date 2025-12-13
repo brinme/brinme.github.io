@@ -116,7 +116,10 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const targetUserId = urlParams.get('userId') || user.uid;
+
+                    const userDoc = await getDoc(doc(db, "users", targetUserId));
                     if (userDoc.exists()) {
                         const data = userDoc.data();
                         const reviews = data.reviews || [];
@@ -144,15 +147,35 @@
                             // Based on models.js, it's just "reviews: []".
                             // Let's assume it's an object for a better UI.
                             
-                            reviews.forEach(review => {
+                            for (const review of reviews) {
                                 const reviewEl = document.createElement('div');
                                 reviewEl.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100';
                                 
                                 // Fallback if review is just a string
-                                const text = typeof review === 'string' ? review : review.text || "No text";
-                                const author = review.authorName || "Anonymous";
+                                const text = typeof review === 'string' ? review : (review.text || review.comment || "No text");
+                                let author = review.authorName || "Anonymous";
                                 const rating = review.rating || 5;
-                                const date = review.date || "";
+                                let date = review.date || review.timestamp || "";
+
+                                // Format date if needed
+                                if (date && date.includes('T')) {
+                                    try {
+                                        date = new Date(date).toLocaleDateString();
+                                    } catch (e) {}
+                                }
+
+                                // Fetch author if missing
+                                if (author === "Anonymous" && review.reviewerId) {
+                                    try {
+                                        const authorDoc = await getDoc(doc(db, "users", review.reviewerId));
+                                        if (authorDoc.exists()) {
+                                            const authorData = authorDoc.data();
+                                            author = `${authorData.firstName || ''} ${authorData.lastName || ''}`.trim() || "Anonymous";
+                                        }
+                                    } catch (e) {
+                                        console.error("Error fetching reviewer:", e);
+                                    }
+                                }
 
                                 reviewEl.innerHTML = `
                                     <div class="flex justify-between items-start mb-3">
@@ -170,7 +193,7 @@
                                     <p class="text-gray-600 text-sm leading-relaxed">${text}</p>
                                 `;
                                 reviewsList.appendChild(reviewEl);
-                            });
+                            }
                         }
                     }
                 } catch (error) {

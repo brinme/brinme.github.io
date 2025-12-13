@@ -201,6 +201,18 @@
             }
 
             try {
+                // Fetch current user details for denormalization
+                let authorName = "Anonymous";
+                try {
+                    const currentUserDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+                    if (currentUserDoc.exists()) {
+                        const d = currentUserDoc.data();
+                        authorName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || "Anonymous";
+                    }
+                } catch (e) {
+                    console.error("Error fetching current user details:", e);
+                }
+
                 const userRef = doc(db, "users", targetUserId);
                 const userDoc = await getDoc(userRef);
                 
@@ -212,9 +224,12 @@
                     const currentReviews = userData.reviews || [];
                     const reviewObject = {
                         reviewerId: auth.currentUser.uid,
+                        authorName: authorName,
                         rating: rating,
                         comment: comment,
-                        timestamp: new Date().toISOString()
+                        text: comment, // For compatibility
+                        timestamp: new Date().toISOString(),
+                        date: new Date().toLocaleDateString() // For compatibility
                     };
                     currentReviews.push(reviewObject);
 
