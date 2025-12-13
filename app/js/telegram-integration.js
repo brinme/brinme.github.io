@@ -83,6 +83,16 @@
                     border-color: var(--tg-theme-hint-color, #cccccc) !important;
                 }
 
+                /* Allow transparent inputs (like in chat) */
+                input.bg-transparent {
+                    background-color: transparent !important;
+                }
+
+                /* Map bg-gray-100 to secondary background */
+                .bg-gray-100 {
+                    background-color: var(--tg-theme-secondary-bg-color, #f3f4f6) !important;
+                }
+
                 /* Mobile Bottom Nav - Adapt colors */
                 nav.fixed.bottom-0 {
                     background-color: var(--tg-theme-secondary-bg-color, #ffffff) !important;

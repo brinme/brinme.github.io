@@ -156,8 +156,13 @@
             }
         });
 
-        function openChat(userId, telegramUsername) {
-            if (window.isTelegramApp && userId.startsWith('tg_') && telegramUsername) {
+        window.openChat = function(userId, telegramUsername) {
+            const currentUserId = auth.currentUser ? auth.currentUser.uid : null;
+            
+            if (window.isTelegramApp && 
+                currentUserId && currentUserId.startsWith('tg_') && 
+                userId.startsWith('tg_') && 
+                telegramUsername) {
                 window.Telegram.WebApp.openTelegramLink('https://t.me/' + telegramUsername);
             } else {
                 window.location.href = 'chat.html?userId=' + userId;
