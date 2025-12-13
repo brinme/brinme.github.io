@@ -115,6 +115,9 @@
                 // Add Telegram photo if available
                 if (tgData.photo) newUser.profile.photo = tgData.photo;
                 
+                // Add Telegram Username if available
+                if (tgData.username) newUser.profile.media = tgData.username;
+
                 await setDoc(doc(db, "users", currentUser.uid), newUser);
 
                 // 3. Send Verification

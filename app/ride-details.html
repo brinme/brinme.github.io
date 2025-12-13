@@ -156,6 +156,14 @@
             }
         });
 
+        function openChat(userId, telegramUsername) {
+            if (window.isTelegramApp && userId.startsWith('tg_') && telegramUsername) {
+                window.Telegram.WebApp.openTelegramLink('https://t.me/' + telegramUsername);
+            } else {
+                window.location.href = 'chat.html?userId=' + userId;
+            }
+        }
+
         function renderRideDetails(currentUser, ride, driver, myRequest) {
             const isOwner = currentUser.uid === ride.ownerId;
             
@@ -275,7 +283,7 @@
                         </div>
 
                         ${!isOwner ? `
-                        <button onclick="window.location.href='chat.html?userId=${ride.ownerId}'" class="px-4 py-2 text-[#25A8D9] border border-[#25A8D9] hover:bg-blue-50 rounded-xl transition-colors flex items-center gap-2 font-bold ml-auto md:ml-0">
+                        <button onclick="openChat('${ride.ownerId}', '${(driver.profile && driver.profile.media) ? driver.profile.media : ''}')" class="px-4 py-2 text-[#25A8D9] border border-[#25A8D9] hover:bg-blue-50 rounded-xl transition-colors flex items-center gap-2 font-bold ml-auto md:ml-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                             <span>Chat</span>
                         </button>
