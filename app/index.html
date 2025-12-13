@@ -216,20 +216,15 @@
 
                 // User is logged in. Verify it matches the current Telegram user.
                 if (tgUser) {
-                    try {
-                        const userDoc = await getDoc(doc(db, "users", user.uid));
-                        if (userDoc.exists()) {
-                            const userData = userDoc.data();
-                            // If the Firestore user's telegramId doesn't match the current TG App user
-                            if (userData.telegramId && userData.telegramId !== tgUser.id) {
-                                console.warn("User mismatch! Signing out old user...");
-                                await signOut(auth);
-                                await loginWithTelegram();
-                                return;
-                            }
-                        }
-                    } catch (e) {
-                        console.error("Error verifying TG user match:", e);
+                    // Check if the current Firebase User UID matches the expected Telegram UID
+                    // The Cloud Function sets UID as `tg_${telegram_id}`
+                    const expectedUid = `tg_${tgUser.id}`;
+                    
+                    if (user.uid !== expectedUid) {
+                        console.warn(`User mismatch! Current: ${user.uid}, Expected: ${expectedUid}. Signing out...`);
+                        await signOut(auth);
+                        await loginWithTelegram();
+                        return;
                     }
                 }
             } else {
