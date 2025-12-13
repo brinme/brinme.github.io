@@ -15,8 +15,8 @@ export const RequestStatus = {
 
 // Factory Functions
 
-export function createLocation(name = "", address = "", country = "", latitude = 0.0, longitude = 0.0) {
-    return { name, address, country, latitude, longitude };
+export function createLocation(name = "") {
+    return { name };
 }
 
 export function createProfile(photo = "", about = "", media = "", phoneNumber = "", country = "", birthday = "") {

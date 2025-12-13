@@ -34,7 +34,7 @@
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const mainContent = document.getElementById('mainContent');
         const pageTitle = document.getElementById('pageTitle');
@@ -221,22 +221,22 @@
                     const currentScores = userData.scores || [];
                     currentScores.push(rating);
                     
-                    const currentReviews = userData.reviews || [];
+                    // Save review to "reviews" collection
                     const reviewObject = {
-                        reviewerId: auth.currentUser.uid,
+                        targetUserId: targetUserId,
                         authorName: authorName,
                         rating: rating,
                         comment: comment,
-                        text: comment, // For compatibility
-                        timestamp: new Date().toISOString(),
-                        date: new Date().toLocaleDateString() // For compatibility
+                        date: new Date().toLocaleDateString()
                     };
-                    currentReviews.push(reviewObject);
-
+                    
+                    // Update user scores only
                     await updateDoc(userRef, {
-                        scores: currentScores,
-                        reviews: currentReviews
+                        scores: currentScores
                     });
+
+                    // Add to reviews collection
+                    await addDoc(collection(db, "reviews"), reviewObject);
                 }
 
                 const updateData = {};
