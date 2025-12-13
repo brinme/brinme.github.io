@@ -161,45 +161,36 @@
 
             try {
                 let rides = [];
+                let q;
 
                 if (fromQuery) {
-                    // Optimized search: Query startPoints collection first
-                    const startPointsQ = query(collection(db, "startPoints"), where("normalizedName", "==", fromQuery));
-                    const startPointsSnapshot = await getDocs(startPointsQ);
+                    // Optimized search: Query rides directly using array-contains
+                    const constraints = [
+                        where("pickupLocations", "array-contains", fromQuery)
+                    ];
                     
-                    const rideIds = [];
-                    startPointsSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        // Filter by date if provided
-                        if (!dateQuery || data.date === dateQuery) {
-                            rideIds.push(data.rideId);
-                        }
-                    });
-
-                    // Fetch corresponding rides
-                    if (rideIds.length > 0) {
-                        const ridePromises = rideIds.map(id => getDoc(doc(db, "rides", id)));
-                        const rideSnapshots = await Promise.all(ridePromises);
-                        
-                        rideSnapshots.forEach(docSnap => {
-                            if (docSnap.exists()) {
-                                const data = docSnap.data();
-                                data.rideId = docSnap.id;
-                                rides.push(data);
-                            }
-                        });
+                    if (dateQuery) {
+                        constraints.push(where("date", "==", dateQuery));
                     }
+
+                    q = query(collection(db, "rides"), ...constraints);
                 } else {
                     // Fallback: Fetch all rides if no start city specified
-                    const q = query(collection(db, "rides"));
-                    const querySnapshot = await getDocs(q);
-                    
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        data.rideId = doc.id;
-                        rides.push(data);
-                    });
+                    // (Ideally should limit this or require at least one filter)
+                    const constraints = [];
+                    if (dateQuery) {
+                        constraints.push(where("date", "==", dateQuery));
+                    }
+                    q = query(collection(db, "rides"), ...constraints);
                 }
+
+                const querySnapshot = await getDocs(q);
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    data.rideId = doc.id;
+                    rides.push(data);
+                });
 
                 const filteredRides = rides.filter(ride => {
                     if (!ride.points || ride.points.length < 2) return false;

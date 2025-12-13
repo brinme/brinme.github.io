@@ -70,6 +70,8 @@
         </div>
     </div>
 
+    <!-- Rating Screen Removed -->
+
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -78,6 +80,10 @@
         const rideContent = document.getElementById('rideContent');
         const actionBar = document.getElementById('actionBar');
         const logoutBtnDesktop = document.getElementById('logoutBtnDesktop');
+
+        let currentRideData = null;
+        let currentRequestData = null;
+        let currentDriverData = null;
 
         // Helper: Format Date
         const formatDate = (dateString) => {
@@ -170,6 +176,10 @@
         }
 
         function renderRideDetails(currentUser, ride, driver, myRequest) {
+            currentRideData = ride;
+            currentDriverData = driver;
+            currentRequestData = myRequest;
+
             const isOwner = currentUser.uid === ride.ownerId;
             
             // --- Driver Info ---
@@ -434,7 +444,7 @@
                     const rateBtn = document.createElement('button');
                     rateBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
                     rateBtn.textContent = 'Rate Senders';
-                    rateBtn.onclick = () => alert('Rating feature coming soon');
+                    rateBtn.onclick = () => window.location.href = `rate.html?rideId=${ride.rideId}&mode=senders`;
                     container.appendChild(rateBtn);
                 }
 
@@ -467,7 +477,7 @@
                     statusDiv.appendChild(statusBadge);
                     container.appendChild(statusDiv);
 
-                    if (myRequest.status === 'PENDING' || myRequest.status === 'ACCEPTED') {
+                    if ((myRequest.status === 'PENDING' || myRequest.status === 'ACCEPTED') && ride.status === 'IDLE') {
                         const cancelReqBtn = document.createElement('button');
                         cancelReqBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
                         cancelReqBtn.textContent = 'Cancel Request';
@@ -479,7 +489,13 @@
                          const rateDriverBtn = document.createElement('button');
                         rateDriverBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
                         rateDriverBtn.textContent = 'Rate Driver';
-                        rateDriverBtn.onclick = () => alert('Rating feature coming soon');
+                        if (myRequest.senderRated) {
+                            rateDriverBtn.textContent = 'Driver Rated';
+                            rateDriverBtn.disabled = true;
+                            rateDriverBtn.className = 'w-full py-3 bg-gray-300 text-white font-bold rounded-xl cursor-not-allowed';
+                        } else {
+                            rateDriverBtn.onclick = () => window.location.href = `rate.html?rideId=${ride.rideId}&mode=driver&requestId=${myRequest.id}`;
+                        }
                         container.appendChild(rateDriverBtn);
                     }
 
@@ -540,16 +556,7 @@
                 );
                 await Promise.all(updatePromises);
 
-                // 2. Delete startPoints entries
-                const qStartPoints = query(collection(db, "startPoints"), where("rideId", "==", rideId));
-                const startPointsSnapshot = await getDocs(qStartPoints);
-                
-                const deleteStartPointsPromises = startPointsSnapshot.docs.map(doc => 
-                    deleteDoc(doc.ref)
-                );
-                await Promise.all(deleteStartPointsPromises);
-
-                // 3. Delete the ride document
+                // 2. Delete the ride document
                 await deleteDoc(doc(db, "rides", rideId));
 
                 alert('Ride deleted successfully.');
