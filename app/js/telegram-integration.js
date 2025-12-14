@@ -105,6 +105,11 @@
                 #logoutBtnDesktop, #logoutBtnMobile {
                     display: none !important;
                 }
+
+                /* Hide Brinme branding in Telegram */
+                .brinme-main-mobile-header {
+                    display: none !important;
+                }
             `;
             document.head.appendChild(style);
         }
