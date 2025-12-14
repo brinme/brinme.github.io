@@ -18,6 +18,7 @@ export const translations = {
         "loading": "Loading...",
         "text_no_upcoming_rides": "No upcoming rides",
         "text_no_rides_scheduled": "You don't have any rides scheduled.",
+        "text_no_rides_found_criteria": "No rides found matching your criteria.",
         
         // Rides (rides.html)
         "title_my_rides": "My Rides",
@@ -35,6 +36,7 @@ export const translations = {
         "reviews_count": "reviews",
         "title_reviews": "Reviews",
         "text_no_reviews": "No reviews yet.",
+        "text_no_text": "No text",
         
         // Rate (rate.html)
         "title_rate": "Rate",
@@ -238,9 +240,10 @@ export const translations = {
         "title_my_next_ride": "Следующая поездка",
         "link_view_all": "Все",
         "loading": "Загрузка...",
-        "text_no_upcoming_rides": "Нет предстоящих поездок",
         "text_no_rides_scheduled": "У вас нет запланированных поездок",
+        "text_no_rides_found_criteria": "Поездок по вашему запросу не найдено.",
         
+        // Rides (rides.html)
         // Rides (rides.html)
         "title_my_rides": "Мои поездки",
         "tab_offered": "Созданные",
@@ -255,9 +258,10 @@ export const translations = {
         "stat_rides": "Поездки",
         "stat_packages": "Посылки",
         "reviews_count": "отзывов",
-        "title_reviews": "Отзывы",
         "text_no_reviews": "Отзывов пока нет",
+        "text_no_text": "Без текста",
         
+        // Rate (rate.html)
         // Rate (rate.html)
         "title_rate": "Оценить",
         "title_rate_senders": "Оценить отправителей",
@@ -367,24 +371,24 @@ export const translations = {
         "btn_cancel_request": "Отменить заявку",
         "btn_rate_driver": "Оценить водителя",
         "btn_driver_rated": "Водитель оценен",
-        "btn_request_delivery": "Запросить доставку",
+        "btn_request_delivery": "Запрос",
         "text_ride_closed": "Эта поездка больше не принимает заявки.",
         "confirm_delete_ride": "Вы уверены, что хотите удалить эту поездку? Это действие нельзя отменить.",
         "alert_ride_deleted": "Поездка успешно удалена.",
         "alert_delete_error": "Ошибка при удалении поездки: ",
-        "confirm_cancel_request": "Вы уверены, что хотите отменить эту заявку?",
-        "alert_no_ride_id": "Поездка не указана.",
-        "alert_ride_not_found": "Поездка не найдена.",
-        "text_error_loading": "Ошибка загрузки деталей поездки.",
+        "confirm_cancel_request": "Вы уверены, что хотите отменить заявку?",
+        "alert_no_ride_id": "Поездка не указана",
+        "alert_ride_not_found": "Поездка не найдена",
+        "text_error_loading": "Ошибка загрузки деталей поездки",
         "text_reviews_parens": "отзывов",
         "alert_request_cancelled": "Заявка отменена.",
         "alert_cancel_error": "Ошибка при отмене заявки.",
         "alert_status_update_error": "Ошибка обновления статуса",
-        "alert_no_accept_s": "Эта поездка не принимает маленькие посылки.",
+        "alert_no_accept_s": "Эта поездка не принимает маленькие посылки",
         "alert_no_space_s": "Недостаточно места для маленьких посылок. Доступно: ",
-        "alert_no_accept_m": "Эта поездка не принимает средние посылки.",
+        "alert_no_accept_m": "Эта поездка не принимает средние посылки",
         "alert_no_space_m": "Недостаточно места для средних посылок. Доступно: ",
-        "alert_no_accept_l": "Эта поездка не принимает большие посылки.",
+        "alert_no_accept_l": "Эта поездка не принимает большие посылки",
         "alert_no_space_l": "Недостаточно места для больших посылок. Доступно: ",
         "alert_request_sent": "Заявка отправлена!",
         "alert_request_error": "Ошибка отправки заявки",
@@ -396,10 +400,10 @@ export const translations = {
         "btn_verified": "Я подтвердил email",
         "btn_resend": "Отправить снова",
         "text_email_not_verified": "Email еще не подтвержден. Проверьте почту.",
-        "text_error_checking": "Ошибка проверки статуса.",
+        "text_error_checking": "Ошибка проверки статуса",
         "text_checking": "Проверка...",
         "text_email_resent": "Письмо отправлено повторно!",
-        "text_error_resending": "Ошибка отправки письма.",
+        "text_error_resending": "Ошибка отправки письма",
 
         // Register Telegram (register-telegram.html)
         "title_complete_registration": "Завершение регистрации",

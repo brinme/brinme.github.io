@@ -168,7 +168,7 @@
                                 reviewEl.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100';
                                 
                                 // Fallback if review is just a string
-                                const text = typeof review === 'string' ? review : (review.text || review.comment || "No text");
+                                const text = typeof review === 'string' ? review : (review.text || review.comment || localization.getText('text_no_text'));
                                 let author = review.authorName || "Anonymous";
                                 const rating = review.rating || 5;
                                 let date = review.date || review.timestamp || "";

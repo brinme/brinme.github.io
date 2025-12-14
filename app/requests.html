@@ -118,7 +118,7 @@
                 const rideId = urlParams.get('rideId');
 
                 if (!rideId) {
-                    alert("No ride specified.");
+                    alert(localization.getText('alert_no_ride_id'));
                     window.location.href = 'rides.html';
                     return;
                 }
@@ -145,7 +145,7 @@
                     if (querySnapshot.empty) {
                         requestsList.innerHTML = `
                             <div class="text-center py-12 bg-white rounded-xl border border-gray-100">
-                                <p class="text-gray-500">No requests yet.</p>
+                                <p class="text-gray-500">${localization.getText('text_no_requests')}</p>
                             </div>
                         `;
                     } else {
@@ -192,6 +192,8 @@
         function renderRequestCard(request, requester, ride) {
             const name = `${requester.firstName || ''} ${requester.lastName || ''}`;
             const photo = (requester.profile && requester.profile.photo) ? requester.profile.photo : `https://ui-avatars.com/api/?name=${name}&background=random`;
+            const country = (requester.profile && requester.profile.country) ? requester.profile.country : '';
+            const about = (requester.profile && requester.profile.about) ? requester.profile.about : '';
             
             let rating = 0;
             if (requester.scores && requester.scores.length > 0) {
@@ -237,6 +239,8 @@
                         <img src="${photo}" alt="${name}" class="w-10 h-10 rounded-full object-cover border-2 border-gray-100">
                         <div>
                             <h3 class="font-bold text-sm text-gray-900">${name}</h3>
+                            ${country ? `<p class="text-xs text-gray-600"><span class="font-medium">${localization.getText('label_country')}:</span> ${country}</p>` : ''}
+                            ${about ? `<p class="text-xs text-gray-600 mb-1"><span class="font-medium">${localization.getText('label_about')}:</span> ${about}</p>` : ''}
                             <div class="flex items-center gap-1">
                                 ${getStarsHTML(rating)}
                                 <span class="text-[10px] text-gray-500">(${requester.scores ? requester.scores.length : 0})</span>

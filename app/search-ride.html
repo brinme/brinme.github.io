@@ -267,7 +267,7 @@
                 if (filteredRides.length === 0) {
                     resultsList.innerHTML = `
                         <div class="text-center py-8 text-gray-500">
-                            <p>No rides found matching your criteria.</p>
+                            <p>${localization.getText('text_no_rides_found_criteria')}</p>
                         </div>
                     `;
                 } else {
@@ -275,10 +275,10 @@
 
                     // Helper for date formatting
                     const formatDate = (dateString) => {
-                        if (!dateString) return "Unknown Date";
+                        if (!dateString) return localization.getText('text_unknown_date');
                         const date = new Date(dateString);
                         const day = date.getDate();
-                        const month = date.toLocaleString('en-US', { month: 'short' });
+                        const month = date.toLocaleString(localization.currentLang, { month: 'short' });
                         const year = date.getFullYear();
                         const hours = date.getHours().toString().padStart(2, '0');
                         const minutes = date.getMinutes().toString().padStart(2, '0');
