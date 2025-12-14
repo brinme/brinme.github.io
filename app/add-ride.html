@@ -75,7 +75,7 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <div class="w-2 h-2 rounded-full bg-[#25A8D9]"></div>
                                             </div>
-                                            <input type="text" id="fromLocation" required placeholder="e.g. Warszawa" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                            <input type="text" id="fromLocation" required placeholder="e.g. Warszawa" data-i18n="placeholder_city_example_from" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
                                         </div>
                                     </div>
                                     <div>
@@ -92,7 +92,7 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
                                             </div>
-                                            <input type="text" id="toLocation" required placeholder="e.g. Kraków" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                            <input type="text" id="toLocation" required placeholder="e.g. Kraków" data-i18n="placeholder_city_example_to" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
                                         </div>
                                     </div>
                                     <div>
@@ -239,6 +239,7 @@
         import { createRide, createLocation, createRideSegment } from './js/models.js';
         import { setupAutocomplete } from './js/autocomplete.js';
         import { LocalizationManager } from './js/localization.js';
+        import { getAllCities } from './js/cities.js';
 
         // Initialize localization
         const localization = new LocalizationManager();
@@ -272,8 +273,36 @@
 
             try {
                 // Gather Data
-                const fromName = document.getElementById('fromLocation').value;
-                const toName = document.getElementById('toLocation').value;
+                let fromName = document.getElementById('fromLocation').value;
+                let toName = document.getElementById('toLocation').value;
+                
+                // Validate Cities & Canonicalize
+                const allCities = getAllCities();
+                const normalizeForCheck = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                
+                const getCityObject = (cityName) => {
+                    const normalizedInput = normalizeForCheck(cityName);
+                    return allCities.find(city => 
+                        city.names.some(name => normalizeForCheck(name) === normalizedInput)
+                    );
+                };
+
+                const fromCityObj = getCityObject(fromName);
+                const toCityObj = getCityObject(toName);
+
+                if (!fromCityObj) {
+                    const msg = localization.getText('error_city_not_supported').replace('{city}', fromName);
+                    throw new Error(msg);
+                }
+                if (!toCityObj) {
+                    const msg = localization.getText('error_city_not_supported').replace('{city}', toName);
+                    throw new Error(msg);
+                }
+
+                // Use Canonical Names
+                fromName = fromCityObj.name;
+                toName = toCityObj.name;
+
                 const departureTime = document.getElementById('departureTime').value;
                 const arrivalTime = document.getElementById('arrivalTime').value;
                 

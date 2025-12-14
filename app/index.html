@@ -405,12 +405,12 @@
             // Status Helper
             const getStatusInfo = (status) => {
                 const map = {
-                    'IDLE': { label: 'PLANNED', class: 'bg-blue-100 text-blue-800' },
-                    'STARTED': { label: 'STARTED', class: 'bg-green-100 text-green-800' },
-                    'ENDED': { label: 'ENDED', class: 'bg-gray-100 text-gray-800' },
-                    'RATED': { label: 'REVIEWED', class: 'bg-yellow-100 text-yellow-800' }
+                    'IDLE': { label: localization.getText('status_idle'), class: 'bg-blue-100 text-blue-800' },
+                    'STARTED': { label: localization.getText('status_started'), class: 'bg-green-100 text-green-800' },
+                    'ENDED': { label: localization.getText('status_ended'), class: 'bg-gray-100 text-gray-800' },
+                    'RATED': { label: localization.getText('status_rated'), class: 'bg-yellow-100 text-yellow-800' }
                 };
-                return map[status] || { label: status || 'PLANNED', class: 'bg-gray-100 text-gray-800' };
+                return map[status] || { label: status || localization.getText('status_idle'), class: 'bg-gray-100 text-gray-800' };
             };
             const statusInfo = getStatusInfo(ride.status);
 
@@ -422,7 +422,7 @@
                 // Label
                 packagesHtml += `
                     <div class="text-left pl-1 md:pl-4 text-[10px] md:text-xs font-bold text-gray-400 uppercase leading-tight">
-                        Capacity<br>& Price
+                        ${localization.getText('label_capacity_price')}
                     </div>
                 `;
 
@@ -434,7 +434,7 @@
                                 <div class="text-[#25A8D9]">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Small</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_small_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">${maxS}</div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceS} ${currency}</div>
@@ -447,7 +447,7 @@
                                 <div class="text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Small</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_small_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">-</div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
@@ -463,7 +463,7 @@
                                 <div class="text-[#25A8D9]">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Medium</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_medium_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">${maxM}</div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceM} ${currency}</div>
@@ -476,7 +476,7 @@
                                 <div class="text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Medium</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_medium_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">-</div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
@@ -492,7 +492,7 @@
                                 <div class="text-[#25A8D9]">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Large</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_large_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">${maxL}</div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceL} ${currency}</div>
@@ -505,7 +505,7 @@
                                 <div class="text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 </div>
-                                <div class="text-xs font-bold text-black">Large</div>
+                                <div class="text-xs font-bold text-black">${localization.getText('option_large_simple')}</div>
                             </div>
                             <div class="font-bold text-gray-800 text-lg">-</div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
@@ -519,14 +519,14 @@
                 packagesHtml = `
                 <div class="flex items-center justify-between border-t border-gray-100 pt-4 mt-2">
                     <div>
-                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">Capacity</p>
+                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">${localization.getText('label_capacity')}</p>
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                            <span class="font-bold text-gray-700">${currentPackages}/${maxPackages} <span class="font-normal text-gray-500">parcels</span></span>
+                            <span class="font-bold text-gray-700">${currentPackages}/${maxPackages} <span class="font-normal text-gray-500">${localization.getText('label_parcels')}</span></span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">Price per parcel</p>
+                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">${localization.getText('label_price_per_parcel')}</p>
                         <p class="text-xl font-bold text-[#25A8D9]">${price} <span class="text-sm font-medium text-gray-500">${currency}</span></p>
                     </div>
                 </div>
@@ -543,7 +543,7 @@
                     <span class="px-3 py-1 rounded-full text-xs font-bold ${statusInfo.class}">
                         ${statusInfo.label}
                     </span>
-                    <span class="text-xs font-bold text-[#25A8D9] bg-blue-50 px-2 py-1 rounded">OFFERED</span>
+                    <span class="text-xs font-bold text-[#25A8D9] bg-blue-50 px-2 py-1 rounded">${localization.getText('label_offered')}</span>
                 </div>
 
                 <!-- Route -->
@@ -560,7 +560,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">From</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_from')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${fromPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${fromTime}</p>
@@ -577,7 +577,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">Stops</p>
+                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_stops')}</p>
                             <p class="text-sm text-gray-700 leading-relaxed">${stops}</p>
                         </div>
                     </div>
@@ -593,7 +593,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">To</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
@@ -657,9 +657,9 @@
                 <!-- Header: Status -->
                 <div class="flex justify-between items-center mb-6">
                     <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">
-                        ${request.status}
+                        ${localization.getText('status_' + request.status.toLowerCase()) || request.status}
                     </span>
-                    <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">REQUESTED</span>
+                    <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">${localization.getText('label_requested')}</span>
                 </div>
 
                 <!-- Route -->
@@ -676,7 +676,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">From</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_from')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${fromPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${fromTime}</p>
@@ -693,7 +693,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">Stops</p>
+                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_stops')}</p>
                             <p class="text-sm text-gray-700 leading-relaxed">${stops}</p>
                         </div>
                     </div>
@@ -709,7 +709,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">To</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
@@ -721,11 +721,11 @@
                 <!-- Footer: Requested Data -->
                 <div class="flex items-center justify-between border-t border-gray-100 pt-4 mt-2">
                     <div>
-                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">Requested</p>
-                        <span class="font-bold text-gray-700">${request.packages} <span class="font-normal text-gray-500">${request.packageType === 'S' ? 'Small' : request.packageType === 'M' ? 'Medium' : request.packageType === 'L' ? 'Large' : 'parcels'}</span></span>
+                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">${localization.getText('label_requested')}</p>
+                        <span class="font-bold text-gray-700">${request.packages} <span class="font-normal text-gray-500">${request.packageType === 'S' ? localization.getText('option_small_simple') : request.packageType === 'M' ? localization.getText('option_medium_simple') : request.packageType === 'L' ? localization.getText('option_large_simple') : localization.getText('label_parcels')}</span></span>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">Total</p>
+                        <p class="text-xs text-gray-400 mb-1 uppercase tracking-wide">${localization.getText('label_total')}</p>
                         <p class="text-xl font-bold text-[#25A8D9]">${request.packages} x ${price} <span class="text-sm font-medium text-gray-500">${currency}</span></p>
                     </div>
                 </div>

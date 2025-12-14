@@ -103,6 +103,18 @@ export const translations = {
         "text_medium_desc": "Computer, printer",
         "text_large_desc": "Sofa, wardrobe",
         "label_comment": "Comment (Optional)",
+        "label_capacity_price": "Capacity<br>& Price",
+        "label_offered": "OFFERED",
+        "label_capacity": "Capacity",
+        "label_parcels": "parcels",
+        "label_price_per_parcel": "Price per parcel",
+        "label_requested": "Requested",
+        "label_total": "Total",
+        "placeholder_city_example_from": "e.g. Warsaw",
+        "placeholder_city_example_to": "e.g. Krakow",
+        "placeholder_city": "City",
+        "placeholder_review": "Write your review here...",
+        "error_city_not_supported": "City '{city}' is not in our supported list. Please select from the suggestions.",
         
         // Requests (requests.html)
         "requests_title": "Requests",
@@ -132,11 +144,12 @@ export const translations = {
         "link_signin": "Sign in",
 
         // Common
-        "status_idle": "IDLE",
+        "status_idle": "PLANNED",
         "status_started": "STARTED",
         "status_ended": "ENDED",
-        "status_rated": "RATED",
+        "status_rated": "REVIEWED",
         "status_pending": "PENDING",
+        "status_cancelled": "CANCELLED",
         "status_accepted": "ACCEPTED",
         "status_rejected": "REJECTED"
     },
@@ -244,6 +257,18 @@ export const translations = {
         "text_medium_desc": "Компьютер, принтер",
         "text_large_desc": "Диван, шкаф",
         "label_comment": "Комментарий (опционально)",
+        "label_capacity_price": "Вместимость<br>и Цена",
+        "label_offered": "ПРЕДЛОЖЕНО",
+        "label_capacity": "Вместимость",
+        "label_parcels": "посылок",
+        "label_price_per_parcel": "Цена за посылку",
+        "label_requested": "Запрошено",
+        "label_total": "Итого",
+        "placeholder_city_example_from": "например, Варшава",
+        "placeholder_city_example_to": "например, Краков",
+        "placeholder_city": "Город",
+        "placeholder_review": "Напишите ваш отзыв здесь...",
+        "error_city_not_supported": "Город '{city}' не найден в нашем списке. Пожалуйста, выберите из предложенных вариантов.",
         
         // Requests (requests.html)
         "requests_title": "Заявки",
@@ -273,11 +298,12 @@ export const translations = {
         "link_signin": "Войти",
 
         // Common
-        "status_idle": "ОЖИДАЕТ",
+        "status_idle": "ЗАПЛАНИРОВАНА",
         "status_started": "В ПУТИ",
         "status_ended": "ЗАВЕРШЕНА",
-        "status_rated": "ОЦЕНЕНА",
+        "status_rated": "ОТЗЫВ ОСТАВЛЕН",
         "status_pending": "НА РАССМОТРЕНИИ",
+        "status_cancelled": "ОТМЕНЕНА",
         "status_accepted": "ПРИНЯТА",
         "status_rejected": "ОТКЛОНЕНА"
     }

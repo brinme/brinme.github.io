@@ -171,7 +171,7 @@
 
                     <div class="mb-4">
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Comment</label>
-                        <textarea id="comment-${uniqueId}" rows="3" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-gray-50" placeholder="Write your review here..."></textarea>
+                        <textarea id="comment-${uniqueId}" rows="3" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-gray-50" placeholder="${localization.getText('placeholder_review')}"></textarea>
                     </div>
 
                     <button onclick="submitRating('${targetUserId}', '${uniqueId}', '${type}')" class="w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors">Submit Review</button>

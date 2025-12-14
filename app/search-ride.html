@@ -62,11 +62,11 @@
                         <form id="searchForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1 uppercase" data-i18n="label_from">From</label>
-                                <input type="text" id="searchFrom" placeholder="City" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9]">
+                                <input type="text" id="searchFrom" placeholder="City" data-i18n="placeholder_city" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9]">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1 uppercase" data-i18n="label_to">To</label>
-                                <input type="text" id="searchTo" placeholder="City" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9]">
+                                <input type="text" id="searchTo" placeholder="City" data-i18n="placeholder_city" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9]">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1 uppercase" data-i18n="label_date">Date</label>
@@ -124,6 +124,7 @@
         import { collection, query, getDocs, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { setupAutocomplete } from './js/autocomplete.js';
         import { LocalizationManager } from './js/localization.js';
+        import { getAllCities } from './js/cities.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -152,8 +153,23 @@
             e.preventDefault();
             const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
             
-            const fromQuery = normalize(document.getElementById('searchFrom').value);
-            const toQuery = normalize(document.getElementById('searchTo').value);
+            // Canonicalize inputs
+            const allCities = getAllCities();
+            const getCanonicalName = (input) => {
+                if (!input) return "";
+                const normalized = normalize(input);
+                const city = allCities.find(c => c.names.some(n => normalize(n) === normalized));
+                return city ? city.name : input;
+            };
+
+            const rawFrom = document.getElementById('searchFrom').value;
+            const rawTo = document.getElementById('searchTo').value;
+
+            const fromCanonical = getCanonicalName(rawFrom);
+            const toCanonical = getCanonicalName(rawTo);
+
+            const fromQuery = normalize(fromCanonical);
+            const toQuery = normalize(toCanonical);
             const dateQuery = document.getElementById('searchDate').value; // YYYY-MM-DD
             const typeQuery = document.getElementById('searchType').value;
 
