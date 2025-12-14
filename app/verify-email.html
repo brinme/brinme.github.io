@@ -19,18 +19,18 @@
             </svg>
         </div>
         
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Verify your email</h1>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2" data-i18n="title_verify_email">Verify your email</h1>
         <p class="text-gray-500 mb-8">
-            We sent a verification link to <br>
-            <span id="userEmail" class="font-medium text-gray-900">your email</span>
+            <span data-i18n="text_verify_email_sent">We sent a verification link to</span> <br>
+            <span id="userEmail" class="font-medium text-gray-900" data-i18n="text_your_email">your email</span>
         </p>
 
         <div class="space-y-3">
-            <button id="checkBtn" class="w-full py-3.5 px-4 bg-[#25A8D9] hover:bg-[#1e90c7] text-white font-bold rounded-xl transition-colors">
+            <button id="checkBtn" class="w-full py-3.5 px-4 bg-[#25A8D9] hover:bg-[#1e90c7] text-white font-bold rounded-xl transition-colors" data-i18n="btn_verified">
                 I've verified my email
             </button>
             
-            <button id="resendBtn" class="w-full py-3.5 px-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors">
+            <button id="resendBtn" class="w-full py-3.5 px-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors" data-i18n="btn_resend">
                 Resend Email
             </button>
         </div>
@@ -41,6 +41,11 @@
     <script type="module">
         import { onAuthStateChanged, sendEmailVerification, reload } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { auth } from './js/firebase-config.js';
+        import { LocalizationManager } from './js/localization.js';
+
+        // Initialize localization
+        const localization = new LocalizationManager();
+        await localization.init();
         
         const userEmailSpan = document.getElementById('userEmail');
         const checkBtn = document.getElementById('checkBtn');
@@ -75,22 +80,22 @@
             const user = auth.currentUser;
             if (user) {
                 checkBtn.disabled = true;
-                checkBtn.textContent = "Checking...";
+                checkBtn.textContent = localization.getText('text_checking');
                 
                 try {
                     await reload(user);
                     if (user.emailVerified) {
                         window.location.href = 'index.html';
                     } else {
-                        showMessage("Email not verified yet. Please check your inbox.", true);
+                        showMessage(localization.getText('text_email_not_verified'), true);
                         checkBtn.disabled = false;
-                        checkBtn.textContent = "I've verified my email";
+                        checkBtn.textContent = localization.getText('btn_verified');
                     }
                 } catch (error) {
                     console.error(error);
-                    showMessage("Error checking status.", true);
+                    showMessage(localization.getText('text_error_checking'), true);
                     checkBtn.disabled = false;
-                    checkBtn.textContent = "I've verified my email";
+                    checkBtn.textContent = localization.getText('btn_verified');
                 }
             }
         });
@@ -101,23 +106,23 @@
                 resendBtn.disabled = true;
                 try {
                     await sendEmailVerification(user);
-                    showMessage("Verification email sent!");
+                    showMessage(localization.getText('text_email_resent'));
                     
                     // Cooldown
                     let count = 60;
                     const interval = setInterval(() => {
-                        resendBtn.textContent = `Resend in ${count}s`;
+                        resendBtn.textContent = `${localization.getText('btn_resend')} (${count}s)`;
                         count--;
                         if (count < 0) {
                             clearInterval(interval);
                             resendBtn.disabled = false;
-                            resendBtn.textContent = "Resend Email";
+                            resendBtn.textContent = localization.getText('btn_resend');
                         }
                     }, 1000);
                     
                 } catch (error) {
                     console.error(error);
-                    showMessage("Error sending email: " + error.message, true);
+                    showMessage(localization.getText('text_error_resending') + " " + error.message, true);
                     resendBtn.disabled = false;
                 }
             }

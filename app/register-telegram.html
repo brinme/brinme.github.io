@@ -17,8 +17,8 @@
         <div class="flex justify-center mb-6">
             <img src="../images/brinme_small_icon.webp" alt="Brinme" class="h-12 w-12 rounded-full">
         </div>
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Welcome, <span id="tgName">User</span>!</h2>
-        <p class="text-center text-gray-500 mb-8 text-sm">To use the app please provide and confirm your email.</p>
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2"><span data-i18n="title_welcome">Welcome,</span> <span id="tgName">User</span>!</h2>
+        <p class="text-center text-gray-500 mb-8 text-sm" data-i18n="text_provide_email">To use the app please provide and confirm your email.</p>
         
         <form id="regForm" class="space-y-6">
             <!-- Hidden fields for TG data -->
@@ -29,14 +29,14 @@
             <input type="hidden" id="tgLastName">
 
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <label for="email" class="block text-sm font-medium text-gray-700" data-i18n="label_email">Email address</label>
                 <input type="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                <p class="text-xs text-gray-400 mt-1">We will send a confirmation link to this email.</p>
+                <p class="text-xs text-gray-400 mt-1" data-i18n="text_email_confirmation_hint">We will send a confirmation link to this email.</p>
             </div>
 
             <div id="errorMessage" class="text-red-500 text-sm hidden"></div>
 
-            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]">
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]" data-i18n="btn_confirm_email">
                 Confirm Email
             </button>
         </form>
@@ -47,6 +47,11 @@
         import { updateEmail, sendEmailVerification, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
+        import { LocalizationManager } from './js/localization.js';
+
+        // Initialize localization
+        const localization = new LocalizationManager();
+        await localization.init();
 
         const tg = window.Telegram.WebApp;
         const regForm = document.getElementById('regForm');
@@ -90,7 +95,7 @@
             e.preventDefault();
             
             if (!currentUser) {
-                errorMessage.textContent = "Authentication session missing. Please restart the app.";
+                errorMessage.textContent = localization.getText('text_auth_missing');
                 errorMessage.classList.remove('hidden');
                 return;
             }
@@ -123,7 +128,7 @@
                 // 3. Send Verification
                 await sendEmailVerification(currentUser);
 
-                alert("Account created! Please check your email to verify.");
+                alert(localization.getText('text_account_created_verify'));
                 
                 // Redirect to dashboard immediately (stay logged in)
                 window.location.href = 'index.html';
@@ -131,11 +136,11 @@
             } catch (error) {
                 console.error("Registration error:", error);
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage.textContent = "This email is already in use by another account. Please use a different email.";
+                    errorMessage.textContent = localization.getText('text_email_in_use');
                 } else if (error.code === 'auth/requires-recent-login') {
-                    errorMessage.textContent = "Session expired. Please restart the app.";
+                    errorMessage.textContent = localization.getText('text_session_expired');
                 } else {
-                    errorMessage.textContent = "Error: " + error.message;
+                    errorMessage.textContent = localization.getText('text_reg_error') + error.message;
                 }
                 errorMessage.classList.remove('hidden');
             }
