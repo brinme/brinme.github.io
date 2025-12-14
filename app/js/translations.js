@@ -408,14 +408,14 @@ export const translations = {
         // Register Telegram (register-telegram.html)
         "title_complete_registration": "Завершение регистрации",
         "title_welcome": "Добро пожаловать,",
-        "text_provide_email": "Для использования приложения укажите и подтвердите ваш email.",
-        "text_email_confirmation_hint": "Мы отправим ссылку для подтверждения на этот email.",
+        "text_provide_email": "Для использования приложения укажите и подтвердите ваш email",
+        "text_email_confirmation_hint": "Мы отправим ссылку для подтверждения на этот email",
         "btn_confirm_email": "Подтвердить Email",
-        "text_auth_missing": "Сессия не найдена. Перезапустите приложение.",
-        "text_email_in_use": "Email уже используется.",
+        "text_auth_missing": "Сессия не найдена. Перезапустите приложение",
+        "text_email_in_use": "Email уже используется",
         "text_reg_error": "Ошибка регистрации: ",
-        "text_account_created_verify": "Аккаунт создан! Проверьте почту для подтверждения.",
-        "text_session_expired": "Сессия истекла. Перезапустите приложение.",
+        "text_account_created_verify": "Аккаунт создан! Проверьте почту для подтверждения",
+        "text_session_expired": "Сессия истекла. Перезапустите приложение",
 
         // Login (login.html)
         "login_title": "Войти в Brinme<br>Маркетплейс доставки",
