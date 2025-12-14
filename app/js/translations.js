@@ -1,0 +1,284 @@
+export const translations = {
+    en: {
+        // Navigation
+        "nav_home": "Home",
+        "nav_rides": "Rides",
+        "nav_profile": "Profile",
+        "nav_logout": "Logout",
+        
+        // Dashboard (index.html)
+        "hello": "Hello",
+        "dashboard_subtitle": "Do you want to save or earn on delivery today?",
+        "btn_find_ride": "Find Ride",
+        "desc_find_ride": "Search for available space",
+        "btn_offer_ride": "Offer Ride",
+        "desc_offer_ride": "Earn by delivering packages",
+        "title_my_next_ride": "My Next Ride",
+        "link_view_all": "View all",
+        "loading": "Loading...",
+        "text_no_upcoming_rides": "No upcoming rides",
+        "text_no_rides_scheduled": "You don't have any rides scheduled.",
+        
+        // Rides (rides.html)
+        "title_my_rides": "My Rides",
+        "tab_offered": "Offered",
+        "tab_requested": "Requested",
+        "no_rides": "No rides found.",
+        "text_no_offered_rides": "You haven't offered any rides yet.",
+        "link_offer_first_ride": "Offer your first ride",
+        "text_no_requests": "You haven't made any requests yet.",
+        "link_find_ride": "Find a ride",
+        
+        // Profile (profile.html)
+        "stat_rides": "Rides",
+        "stat_packages": "Packages",
+        "reviews_count": "reviews",
+        "title_reviews": "Reviews",
+        "text_no_reviews": "No reviews yet.",
+        
+        // Rate (rate.html)
+        "title_rate": "Rate",
+        "title_rate_senders": "Rate Senders",
+        "title_rate_driver": "Rate Driver",
+        "text_no_senders_to_rate": "No accepted senders to rate.",
+        "btn_submit_ratings": "Submit Ratings",
+        "text_rating_submitted": "Rating submitted!",
+        "alert_invalid_params": "Invalid parameters",
+        "alert_request_id_missing": "Request ID missing",
+        "alert_select_rating": "Please select a rating.",
+        "alert_review_submitted": "Review submitted!",
+        "alert_error_submitting": "Error submitting review.",
+        "text_all_senders_rated": "All senders rated!",
+
+        // Chat (chat.html)
+        "placeholder_message": "Type a message...",
+
+        "label_about": "About Me",
+        "placeholder_about": "Tell us about yourself...",
+        "label_phone": "Phone Number",
+        "placeholder_phone": "+1 234 567 890",
+        "label_country": "Country",
+        "placeholder_country": "e.g. Poland",
+        "label_birthday": "Birthday",
+        "label_media": "Media / Website",
+        "placeholder_media": "https://...",
+        "btn_save_changes": "Save Changes",
+
+        // Search (search-ride.html)
+        "title_find_ride": "Find a Ride",
+        "label_from": "From",
+        "label_to": "To",
+        "label_date": "Date",
+        "label_package_type": "Package Type (Optional)",
+        "option_any": "Any",
+        "option_small": "Small (S) - Documents, shoes, phone",
+        "option_medium": "Medium (M) - Computer, wheel, printer",
+        "option_large": "Large (L) - Sofa, window, wardrobe",
+        "btn_search": "Search",
+        "text_enter_cities": "Enter cities to find available rides for your package.",
+        
+        // Offer Ride (add-ride.html)
+        "title_offer_ride": "Offer a Ride",
+        "subtitle_itinerary": "Itinerary",
+        "label_from_city": "From (City)",
+        "label_departure": "Departure Time",
+        "label_to_city": "To (City)",
+        "label_arrival": "Arrival Time",
+        "label_stops": "Stops (Optional)",
+        "subtitle_pricing": "Pricing",
+        "label_price": "Price per Package",
+        "label_currency": "Currency",
+        "subtitle_capacity": "Capacity",
+        "label_max_packages": "Max Packages",
+        "label_allowed_sizes": "Allowed Sizes",
+        "option_small_simple": "Small",
+        "option_medium_simple": "Medium",
+        "option_large_simple": "Large",
+        "btn_create_ride": "Create Ride",
+        "subtitle_additional_info": "Additional Info",
+        "label_car_plate": "Car Plate",
+        "label_qty": "Qty",
+        "label_price_short": "Price",
+        "text_small_desc": "Docs, shoes",
+        "text_medium_desc": "Computer, printer",
+        "text_large_desc": "Sofa, wardrobe",
+        "label_comment": "Comment (Optional)",
+        
+        // Requests (requests.html)
+        "requests_title": "Requests",
+        "requests_title_long": "Ride Requests",
+        
+        // Ride Details (ride-details.html)
+        "ride_details_title": "Ride Details",
+
+        // Login (login.html)
+        "login_title": "Login to Brinme<br>Delivery marketplace",
+        "label_email": "Email address",
+        "label_password": "Password",
+        "btn_signin": "Sign in",
+        "text_or_continue": "Or continue with",
+        "btn_signin_google": "Sign in with Google",
+        "text_no_account": "Don't have an account?",
+        "link_signup": "Sign up",
+        
+        // Register (register.html)
+        "register_title": "Create Account",
+        "label_firstname": "First Name",
+        "label_lastname": "Last Name",
+        "btn_signup": "Sign up",
+        "text_or_signup": "Or sign up with",
+        "btn_signup_google": "Sign up with Google",
+        "text_have_account": "Already have an account?",
+        "link_signin": "Sign in",
+
+        // Common
+        "status_idle": "IDLE",
+        "status_started": "STARTED",
+        "status_ended": "ENDED",
+        "status_rated": "RATED",
+        "status_pending": "PENDING",
+        "status_accepted": "ACCEPTED",
+        "status_rejected": "REJECTED"
+    },
+    ru: {
+        // Navigation
+        "nav_home": "Главная",
+        "nav_rides": "Поездки",
+        "nav_profile": "Профиль",
+        "nav_logout": "Выйти",
+        
+        // Dashboard (index.html)
+        "hello": "Привет",
+        "dashboard_subtitle": "Хочешь сэкономить или заработать на доставке?",
+        "btn_find_ride": "Найти поездку",
+        "desc_find_ride": "Найти место для вашей посылки",
+        "btn_offer_ride": "Создать поездку",
+        "desc_offer_ride": "Предложить место для посылок",
+        "title_my_next_ride": "Следующая поездка",
+        "link_view_all": "Все",
+        "loading": "Загрузка...",
+        "text_no_upcoming_rides": "Нет предстоящих поездок",
+        "text_no_rides_scheduled": "У вас нет запланированных поездок",
+        
+        // Rides (rides.html)
+        "title_my_rides": "Мои поездки",
+        "tab_offered": "Созданные",
+        "tab_requested": "Заявки",
+        "no_rides": "Поездок не найдено",
+        "text_no_offered_rides": "Вы еще не создали ни одной поездки",
+        "link_offer_first_ride": "Создать поездку",
+        "text_no_requests": "Вы еще не оставляли заявок",
+        "link_find_ride": "Найти поездку",
+        
+        // Profile (profile.html)
+        "stat_rides": "Поездки",
+        "stat_packages": "Посылки",
+        "reviews_count": "отзывов",
+        "title_reviews": "Отзывы",
+        "text_no_reviews": "Отзывов пока нет",
+        
+        // Rate (rate.html)
+        "title_rate": "Оценить",
+        "title_rate_senders": "Оценить отправителей",
+        "title_rate_driver": "Оценить водителя",
+        "text_no_senders_to_rate": "Нет отправителей для оценки",
+        "btn_submit_ratings": "Отправить оценки",
+        "text_rating_submitted": "Оценка отправлена!",
+        "alert_invalid_params": "Неверные параметры",
+        "alert_request_id_missing": "Отсутствует ID заявки",
+        "alert_select_rating": "Пожалуйста, выберите оценку.",
+        "alert_review_submitted": "Отзыв отправлен!",
+        "alert_error_submitting": "Ошибка при отправке отзыва.",
+        "text_all_senders_rated": "Все отправители оценены!",
+
+        // Chat (chat.html)
+        "placeholder_message": "Введите сообщение...",
+
+        "label_about": "Обо мне",
+        "placeholder_about": "Расскажите о себе...",
+        "label_phone": "Номер телефона",
+        "placeholder_phone": "+1 234 567 890",
+        "label_country": "Страна",
+        "placeholder_country": "например, Польша",
+        "label_birthday": "День рождения",
+        "label_media": "Медиа / Вебсайт",
+        "placeholder_media": "https://...",
+        "btn_save_changes": "Сохранить изменения",
+
+        // Search (search-ride.html)
+        "title_find_ride": "Найти поездку",
+        "label_from": "Откуда",
+        "label_to": "Куда",
+        "label_date": "Дата",
+        "label_package_type": "Тип посылки (опционально)",
+        "option_any": "Любой",
+        "option_small": "Маленькая (S) - Документы, обувь, телефон",
+        "option_medium": "Средняя (M) - Компьютер, колесо, принтер",
+        "option_large": "Большая (L) - Велосипед, диван, шкаф",
+        "btn_search": "Поиск",
+        "text_enter_cities": "Введите города для поиска доступных поездок.",
+        
+        // Offer Ride (add-ride.html)
+        "title_offer_ride": "Создать поездку",
+        "subtitle_itinerary": "Маршрут",
+        "label_from_city": "Откуда (Город)",
+        "label_departure": "Время отправления",
+        "label_to_city": "Куда (Город)",
+        "label_arrival": "Время прибытия",
+        "label_stops": "Остановки (опционально)",
+        "subtitle_pricing": "Стоимость",
+        "label_price": "Цена за посылку",
+        "label_currency": "Валюта",
+        "subtitle_capacity": "Вместимость",
+        "label_max_packages": "Макс. посылок",
+        "label_allowed_sizes": "Допустимые размеры",
+        "option_small_simple": "Маленькая",
+        "option_medium_simple": "Средняя",
+        "option_large_simple": "Большая",
+        "btn_create_ride": "Создать поездку",
+        "subtitle_additional_info": "Дополнительная информация",
+        "label_car_plate": "Номер машины",
+        "label_qty": "Кол-во",
+        "label_price_short": "Цена",
+        "text_small_desc": "Док-ты, обувь",
+        "text_medium_desc": "Компьютер, принтер",
+        "text_large_desc": "Диван, шкаф",
+        "label_comment": "Комментарий (опционально)",
+        
+        // Requests (requests.html)
+        "requests_title": "Заявки",
+        "requests_title_long": "Заявки на поездку",
+        
+        // Ride Details (ride-details.html)
+        "ride_details_title": "Детали поездки",
+
+        // Login (login.html)
+        "login_title": "Войти в Brinme<br>Маркетплейс доставки",
+        "label_email": "Email адрес",
+        "label_password": "Пароль",
+        "btn_signin": "Войти",
+        "text_or_continue": "Или продолжить с",
+        "btn_signin_google": "Войти через Google",
+        "text_no_account": "Нет аккаунта?",
+        "link_signup": "Регистрация",
+        
+        // Register (register.html)
+        "register_title": "Создать аккаунт",
+        "label_firstname": "Имя",
+        "label_lastname": "Фамилия",
+        "btn_signup": "Зарегистрироваться",
+        "text_or_signup": "Или зарегистрироваться через",
+        "btn_signup_google": "Регистрация через Google",
+        "text_have_account": "Уже есть аккаунт?",
+        "link_signin": "Войти",
+
+        // Common
+        "status_idle": "ОЖИДАЕТ",
+        "status_started": "В ПУТИ",
+        "status_ended": "ЗАВЕРШЕНА",
+        "status_rated": "ОЦЕНЕНА",
+        "status_pending": "НА РАССМОТРЕНИИ",
+        "status_accepted": "ПРИНЯТА",
+        "status_rejected": "ОТКЛОНЕНА"
+    }
+};

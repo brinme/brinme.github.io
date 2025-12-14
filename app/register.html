@@ -17,31 +17,31 @@
         <div class="flex justify-center mb-6">
             <img src="../images/brinme_small_icon.webp" alt="Brinme" class="h-12 w-12 rounded-full">
         </div>
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">Create Account</h2>
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-8" data-i18n="register_title">Create Account</h2>
         
         <form id="registerForm" class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700" data-i18n="label_firstname">First Name</label>
                     <input type="text" id="firstName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
                 </div>
                 <div>
-                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700" data-i18n="label_lastname">Last Name</label>
                     <input type="text" id="lastName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
                 </div>
             </div>
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <label for="email" class="block text-sm font-medium text-gray-700" data-i18n="label_email">Email address</label>
                 <input type="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700" data-i18n="label_password">Password</label>
                 <input type="password" id="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#25A8D9] focus:border-[#25A8D9]">
             </div>
             
             <div id="errorMessage" class="text-red-500 text-sm hidden"></div>
 
-            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]">
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]" data-i18n="btn_signup">
                 Sign up
             </button>
         </form>
@@ -52,7 +52,7 @@
                     <div class="w-full border-t border-gray-300"></div>
                 </div>
                 <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-white text-gray-500">Or sign up with</span>
+                    <span class="px-2 bg-white text-gray-500" data-i18n="text_or_signup">Or sign up with</span>
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
                           <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
                         </g>
                     </svg>
-                    Sign up with Google
+                    <span data-i18n="btn_signup_google">Sign up with Google</span>
                 </button>
             </div>
 
@@ -84,7 +84,7 @@
         </div>
 
         <p class="mt-4 text-center text-sm text-gray-600">
-            Already have an account? <a href="login.html" class="font-medium text-[#25A8D9] hover:text-[#1e90c7]">Sign in</a>
+            <span data-i18n="text_have_account">Already have an account?</span> <a href="login.html" class="font-medium text-[#25A8D9] hover:text-[#1e90c7]" data-i18n="link_signin">Sign in</a>
         </p>
     </div>
 
@@ -94,6 +94,11 @@
         import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
+        import { LocalizationManager } from './js/localization.js';
+
+        // Initialize localization
+        const localization = new LocalizationManager();
+        await localization.init();
 
         // Expose Telegram Auth Callback
         window.onTelegramAuth = async (user) => {

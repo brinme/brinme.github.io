@@ -35,6 +35,11 @@
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { LocalizationManager } from './js/localization.js';
+
+        // Initialize Localization
+        const localization = new LocalizationManager();
+        await localization.init();
 
         const mainContent = document.getElementById('mainContent');
         const pageTitle = document.getElementById('pageTitle');
@@ -48,18 +53,18 @@
                 const requestId = urlParams.get('requestId'); // Required if mode='driver'
 
                 if (!rideId || !mode) {
-                    alert("Invalid parameters");
+                    alert(localization.getText('alert_invalid_params'));
                     window.location.href = 'rides.html';
                     return;
                 }
 
                 if (mode === 'senders') {
-                    pageTitle.textContent = "Rate Senders";
+                    pageTitle.textContent = localization.getText('title_rate_senders');
                     await renderRateSenders(rideId);
                 } else if (mode === 'driver') {
-                    pageTitle.textContent = "Rate Driver";
+                    pageTitle.textContent = localization.getText('title_rate_driver');
                     if (!requestId) {
-                        alert("Request ID missing");
+                        alert(localization.getText('alert_request_id_missing'));
                         window.history.back();
                         return;
                     }
@@ -76,7 +81,7 @@
                 const snapshot = await getDocs(q);
                 
                 if (snapshot.empty) {
-                    mainContent.innerHTML = '<div class="text-center py-10 text-gray-500">No accepted senders to rate.</div>';
+                    mainContent.innerHTML = `<div class="text-center py-10 text-gray-500">${localization.getText('text_no_senders_to_rate')}</div>`;
                     return;
                 }
 
@@ -196,7 +201,7 @@
             const comment = commentInput ? commentInput.value : '';
             
             if (!rating) {
-                alert("Please select a rating.");
+                alert(localization.getText('alert_select_rating'));
                 return;
             }
 
@@ -245,7 +250,7 @@
 
                 await updateDoc(doc(db, "requests", uniqueId), updateData);
 
-                alert("Review submitted!");
+                alert(localization.getText('alert_review_submitted'));
                 
                 // Remove card or redirect
                 if (type === 'driver') {
@@ -256,14 +261,14 @@
                     
                     // Check if any cards left
                     if (document.querySelectorAll('[id^="card-"]').length === 0) {
-                        mainContent.innerHTML = '<div class="text-center py-10 text-gray-500">All senders rated!</div>';
+                        mainContent.innerHTML = `<div class="text-center py-10 text-gray-500">${localization.getText('text_all_senders_rated')}</div>`;
                         setTimeout(() => window.history.back(), 1500);
                     }
                 }
 
             } catch (e) {
                 console.error(e);
-                alert("Error submitting review.");
+                alert(localization.getText('alert_error_submitting'));
             }
         };
     </script>
