@@ -314,7 +314,7 @@
                             if (maxS > 0) {
                                 packagesHtml += `
                                     <div class="text-center border-r border-gray-100 last:border-0">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">S</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_small_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">${maxS}</div>
                                         <div class="text-xs text-[#25A8D9] font-bold">${priceS} ${currency}</div>
                                     </div>
@@ -322,7 +322,7 @@
                             } else {
                                 packagesHtml += `
                                     <div class="text-center border-r border-gray-100 last:border-0 opacity-30">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">S</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_small_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">-</div>
                                         <div class="text-xs text-gray-400 font-bold">-</div>
                                     </div>
@@ -333,7 +333,7 @@
                             if (maxM > 0) {
                                 packagesHtml += `
                                     <div class="text-center border-r border-gray-100 last:border-0">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">M</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_medium_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">${maxM}</div>
                                         <div class="text-xs text-[#25A8D9] font-bold">${priceM} ${currency}</div>
                                     </div>
@@ -341,7 +341,7 @@
                             } else {
                                 packagesHtml += `
                                     <div class="text-center border-r border-gray-100 last:border-0 opacity-30">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">M</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_medium_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">-</div>
                                         <div class="text-xs text-gray-400 font-bold">-</div>
                                     </div>
@@ -352,7 +352,7 @@
                             if (maxL > 0) {
                                 packagesHtml += `
                                     <div class="text-center last:border-0">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">L</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_large_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">${maxL}</div>
                                         <div class="text-xs text-[#25A8D9] font-bold">${priceL} ${currency}</div>
                                     </div>
@@ -360,7 +360,7 @@
                             } else {
                                 packagesHtml += `
                                     <div class="text-center last:border-0 opacity-30">
-                                        <div class="text-xs font-bold text-gray-400 mb-1">L</div>
+                                        <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_large_simple')}</div>
                                         <div class="font-bold text-gray-800 text-sm">-</div>
                                         <div class="text-xs text-gray-400 font-bold">-</div>
                                     </div>

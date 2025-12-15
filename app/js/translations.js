@@ -368,7 +368,7 @@ export const translations = {
         "text_medium_desc": "Компьютер, одежда",
         "text_large_desc": "Велосипед, мебель",
         "label_comment": "Комментарий (опционально)",
-        "label_capacity_price": "Вместимость<br>и Цена",
+        "label_capacity_price": "Кол-во<br>и Цена",
         "label_offered": "ПРЕДЛОЖЕНО",
         "label_capacity": "Вместимость",
         "label_parcels": "посылок",

@@ -266,13 +266,13 @@
                                     <div><span class="font-bold text-gray-900">${ridesCount}</span> ${localization.getText('stat_rides')}</div>
                                     <div><span class="font-bold text-gray-900">${packagesCount}</span> ${localization.getText('stat_packages')}</div>
                                 </div>
-                            ` : ''}
 
-                            ${about ? `<p class="text-xs text-gray-600 mb-1"><span class="font-medium">${localization.getText('label_about')}:</span> ${about}</p>` : ''}
-                            <div class="flex items-center gap-1">
-                                ${getStarsHTML(rating)}
-                                <span class="text-[10px] text-gray-500">(${requester.scores ? requester.scores.length : 0})</span>
-                            </div>
+                                ${about ? `<p class="text-xs text-gray-600 mb-1"><span class="font-medium">${localization.getText('label_about')}:</span> ${about}</p>` : ''}
+                                <div class="flex items-center gap-1">
+                                    ${getStarsHTML(rating)}
+                                    <span class="text-[10px] text-gray-500">(${requester.scores ? requester.scores.length : 0})</span>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                     ${!isMe ? `
