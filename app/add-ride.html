@@ -168,7 +168,7 @@
                                 <div class="flex flex-row md:flex-col items-center p-3 bg-white rounded-xl border border-gray-200 shadow-sm gap-3">
                                     <div class="flex flex-col items-center justify-center w-12 md:w-auto shrink-0">
                                         <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center text-[#25A8D9] mb-1">
-                                            <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                            <svg class="w-4 h-4 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
                                         </div>
                                         <span class="font-bold text-gray-900 text-[10px] md:text-sm" data-i18n="option_large_simple">Large</span>
                                         <span class="text-[10px] text-gray-400 text-center leading-tight hidden md:block" data-i18n="text_large_desc">Sofa, wardrobe</span>
@@ -316,11 +316,11 @@
                 const priceL = parseFloat(document.getElementById('priceL').value) || 0;
 
                 if (maxPackages === 0) {
-                    throw new Error("Please specify capacity for at least one package type.");
+                    throw new Error(localization.getText('error_specify_capacity'));
                 }
 
                 const currency = document.getElementById('currency').value;
-                const plate = document.getElementById('plate').value;
+                const plate = document.getElementById('carPlate').value;
                 const comment = document.getElementById('comment').value;
 
                 // Create Objects
@@ -358,7 +358,7 @@
 
             } catch (error) {
                 console.error("Error adding ride: ", error);
-                errorMessage.textContent = "Error creating ride: " + error.message;
+                errorMessage.textContent = localization.getText('error_creating_ride') + error.message;
                 errorMessage.classList.remove('hidden');
             }
         });

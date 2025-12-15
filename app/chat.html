@@ -145,7 +145,7 @@
                 otherUserId = urlParams.get('userId');
 
                 if (!otherUserId || otherUserId === currentUser.uid) {
-                    alert("Invalid chat user.");
+                    alert(localization.getText('error_invalid_chat_user'));
                     window.history.back();
                     return;
                 }
@@ -169,7 +169,7 @@
                     const userData = userDoc.data();
                     renderHeader(userData);
                 } else {
-                    renderHeader({ firstName: "Unknown", lastName: "User" });
+                    renderHeader({ firstName: localization.getText('text_unknown'), lastName: localization.getText('text_user') });
                 }
             } catch (error) {
                 console.error("Error loading user:", error);
@@ -261,7 +261,7 @@
 
             } catch (error) {
                 console.error("Error sending message:", error);
-                alert("Failed to send message");
+                alert(localization.getText('error_send_message'));
             }
         }
 

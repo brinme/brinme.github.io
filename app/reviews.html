@@ -169,7 +169,7 @@
                                 
                                 // Fallback if review is just a string
                                 const text = typeof review === 'string' ? review : (review.text || review.comment || localization.getText('text_no_text'));
-                                let author = review.authorName || "Anonymous";
+                                let author = review.authorName || localization.getText('text_anonymous');
                                 const rating = review.rating || 5;
                                 let date = review.date || review.timestamp || "";
 
@@ -181,12 +181,12 @@
                                 }
 
                                 // Fetch author if missing
-                                if (author === "Anonymous" && review.reviewerId) {
+                                if (author === localization.getText('text_anonymous') && review.reviewerId) {
                                     try {
                                         const authorDoc = await getDoc(doc(db, "users", review.reviewerId));
                                         if (authorDoc.exists()) {
                                             const authorData = authorDoc.data();
-                                            author = `${authorData.firstName || ''} ${authorData.lastName || ''}`.trim() || "Anonymous";
+                                            author = `${authorData.firstName || ''} ${authorData.lastName || ''}`.trim() || localization.getText('text_anonymous');
                                         }
                                     } catch (e) {
                                         console.error("Error fetching reviewer:", e);

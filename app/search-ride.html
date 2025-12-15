@@ -287,8 +287,8 @@
                     };
 
                     filteredRides.forEach(ride => {
-                        const fromPoint = ride.points[0] || { name: "Unknown" };
-                        const toPoint = ride.points[ride.points.length - 1] || { name: "Unknown" };
+                        const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
+                        const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
                         const fromTime = formatDate(ride.times[0]);
                         const toTime = formatDate(ride.times[ride.times.length - 1]);
                         
@@ -388,7 +388,7 @@
                                 <div class="flex-1">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">From</p>
+                                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_from')}</p>
                                             <p class="font-bold text-lg text-gray-900 leading-tight">${fromPoint.name}</p>
                                         </div>
                                         <p class="text-sm text-gray-500 font-medium text-right">${fromTime}</p>
@@ -403,7 +403,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">Stops</p>
+                                        <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_stops_simple')}</p>
                                         <p class="text-sm text-gray-700 leading-relaxed">${stops}</p>
                                     </div>
                                 </div>
@@ -419,7 +419,7 @@
                                     <div class="flex-1">
                                         <div class="flex justify-between items-start">
                                             <div>
-                                                <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">To</p>
+                                                <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                                 <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                             </div>
                                             <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
@@ -431,7 +431,7 @@
                             ${packagesHtml}
                             
                             <button onclick="window.location.href='ride-details.html?id=${ride.rideId}'" class="w-full mt-6 py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors shadow-sm">
-                                Request Delivery
+                                ${localization.getText('btn_request_delivery')}
                             </button>
                         `;
                         resultsList.appendChild(rideEl);
