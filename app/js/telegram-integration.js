@@ -19,8 +19,6 @@
         window.telegramUser = tg.initDataUnsafe?.user;
 
         if (isTelegram) {
-            console.log("Telegram Web App detected");
-            
             // 3. Signal ready
             tg.ready();
             tg.expand();

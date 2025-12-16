@@ -109,6 +109,7 @@
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -172,7 +173,7 @@
                     renderHeader({ firstName: localization.getText('text_unknown'), lastName: localization.getText('text_user') });
                 }
             } catch (error) {
-                console.error("Error loading user:", error);
+                showToast('error_load_profile', 'error');
             }
         }
 
@@ -260,8 +261,7 @@
                 });
 
             } catch (error) {
-                console.error("Error sending message:", error);
-                alert(localization.getText('error_send_message'));
+                showToast('error_send_message', 'error');
             }
         }
 
@@ -271,8 +271,12 @@
         });
 
         if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.href = 'login.html';
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                showToast('error_sign_out', 'error');
+            }
         });
 
     </script>

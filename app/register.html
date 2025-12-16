@@ -89,7 +89,6 @@
     </div>
 
     <script type="module">
-        console.log("Register script loaded");
         import { auth, db } from './js/firebase-config.js';
         import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -102,7 +101,6 @@
 
         // Expose Telegram Auth Callback
         window.onTelegramAuth = async (user) => {
-            console.log("Telegram Auth Callback:", user);
             
             try {
                 // Check if user exists by telegramId
@@ -119,7 +117,6 @@
                     window.location.href = 'register-telegram.html';
                 }
             } catch (e) {
-                console.error("Error handling Telegram Auth:", e);
                 alert("Error processing Telegram login.");
             }
         };
@@ -130,7 +127,6 @@
 
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("Register form submitted");
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
@@ -140,7 +136,6 @@
                 // 1. Create Auth User
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                console.log("User created", user);
 
                 // 2. Create User Document in Firestore
                 const newUser = createUser(user.uid, email, firstName, lastName);
@@ -155,7 +150,6 @@
                 alert("Registration successful! Please check your email to verify your account before logging in.");
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Register error:", error);
                 if (auth.currentUser) {
                     await signOut(auth);
                 }
@@ -165,12 +159,10 @@
         });
 
         googleRegisterBtn.addEventListener('click', async () => {
-            console.log("Google register clicked");
             const provider = new GoogleAuthProvider();
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                console.log("Google register successful", user);
 
                 // Check if user exists in Firestore
                 const userDocRef = doc(db, "users", user.uid);
@@ -194,7 +186,6 @@
 
                 window.location.href = 'index.html';
             } catch (error) {
-                console.error("Google register error:", error);
                 errorMessage.textContent = error.message;
                 errorMessage.classList.remove('hidden');
             }

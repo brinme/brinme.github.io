@@ -77,6 +77,7 @@
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize localization
         const localization = new LocalizationManager();
@@ -155,7 +156,7 @@
                     renderRideDetails(user, ride, driver, myRequest);
 
                 } catch (error) {
-                    console.error("Error loading details:", error);
+                    showToast('text_error_loading', 'error');
                     rideContent.innerHTML = `<p class="text-red-500">${localization.getText('text_error_loading')}</p>`;
                 }
             } else {
@@ -311,27 +312,26 @@
                             <!-- Name & Info -->
                             <div class="flex-1 min-w-0">
                                 <h2 class="text-lg md:text-2xl font-bold text-gray-900 truncate">${driverName}</h2>
-                                <p class="text-gray-500 text-sm mb-2 truncate">${driver.email || ''}</p>
+                                <p class="text-gray-500 text-sm mb-1 truncate">${driver.email || ''}</p>
                                 
                                 ${!isOwner ? `
                                     <div class="space-y-1">
-                                        ${driverCountry ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_country')}:</span> ${driverCountry}</p>` : ''}
-                                        ${driverAge ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_age')}:</span> ${driverAge} ${localization.getText('text_years')}</p>` : ''}
-                                        
-                                        <div class="flex gap-4 my-2 text-sm text-gray-600">
-                                            <div><span class="font-bold text-gray-900">${ridesCount}</span> ${localization.getText('stat_rides')}</div>
-                                            <div><span class="font-bold text-gray-900">${packagesCount}</span> ${localization.getText('stat_packages')}</div>
-                                        </div>
-
-                                        ${driverAbout ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_about')}:</span> ${driverAbout}</p>` : ''}
-
                                         <!-- Rating -->
-                                        <div class="flex items-center gap-1 pt-1">
+                                        <div class="flex items-center gap-1">
                                             ${getStarsHTML(driverRating)}
                                             <a href="reviews.html?userId=${ride.ownerId}" class="text-xs text-[#25A8D9] hover:underline ml-2 focus:outline-none">
                                                 (${driver.scores ? driver.scores.length : 0} ${localization.getText('text_reviews_parens')})
                                             </a>
                                         </div>
+
+                                        <div class="flex gap-4 my-2 text-sm text-gray-600">
+                                            <div><span class="font-bold text-gray-900">${ridesCount}</span> ${localization.getText('stat_rides')}</div>
+                                            <div><span class="font-bold text-gray-900">${packagesCount}</span> ${localization.getText('stat_packages')}</div>
+                                        </div>
+
+                                        ${driverCountry ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_country')}:</span> ${driverCountry}</p>` : ''}
+                                        ${driverAge ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_age')}:</span> ${driverAge} ${localization.getText('text_years')}</p>` : ''}
+                                        ${driverAbout ? `<p class="text-sm text-gray-600"><span class="font-medium">${localization.getText('label_about')}:</span> ${driverAbout}</p>` : ''}
                                     </div>
                                 ` : ''}
                             </div>
@@ -352,13 +352,13 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <h3 class="font-bold text-gray-900 mb-6">${localization.getText('title_itinerary')}</h3>
                     <div class="flex flex-col gap-0 relative">
-                        <div class="absolute left-[11px] top-3 bottom-3 w-0.5 bg-gray-100 -z-10"></div>
+                        <div class="absolute left-[7px] md:left-[11px] top-3 bottom-3 w-0.5 bg-gray-100 -z-10"></div>
                         
                         <!-- From -->
                         <div class="flex gap-4 pb-8">
                             <div class="flex flex-col items-center pt-1">
-                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#25A8D9]"></div>
+                                <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-blue-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-[#25A8D9]"></div>
                                 </div>
                             </div>
                             <div class="flex-1">
@@ -376,8 +376,8 @@
                         ${stops ? `
                         <div class="flex gap-4 pb-8">
                             <div class="flex flex-col items-center pt-1">
-                                <div class="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gray-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-gray-400"></div>
                                 </div>
                             </div>
                             <div>
@@ -390,8 +390,8 @@
                         <!-- To -->
                         <div class="flex gap-4">
                             <div class="flex flex-col items-center pt-1">
-                                <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                                <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-green-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                    <div class="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-green-500"></div>
                                 </div>
                             </div>
                             <div class="flex-1">
@@ -610,8 +610,7 @@
                 window.location.href = 'rides.html';
 
             } catch (error) {
-                console.error("Error deleting ride:", error);
-                alert(localization.getText('alert_delete_error') + error.message);
+                showToast('alert_delete_error', 'error');
             }
         }
 
@@ -652,8 +651,7 @@
                 window.location.reload();
 
             } catch (error) {
-                console.error("Error cancelling request:", error);
-                alert(localization.getText('alert_cancel_error'));
+                showToast('alert_cancel_error', 'error');
             }
         }
 
@@ -662,8 +660,7 @@
                 await updateDoc(doc(db, "rides", rideId), { status: status });
                 window.location.reload();
             } catch (e) {
-                console.error(e);
-                alert(localization.getText('alert_status_update_error'));
+                showToast('alert_status_update_error', 'error');
             }
         }
 
@@ -736,14 +733,17 @@
                 window.location.reload();
 
             } catch (e) {
-                console.error(e);
-                alert(localization.getText('alert_request_error'));
+                showToast('alert_request_error', 'error');
             }
         }
 
         if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.href = 'login.html';
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                showToast('error_sign_out', 'error');
+            }
         });
     </script>
 </body>

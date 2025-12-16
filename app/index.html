@@ -124,13 +124,12 @@
     </div>
 
     <script type="module">
-        console.log("Starting Dashboard Script...");
         import { auth, db, functions } from './js/firebase-config.js';
-        console.log("Firebase Config Loaded", { auth, db, functions });
         import { onAuthStateChanged, signOut, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -162,23 +161,19 @@
             
             const tg = window.Telegram.WebApp;
             if (!tg.initData) {
-                console.log("No Telegram data found");
                 return;
             }
 
             isLoggingIn = true;
-            console.log("Authenticating via Telegram...");
             
             try {
                 const authTelegramFn = httpsCallable(functions, 'authTelegram');
                 const result = await authTelegramFn({ initData: tg.initData });
                 const token = result.data.token;
                 
-                console.log("Token received, signing in...");
                 await signInWithCustomToken(auth, token);
-                console.log("Signed in successfully");
             } catch (error) {
-                console.error("Telegram Auth Error:", error);
+                showToast('error_login', 'error');
             } finally {
                 isLoggingIn = false;
             }
@@ -186,7 +181,6 @@
 
         // Check Auth State
         onAuthStateChanged(auth, async (user) => {
-            console.log("Auth State Changed:", user ? "User Logged In" : "No User");
             // 1. Robust Telegram Detection
             let isTelegram = window.isTelegramApp;
             
@@ -194,17 +188,14 @@
             if (typeof isTelegram === 'undefined') {
                 if (navigator.userAgent.includes('Telegram') || navigator.userAgent.includes('TME')) {
                     isTelegram = true;
-                    console.log("Telegram detected via UserAgent");
                 }
             }
 
             if (isTelegram) {
-                console.log("Environment: Telegram Mini App");
                 loadingOverlay.classList.remove('hidden'); // Show loading immediately
                 
                 // Wait for SDK if needed
                 if (!window.Telegram || !window.Telegram.WebApp) {
-                    console.log("Waiting for Telegram SDK...");
                     let attempts = 0;
                     while ((!window.Telegram || !window.Telegram.WebApp) && attempts < 30) {
                         await new Promise(r => setTimeout(r, 100));
@@ -227,14 +218,11 @@
                     const expectedUid = `tg_${tgUser.id}`;
                     
                     if (user.uid !== expectedUid) {
-                        console.warn(`User mismatch! Current: ${user.uid}, Expected: ${expectedUid}. Signing out...`);
                         await signOut(auth);
                         await loginWithTelegram();
                         return;
                     }
                 }
-            } else {
-                console.log("Environment: Browser");
             }
 
             // 2. Handle Logged In User
@@ -248,13 +236,11 @@
                 }
 
                 try {
-                    console.log("Fetching user profile...");
                     // Check if profile exists (Registration Check)
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     
                     if (!userDoc.exists()) {
                         // User authenticated but no profile -> Redirect to finish registration
-                        console.log("User authenticated but no profile, redirecting to register");
                         
                         if (isTelegram) {
                             window.location.href = 'register-telegram.html';
@@ -271,14 +257,12 @@
                     // Telegram Users: Enforce Email Collection if missing
                     if (isTelegram) {
                         if (!userData.email) {
-                            console.log("User has profile but no email. Redirecting to completion...");
                             window.location.href = 'register-telegram.html';
                             return;
                         }
                         
                         // Enforce Email Verification for Telegram Users
                         if (!user.emailVerified) {
-                            console.log("User email not verified. Redirecting to verification...");
                             window.location.href = 'verify-email.html';
                             return;
                         }
@@ -289,7 +273,6 @@
                         loadingOverlay.classList.add('hidden');
                     }
 
-                    console.log("User profile loaded:", userData.firstName);
                     if(userNameElement) userNameElement.textContent = userData.firstName || user.email;
                     
                     // 1. Fetch Offered Rides
@@ -324,7 +307,7 @@
                                 });
                             }
                         } catch (e) {
-                            console.error("Error fetching ride for request", e);
+                            // Optional: showToast("Error loading some requests", 'error');
                         }
                     }
 
@@ -368,7 +351,7 @@
                     }
 
                 } catch (error) {
-                    console.error("Error fetching user data:", error);
+                    showToast('error_load_rides', 'error');
                     ridesList.innerHTML = `<p class="text-red-500 text-center p-4">Error loading rides. Please try refreshing.</p>`;
                 }
             } else {
@@ -618,7 +601,7 @@
                     driver = driverDoc.data();
                 }
             } catch (e) {
-                console.error("Error fetching driver", e);
+                // Silent fail for driver fetch
             }
 
             // Route Info
@@ -736,21 +719,17 @@
         // Logout Handlers
         const handleLogout = async (e) => {
             if (e) e.preventDefault();
-            console.log("Logout clicked. isTelegramApp:", window.isTelegramApp);
-
+            
             // Strict separation: Telegram users cannot logout manually via this button
             if (window.isTelegramApp) {
-                console.warn("Logout blocked because isTelegramApp is true");
                 return;
             }
 
             try {
-                console.log("Attempting to sign out...");
                 await signOut(auth);
-                console.log("Signed out, redirecting...");
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Error signing out:", error);
+                showToast('error_sign_out', 'error');
             }
         };
 

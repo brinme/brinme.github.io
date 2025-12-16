@@ -243,7 +243,25 @@ export const translations = {
         "status_pending": "PENDING",
         "status_cancelled": "CANCELLED",
         "status_accepted": "ACCEPTED",
-        "status_rejected": "REJECTED"
+        "status_rejected": "REJECTED",
+
+        // Errors
+        "error_load_rides": "Error loading rides.",
+        "error_sign_out": "Error signing out.",
+        "error_cancel_request": "Error cancelling request.",
+        "error_login": "Error logging in.",
+        "error_register": "Error registering.",
+        "error_load_profile": "Error loading profile.",
+        "error_update_profile": "Error updating profile.",
+        "error_load_reviews": "Error loading reviews.",
+        "error_submit_review": "Error submitting review.",
+        "error_load_chat": "Error loading chat.",
+        "error_send_message": "Error sending message.",
+        "error_load_requests": "Error loading requests.",
+        "error_accept_request": "Error accepting request.",
+        "error_reject_request": "Error rejecting request.",
+        "error_load_cities": "Error loading cities.",
+        "error_generic": "An error occurred."
     },
     ru: {
         // Navigation
@@ -254,17 +272,17 @@ export const translations = {
         
         // Dashboard (index.html)
         "hello": "Привет",
-        "dashboard_subtitle": "Хочешь сэкономить или заработать на доставке?",
+        "dashboard_subtitle": "Сэкономь на отправке посылки или заработай подвезя чью-то!",
         "btn_find_ride": "Найти поездку",
-        "desc_find_ride": "Найти место для вашей посылки",
+        "desc_find_ride": "Найти место для посылки",
         "btn_offer_ride": "Создать поездку",
-        "desc_offer_ride": "Предложить место для посылок",
+        "desc_offer_ride": "Подвезти чью-то посылку",
         "title_my_next_ride": "Следующая поездка",
         "link_view_all": "Все",
         "loading": "Загрузка...",
         "text_no_upcoming_rides": "Нет предстоящих поездок",
         "text_no_rides_scheduled": "У вас нет запланированных поездок",
-        "text_no_rides_found_criteria": "Поездок по вашему запросу не найдено.",
+        "text_no_rides_found_criteria": "Поездок по вашему запросу не найдено",
         
         // Rides (rides.html)
         "title_my_rides": "Мои поездки",
@@ -488,6 +506,24 @@ export const translations = {
         "status_pending": "НА РАССМОТРЕНИИ",
         "status_cancelled": "ОТМЕНЕНА",
         "status_accepted": "ПРИНЯТА",
-        "status_rejected": "ОТКЛОНЕНА"
+        "status_rejected": "ОТКЛОНЕНА",
+
+        // Errors
+        "error_load_rides": "Ошибка загрузки поездок.",
+        "error_sign_out": "Ошибка выхода.",
+        "error_cancel_request": "Ошибка отмены заявки.",
+        "error_login": "Ошибка входа.",
+        "error_register": "Ошибка регистрации.",
+        "error_load_profile": "Ошибка загрузки профиля.",
+        "error_update_profile": "Ошибка обновления профиля.",
+        "error_load_reviews": "Ошибка загрузки отзывов.",
+        "error_submit_review": "Ошибка отправки отзыва.",
+        "error_load_chat": "Ошибка загрузки чата.",
+        "error_send_message": "Ошибка отправки сообщения.",
+        "error_load_requests": "Ошибка загрузки заявок.",
+        "error_accept_request": "Ошибка принятия заявки.",
+        "error_reject_request": "Ошибка отклонения заявки.",
+        "error_load_cities": "Ошибка загрузки городов.",
+        "error_generic": "Произошла ошибка."
     }
 };

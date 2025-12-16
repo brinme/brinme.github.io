@@ -111,7 +111,6 @@
                 }
 
             } catch (error) {
-                console.error(error);
                 mainContent.innerHTML = '<div class="text-center py-10 text-red-500">Error loading data.</div>';
             }
         }
@@ -142,7 +141,6 @@
                 mainContent.innerHTML = createRatingCard(ride.ownerId, requestId, 'driver', name, photo, 'Driver');
 
             } catch (error) {
-                console.error(error);
                 mainContent.innerHTML = '<div class="text-center py-10 text-red-500">Error loading data.</div>';
             }
         }
@@ -215,7 +213,7 @@
                         authorName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || "Anonymous";
                     }
                 } catch (e) {
-                    console.error("Error fetching current user details:", e);
+                    // Silent fail
                 }
 
                 const userRef = doc(db, "users", targetUserId);
@@ -267,7 +265,6 @@
                 }
 
             } catch (e) {
-                console.error(e);
                 alert(localization.getText('alert_error_submitting'));
             }
         };

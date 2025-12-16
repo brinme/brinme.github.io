@@ -23,8 +23,6 @@ export class LocalizationManager {
         }
         */
 
-        console.log(`Localization initialized. Language: ${this.currentLang}`);
-        
         // Apply immediately on load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.applyTranslations());

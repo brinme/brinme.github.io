@@ -125,6 +125,7 @@
         import { setupAutocomplete } from './js/autocomplete.js';
         import { LocalizationManager } from './js/localization.js';
         import { getAllCities } from './js/cities.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -376,13 +377,13 @@
                             <!-- Route -->
                             <div class="flex flex-col gap-0 mb-6 relative">
                                 <!-- Connecting Line Background -->
-                                <div class="absolute left-[11px] top-3 bottom-3 w-0.5 bg-gray-100 -z-10"></div>
+                                <div class="absolute left-[7px] md:left-[11px] top-3 bottom-3 w-0.5 bg-gray-100 -z-10"></div>
 
                             <!-- From -->
                             <div class="flex gap-4 pb-6">
                                 <div class="flex flex-col items-center pt-1">
-                                    <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                        <div class="w-2.5 h-2.5 rounded-full bg-[#25A8D9]"></div>
+                                    <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-blue-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                        <div class="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-[#25A8D9]"></div>
                                     </div>
                                 </div>
                                 <div class="flex-1">
@@ -398,8 +399,8 @@
                                 ${stops ? `
                                 <div class="flex gap-4 pb-6">
                                     <div class="flex flex-col items-center pt-1">
-                                        <div class="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                            <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                        <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gray-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                            <div class="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-gray-400"></div>
                                         </div>
                                     </div>
                                     <div>
@@ -412,8 +413,8 @@
                                 <!-- To -->
                                 <div class="flex gap-4">
                                     <div class="flex flex-col items-center pt-1">
-                                        <div class="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center z-10 ring-4 ring-white">
-                                            <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                                        <div class="w-4 h-4 md:w-6 md:h-6 rounded-full bg-green-50 flex items-center justify-center z-10 ring-4 ring-white">
+                                            <div class="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-green-500"></div>
                                         </div>
                                     </div>
                                     <div class="flex-1">
@@ -439,7 +440,7 @@
                 }
 
             } catch (error) {
-                console.error("Error searching rides:", error);
+                showToast('error_generic', 'error');
                 resultsList.innerHTML = `<p class="text-red-500 text-center">Error loading rides.</p>`;
             }
         });
@@ -449,7 +450,7 @@
                 await signOut(auth);
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Error signing out:", error);
+                showToast('error_sign_out', 'error');
             }
         };
         if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', handleLogout);

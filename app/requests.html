@@ -89,6 +89,7 @@
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, updateDoc, collection, query, where, getDocs, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize localization
         const localization = new LocalizationManager();
@@ -164,7 +165,7 @@
                     }
 
                 } catch (error) {
-                    console.error("Error loading requests:", error);
+                    showToast('error_load_requests', 'error');
                     requestsList.innerHTML = `<p class="text-red-500">Error loading requests.</p>`;
                 }
             } else {
@@ -353,17 +354,16 @@
                 window.location.reload();
 
             } catch (error) {
-                console.error("Error updating request:", error);
-                alert("Error processing request.");
+                showToast('error_generic', 'error');
             }
-        };
+        }
 
         const handleLogout = async () => {
             try {
                 await signOut(auth);
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Error signing out:", error);
+                showToast('error_sign_out', 'error');
             }
         };
 

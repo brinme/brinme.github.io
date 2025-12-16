@@ -106,6 +106,7 @@
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { collection, query, where, getDocs, doc, deleteDoc, updateDoc, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -435,8 +436,7 @@
                 });
 
             } catch (error) {
-                console.error("Error loading rides:", error);
-                ridesList.innerHTML = `<p class="text-red-500">Error loading rides.</p>`;
+                showToast('error_load_rides', 'error');                ridesList.innerHTML = `<p class="text-red-500">Error loading rides.</p>`;
             }
         }
 
@@ -478,7 +478,7 @@
                             ride.rideId = rideDoc.id;
                         }
                     } catch (e) {
-                        console.error("Error fetching ride for request", e);
+                        // Silent fail
                     }
 
                     if (!ride) {
@@ -494,15 +494,14 @@
                             driver = driverDoc.data();
                         }
                     } catch (e) {
-                        console.error("Error fetching driver", e);
+                        // Silent fail
                     }
 
                     renderRequestCard(request, ride, driver);
                 }
 
             } catch (error) {
-                console.error("Error loading requests:", error);
-                ridesList.innerHTML = `<p class="text-red-500">Error loading requests.</p>`;
+                showToast('error_load_requests', 'error');                ridesList.innerHTML = `<p class="text-red-500">Error loading requests.</p>`;
             }
         }
 
@@ -642,8 +641,7 @@
                 loadRequests();
 
             } catch (e) {
-                console.error("Error cancelling request:", e);
-                alert(localization.getText('alert_cancel_failed'));
+                showToast('alert_cancel_failed', 'error');
             }
         }
 
@@ -652,7 +650,7 @@
                 await signOut(auth);
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Error signing out:", error);
+                showToast('error_sign_out', 'error');
             }
         };
 

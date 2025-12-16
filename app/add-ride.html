@@ -352,12 +352,9 @@
                 // Save to Firestore
                 const docRef = await addDoc(collection(db, "rides"), newRide);
                 
-                console.log("Document written with ID: ", docRef.id);
-                
                 window.location.href = 'rides.html';
 
             } catch (error) {
-                console.error("Error adding ride: ", error);
                 errorMessage.textContent = localization.getText('error_creating_ride') + error.message;
                 errorMessage.classList.remove('hidden');
             }
@@ -368,7 +365,7 @@
                 await signOut(auth);
                 window.location.href = 'login.html';
             } catch (error) {
-                console.error("Error signing out:", error);
+                // Silent fail
             }
         };
         if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', handleLogout);
