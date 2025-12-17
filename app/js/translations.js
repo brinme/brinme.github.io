@@ -216,7 +216,7 @@ export const translations = {
         "text_session_expired": "Session expired. Please restart the app.",
 
         // Login (login.html)
-        "login_title": "Login to Brinme<br>Delivery marketplace",
+        "login_title": "Login to Brinme\nDelivery marketplace",
         "label_email": "Email address",
         "label_password": "Password",
         "btn_signin": "Sign in",
@@ -479,7 +479,7 @@ export const translations = {
         "text_session_expired": "Сессия истекла. Перезапустите приложение",
 
         // Login (login.html)
-        "login_title": "Войти в Brinme<br>Маркетплейс доставки",
+        "login_title": "Войти в Brinme\nМаркетплейс доставки",
         "label_email": "Email адрес",
         "label_password": "Пароль",
         "btn_signin": "Войти",

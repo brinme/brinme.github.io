@@ -80,12 +80,13 @@
             const user = auth.currentUser;
             if (user) {
                 checkBtn.disabled = true;
-                checkBtn.textContent = localization.getText('text_checking');
+                const originalText = checkBtn.textContent;
+                checkBtn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>';
                 
                 try {
                     await reload(user);
                     if (user.emailVerified) {
-                        window.location.href = 'index.html';
+                        window.location.replace('index.html');
                     } else {
                         showMessage(localization.getText('text_email_not_verified'), true);
                         checkBtn.disabled = false;

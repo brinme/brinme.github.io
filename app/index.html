@@ -28,18 +28,18 @@
                 <span class="font-bold text-xl text-[#25A8D9]">brinme</span>
             </div>
             <nav class="flex-1 p-4 space-y-2">
-                <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-[#25A8D9] bg-blue-50 rounded-lg font-medium">
+                <div onclick="window.location.href='index.html'" class="flex items-center gap-3 px-4 py-3 text-[#25A8D9] bg-blue-50 rounded-lg font-medium cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span data-i18n="nav_home">Home</span>
-                </a>
-                <a href="rides.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+                </div>
+                <div onclick="window.location.href='rides.html'" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                     <span data-i18n="nav_rides">Rides</span>
-                </a>
-                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors">
+                </div>
+                <div onclick="window.location.href='profile.html'" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span data-i18n="nav_profile">Profile</span>
-                </a>
+                </div>
             </nav>
             <div class="p-4 border-t border-gray-100">
                 <button id="logoutBtnDesktop" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium w-full transition-colors">
@@ -71,20 +71,20 @@
 
                     <!-- Action Buttons (Mobile & Desktop) -->
                     <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
-                        <a href="search-ride.html" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center gap-3 hover:shadow-md transition-shadow group">
+                        <div onclick="window.location.href='search-ride.html'" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center gap-3 hover:shadow-md transition-shadow group cursor-pointer">
                             <div class="bg-blue-50 p-4 rounded-full group-hover:bg-blue-100 transition-colors">
                                 <svg class="w-8 h-8 text-[#25A8D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
                             <span class="font-bold text-gray-700 text-center" data-i18n="btn_find_ride">Find Ride</span>
                             <span class="text-xs text-gray-500 text-center" data-i18n="desc_find_ride">Search for available space</span>
-                        </a>
-                        <a href="add-ride.html" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center gap-3 hover:shadow-md transition-shadow group">
+                        </div>
+                        <div onclick="window.location.href='add-ride.html'" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center gap-3 hover:shadow-md transition-shadow group cursor-pointer">
                             <div class="bg-green-50 p-4 rounded-full group-hover:bg-green-100 transition-colors">
                                 <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             </div>
                             <span class="font-bold text-gray-700 text-center" data-i18n="btn_offer_ride">Offer Ride</span>
                             <span class="text-xs text-gray-500 text-center" data-i18n="desc_offer_ride">Earn by delivering packages</span>
-                        </a>
+                        </div>
                     </div>
 
                     <!-- My Rides Section -->
@@ -107,18 +107,18 @@
 
             <!-- Mobile Bottom Navigation -->
             <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-20">
-                <a href="index.html" class="flex flex-col items-center gap-1 text-[#25A8D9]">
+                <div onclick="window.location.href='index.html'" class="flex flex-col items-center gap-1 text-[#25A8D9] cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="text-xs font-medium" data-i18n="nav_home">Home</span>
-                </a>
-                <a href="rides.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600">
+                </div>
+                <div onclick="window.location.href='rides.html'" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                     <span class="text-xs font-medium" data-i18n="nav_rides">Rides</span>
-                </a>
-                <a href="profile.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600">
+                </div>
+                <div onclick="window.location.href='profile.html'" class="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     <span class="text-xs font-medium" data-i18n="nav_profile">Profile</span>
-                </a>
+                </div>
             </nav>
         </div>
     </div>
@@ -126,10 +126,11 @@
     <script type="module">
         import { auth, db, functions } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
         import { LocalizationManager } from './js/localization.js';
         import { showToast } from './js/toast.js';
+        import { createUser } from './js/models.js';
 
         // Initialize Localization
         const localization = new LocalizationManager();
@@ -238,35 +239,50 @@
                 try {
                     // Check if profile exists (Registration Check)
                     const userDoc = await getDoc(doc(db, "users", user.uid));
+                    let userData;
                     
                     if (!userDoc.exists()) {
                         // User authenticated but no profile -> Redirect to finish registration
                         
                         if (isTelegram) {
-                            window.location.href = 'register-telegram.html';
+                            // Auto-create profile for Telegram users
+                            const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+                            const firstName = tgUser?.first_name || "Telegram";
+                            const lastName = tgUser?.last_name || "User";
+                            const photoUrl = tgUser?.photo_url || "";
+                            
+                            const newUser = createUser(user.uid, null, firstName, lastName);
+                            newUser.telegramId = tgUser?.id;
+                            if (photoUrl) newUser.profile.photo = photoUrl;
+                            
+                            await setDoc(doc(db, "users", user.uid), newUser);
+                            userData = newUser;
                         } else {
                             await signOut(auth);
                             window.location.href = 'login.html';
+                            return;
                         }
-                        return;
+                    } else {
+                        userData = userDoc.data();
                     }
 
                     // Profile exists -> Show Dashboard
-                    const userData = userDoc.data();
 
                     // Telegram Users: Enforce Email Collection if missing
+                    /*
                     if (isTelegram) {
                         if (!userData.email) {
-                            window.location.href = 'register-telegram.html';
+                            window.location.replace('register-telegram.html');
                             return;
                         }
                         
                         // Enforce Email Verification for Telegram Users
                         if (!user.emailVerified) {
-                            window.location.href = 'verify-email.html';
+                            window.location.replace('verify-email.html');
                             return;
                         }
                     }
+                    */
 
                     // Hide loading overlay only if we are staying on this page
                     if (isTelegram) {
@@ -399,7 +415,7 @@
 
             // Package Info Grid
             let packagesHtml = '';
-            if (maxS > 0 || maxM > 0 || maxL > 0) {
+            if (maxS > 0 || maxM > 0 || maxL > 0 || true) { // Always show grid, even if max is 0 (since we removed capacity input)
                 packagesHtml = '<div class="grid grid-cols-4 gap-2 border-t border-gray-100 pt-4 mt-2 items-center">';
                 
                 // Label
@@ -410,16 +426,10 @@
                 `;
 
                 // S
-                if (maxS > 0) {
+                if (priceS > 0) {
                     packagesHtml += `
                         <div class="flex flex-col items-center border-r border-gray-100 last:border-0">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_small_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-[#25A8D9]">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">${maxS}</div>
-                            </div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceS} ${currency}</div>
                         </div>
                     `;
@@ -427,28 +437,16 @@
                         packagesHtml += `
                         <div class="flex flex-col items-center border-r border-gray-100 last:border-0 opacity-30">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_small_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-gray-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">-</div>
-                            </div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
                         </div>
                     `;
                 }
 
                 // M
-                if (maxM > 0) {
+                if (priceM > 0) {
                     packagesHtml += `
                         <div class="flex flex-col items-center border-r border-gray-100 last:border-0">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_medium_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-[#25A8D9]">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">${maxM}</div>
-                            </div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceM} ${currency}</div>
                         </div>
                     `;
@@ -456,28 +454,16 @@
                         packagesHtml += `
                         <div class="flex flex-col items-center border-r border-gray-100 last:border-0 opacity-30">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_medium_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-gray-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">-</div>
-                            </div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
                         </div>
                     `;
                 }
 
                 // L
-                if (maxL > 0) {
+                if (priceL > 0) {
                     packagesHtml += `
                         <div class="flex flex-col items-center last:border-0">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_large_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-[#25A8D9]">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">${maxL}</div>
-                            </div>
                             <div class="text-sm text-[#25A8D9] font-bold">${priceL} ${currency}</div>
                         </div>
                     `;
@@ -485,12 +471,6 @@
                         packagesHtml += `
                         <div class="flex flex-col items-center last:border-0 opacity-30">
                             <div class="text-xs font-bold text-black mb-1">${localization.getText('option_large_simple')}</div>
-                            <div class="flex items-center gap-1">
-                                <div class="text-gray-400">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
-                                </div>
-                                <div class="font-bold text-gray-800 text-lg">-</div>
-                            </div>
                             <div class="text-sm text-gray-400 font-bold">-</div>
                         </div>
                     `;

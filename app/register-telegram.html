@@ -48,6 +48,7 @@
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createUser } from './js/models.js';
         import { LocalizationManager } from './js/localization.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize localization
         const localization = new LocalizationManager();
@@ -56,6 +57,7 @@
         const tg = window.Telegram.WebApp;
         const regForm = document.getElementById('regForm');
         const errorMessage = document.getElementById('errorMessage');
+        const submitBtn = regForm.querySelector('button[type="submit"]');
 
         // Initialize with TG Data
         let tgUser = null;
@@ -95,10 +97,14 @@
             e.preventDefault();
             
             if (!currentUser) {
-                errorMessage.textContent = localization.getText('text_auth_missing');
-                errorMessage.classList.remove('hidden');
+                showToast('text_auth_missing', 'error');
                 return;
             }
+
+            // Loading State
+            submitBtn.disabled = true;
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>';
 
             const email = document.getElementById('email').value;
             
@@ -128,20 +134,24 @@
                 // 3. Send Verification
                 await sendEmailVerification(currentUser);
 
-                alert(localization.getText('text_account_created_verify'));
+                showToast('text_account_created_verify', 'success');
                 
-                // Redirect to dashboard immediately (stay logged in)
-                window.location.href = 'index.html';
+                // Redirect to dashboard after a short delay
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 1500);
 
             } catch (error) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage.textContent = localization.getText('text_email_in_use');
+                    showToast('text_email_in_use', 'error');
                 } else if (error.code === 'auth/requires-recent-login') {
-                    errorMessage.textContent = localization.getText('text_session_expired');
+                    showToast('text_session_expired', 'error');
                 } else {
-                    errorMessage.textContent = localization.getText('text_reg_error') + error.message;
+                    showToast(error.message, 'error');
                 }
-                errorMessage.classList.remove('hidden');
             }
         });
     </script>

@@ -285,7 +285,7 @@
                 
                 <div class="flex justify-between items-center mb-3 p-3 bg-gray-50 rounded-lg">
                     <span class="text-xs text-gray-500 font-medium">${localization.getText('label_parcels_simple')} (${request.packageType || 'S'})</span>
-                    <span class="text-lg font-bold text-[#25A8D9]">${request.packages} x ${price} ${currency}</span>
+                    <span class="text-lg font-bold text-[#25A8D9]">${price} ${currency}</span>
                 </div>
 
                 ${actionButtons}
@@ -319,7 +319,8 @@
                         const segment = rideData.rideSegments[0];
                         if (!segment.packages) segment.packages = [];
                         
-                        // Check capacity
+                        // Check capacity - REMOVED for infinite capacity
+                        /*
                         let currentCount = 0;
                         if (segment.packages) {
                             currentCount = segment.packages.filter(p => p.type === packageType).length;
@@ -336,6 +337,7 @@
                             await updateDoc(doc(db, "requests", requestId), { status: 'PENDING' });
                             return;
                         }
+                        */
 
                         // Add package entries
                         for(let i=0; i<packages; i++) {
