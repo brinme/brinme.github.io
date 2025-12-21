@@ -75,7 +75,7 @@
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
         import { showToast } from './js/toast.js';
 
@@ -118,6 +118,8 @@
             return html;
         };
 
+        let unsubscribeRide = null;
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -129,36 +131,41 @@
                     return;
                 }
 
-                try {
-                    // 1. Fetch Ride
-                    const rideDoc = await getDoc(doc(db, "rides", rideId));
+                if (unsubscribeRide) unsubscribeRide();
+
+                unsubscribeRide = onSnapshot(doc(db, "rides", rideId), async (rideDoc) => {
                     if (!rideDoc.exists()) {
                         alert(localization.getText('alert_ride_not_found'));
                         window.location.href = 'rides.html';
                         return;
                     }
                     const ride = rideDoc.data();
-                    ride.rideId = rideDoc.id; // Ensure ID is available
+                    ride.rideId = rideDoc.id;
 
-                    // 2. Fetch Driver
-                    const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
-                    const driver = driverDoc.exists() ? driverDoc.data() : { firstName: localization.getText('text_unknown'), lastName: localization.getText('text_unknown_driver') };
+                    try {
+                        // 2. Fetch Driver
+                        const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
+                        const driver = driverDoc.exists() ? driverDoc.data() : { firstName: localization.getText('text_unknown'), lastName: localization.getText('text_unknown_driver') };
 
-                    // 3. Fetch Current User's Request (if any)
-                    let myRequest = null;
-                    const q = query(collection(db, "requests"), where("rideId", "==", rideId), where("userId", "==", user.uid));
-                    const requestSnapshot = await getDocs(q);
-                    if (!requestSnapshot.empty) {
-                        myRequest = requestSnapshot.docs[0].data();
-                        myRequest.id = requestSnapshot.docs[0].id;
+                        // 3. Fetch Current User's Request (if any)
+                        let myRequest = null;
+                        const q = query(collection(db, "requests"), where("rideId", "==", rideId), where("userId", "==", user.uid));
+                        const requestSnapshot = await getDocs(q);
+                        if (!requestSnapshot.empty) {
+                            myRequest = requestSnapshot.docs[0].data();
+                            myRequest.id = requestSnapshot.docs[0].id;
+                        }
+
+                        renderRideDetails(user, ride, driver, myRequest);
+                    } catch (error) {
+                        console.error(error);
+                        showToast('text_error_loading', 'error');
                     }
-
-                    renderRideDetails(user, ride, driver, myRequest);
-
-                } catch (error) {
+                }, (error) => {
+                    console.error(error);
                     showToast('text_error_loading', 'error');
-                    rideContent.innerHTML = `<p class="text-red-500">${localization.getText('text_error_loading')}</p>`;
-                }
+                });
+
             } else {
                 if (window.isTelegramApp) {
                     window.location.href = 'index.html';
@@ -512,6 +519,13 @@
                     statusDiv.appendChild(statusBadge);
                     container.appendChild(statusDiv);
 
+                    if (ride.status === 'STARTED') {
+                        const rideStatusDiv = document.createElement('div');
+                        rideStatusDiv.className = 'mt-2 text-center text-green-600 font-bold animate-pulse';
+                        rideStatusDiv.textContent = localization.getText('text_ride_in_progress');
+                        container.appendChild(rideStatusDiv);
+                    }
+
                     if ((myRequest.status === 'PENDING' || myRequest.status === 'ACCEPTED') && ride.status === 'IDLE') {
                         const cancelReqBtn = document.createElement('button');
                         cancelReqBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
@@ -561,6 +575,11 @@
 
                         inputGroup.appendChild(requestBtn);
                         container.appendChild(inputGroup);
+                    } else if (ride.status === 'STARTED') {
+                        const msg = document.createElement('div');
+                        msg.className = 'text-center text-green-600 font-bold text-lg animate-pulse';
+                        msg.textContent = localization.getText('text_ride_in_progress');
+                        container.appendChild(msg);
                     } else {
                         const msg = document.createElement('div');
                         msg.className = 'text-center text-gray-500 font-medium';
