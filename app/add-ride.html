@@ -121,64 +121,63 @@
                             </div>
                             
                             <!-- Package Types -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm mb-4">
                                 <!-- Type S -->
-                                <div class="flex flex-row md:flex-col items-center p-3 bg-white rounded-xl border border-gray-200 shadow-sm gap-3">
-                                    <div class="flex flex-col items-center justify-center w-12 md:w-auto shrink-0">
-                                        <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center text-[#25A8D9] mb-1">
-                                            <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-stretch bg-white rounded-xl border border-gray-200 h-14 overflow-hidden relative shadow-sm">
+                                        <div class="flex items-center gap-3 px-3 w-[60%]">
+                                            <div class="text-[#25A8D9] shrink-0">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            </div>
+                                            <span class="font-bold text-gray-900 text-sm truncate" data-i18n="option_small_full">Small</span>
                                         </div>
-                                        <span class="font-bold text-gray-900 text-[10px] md:text-sm" data-i18n="option_small_full">Small</span>
+                                        <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                                        <div class="flex items-center justify-center flex-1 px-2">
+                                            <input type="number" id="priceS" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full h-full bg-transparent border-none text-center text-lg font-bold text-[#25A8D9] focus:ring-0 p-0 placeholder-gray-300" placeholder="0">
+                                        </div>
                                     </div>
-                                    <div class="flex-1 flex flex-row md:flex-col items-center justify-between w-full pl-3 md:pl-0 border-l md:border-l-0 border-gray-200 md:border-t md:pt-3 gap-3">
-                                        <div class="flex flex-col items-center flex-1 md:w-full">
-                                            <label class="text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_price_short">Price</label>
-                                            <input type="number" id="priceS" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full px-2 py-2 border border-gray-200 rounded-lg text-center text-sm font-medium focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                                        </div>
+                                    <div class="text-xs text-gray-500 text-left px-1" data-i18n="desc_small">
+                                        Documents, shoes, phone
                                     </div>
                                 </div>
 
                                 <!-- Type M -->
-                                <div class="flex flex-row md:flex-col items-center p-3 bg-white rounded-xl border border-gray-200 shadow-sm gap-3">
-                                    <div class="flex flex-col items-center justify-center w-12 md:w-auto shrink-0">
-                                        <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center text-[#25A8D9] mb-1">
-                                            <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-stretch bg-white rounded-xl border border-gray-200 h-14 overflow-hidden relative shadow-sm">
+                                        <div class="flex items-center gap-3 px-3 w-[60%]">
+                                            <div class="text-[#25A8D9] shrink-0">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                            </div>
+                                            <span class="font-bold text-gray-900 text-sm truncate" data-i18n="option_medium_full">Medium</span>
                                         </div>
-                                        <span class="font-bold text-gray-900 text-[10px] md:text-sm" data-i18n="option_medium_full">Medium</span>
+                                        <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                                        <div class="flex items-center justify-center flex-1 px-2">
+                                            <input type="number" id="priceM" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full h-full bg-transparent border-none text-center text-lg font-bold text-[#25A8D9] focus:ring-0 p-0 placeholder-gray-300" placeholder="0">
+                                        </div>
                                     </div>
-                                    <div class="flex-1 flex flex-row md:flex-col items-center justify-between w-full pl-3 md:pl-0 border-l md:border-l-0 border-gray-200 md:border-t md:pt-3 gap-3">
-                                        <div class="flex flex-col items-center flex-1 md:w-full">
-                                            <label class="text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_price_short">Price</label>
-                                            <input type="number" id="priceM" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full px-2 py-2 border border-gray-200 rounded-lg text-center text-sm font-medium focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                                        </div>
+                                    <div class="text-xs text-gray-500 text-left px-1" data-i18n="desc_medium">
+                                        Computer, wheel, printer
                                     </div>
                                 </div>
 
                                 <!-- Type L -->
-                                <div class="flex flex-row md:flex-col items-center p-3 bg-white rounded-xl border border-gray-200 shadow-sm gap-3">
-                                    <div class="flex flex-col items-center justify-center w-12 md:w-auto shrink-0">
-                                        <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center text-[#25A8D9] mb-1">
-                                            <svg class="w-4 h-4 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-stretch bg-white rounded-xl border border-gray-200 h-14 overflow-hidden relative shadow-sm">
+                                        <div class="flex items-center gap-3 px-3 w-[60%]">
+                                            <div class="text-[#25A8D9] shrink-0">
+                                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
+                                            </div>
+                                            <span class="font-bold text-gray-900 text-sm truncate" data-i18n="option_large_full">Large</span>
                                         </div>
-                                        <span class="font-bold text-gray-900 text-[10px] md:text-sm" data-i18n="option_large_full">Large</span>
+                                        <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                                        <div class="flex items-center justify-center flex-1 px-2">
+                                            <input type="number" id="priceL" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full h-full bg-transparent border-none text-center text-lg font-bold text-[#25A8D9] focus:ring-0 p-0 placeholder-gray-300" placeholder="0">
+                                        </div>
                                     </div>
-                                    <div class="flex-1 flex flex-row md:flex-col items-center justify-between w-full pl-3 md:pl-0 border-l md:border-l-0 border-gray-200 md:border-t md:pt-3 gap-3">
-                                        <div class="flex flex-col items-center flex-1 md:w-full">
-                                            <label class="text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_price_short">Price</label>
-                                            <input type="number" id="priceL" min="0" value="0" onfocus="if(this.value=='0') this.value=''" onblur="if(this.value=='') this.value='0'" class="w-full px-2 py-2 border border-gray-200 rounded-lg text-center text-sm font-medium focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                                        </div>
+                                    <div class="text-xs text-gray-500 text-left px-1" data-i18n="desc_large">
+                                        Sofa, window, wardrobe
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Size Examples Block -->
-                            <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-500">
-                                <p class="font-bold mb-1 text-gray-700" data-i18n="title_size_examples">Size Examples:</p>
-                                <ul class="space-y-1">
-                                    <li><span class="font-bold text-gray-700" data-i18n="option_small_full">Small</span>: <span data-i18n="desc_small">Documents, shoes, phone</span></li>
-                                    <li><span class="font-bold text-gray-700" data-i18n="option_medium_full">Medium</span>: <span data-i18n="desc_medium">Computer, wheel, printer</span></li>
-                                    <li><span class="font-bold text-gray-700" data-i18n="option_large_full">Large</span>: <span data-i18n="desc_large">Sofa, window, wardrobe</span></li>
-                                </ul>
                             </div>
                         </div>
 
@@ -309,6 +308,12 @@
                 const priceS = parseFloat(document.getElementById('priceS').value) || 0;
                 const priceM = parseFloat(document.getElementById('priceM').value) || 0;
                 const priceL = parseFloat(document.getElementById('priceL').value) || 0;
+
+                if (priceS === 0 && priceM === 0 && priceL === 0) {
+                    errorMessage.textContent = localization.getText('error_no_price_specified');
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
 
                 const currency = document.getElementById('currency').value;
                 const plate = document.getElementById('carPlate').value;

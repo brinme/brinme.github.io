@@ -104,7 +104,7 @@
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, query, where, getDocs, doc, deleteDoc, updateDoc, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, query, where, getDocs, getDoc, doc, deleteDoc, updateDoc, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { LocalizationManager } from './js/localization.js';
         import { showToast } from './js/toast.js';
 
@@ -430,38 +430,52 @@
                 ridesList.innerHTML = '';
 
                 for (const reqDoc of requestSnapshot.docs) {
-                    const request = reqDoc.data();
-                    request.id = reqDoc.id;
-
-                    // Fetch Ride
-                    let ride = null;
                     try {
-                        const rideDoc = await getDoc(doc(db, "rides", request.rideId));
-                        if (rideDoc.exists()) {
-                            ride = rideDoc.data();
-                            ride.rideId = rideDoc.id;
+                        const request = reqDoc.data();
+                        request.id = reqDoc.id;
+
+                        // Fetch Ride
+                        let ride = null;
+                        try {
+                            const rideDoc = await getDoc(doc(db, "rides", request.rideId));
+                            if (rideDoc.exists()) {
+                                ride = rideDoc.data();
+                                ride.rideId = rideDoc.id;
+                            }
+                        } catch (e) {
+                            console.error("Error fetching ride for request:", request.id, e);
                         }
-                    } catch (e) {
-                        // Silent fail
-                    }
 
-                    if (!ride) {
-                        // Handle case where ride is deleted but request exists
-                        continue; 
-                    }
-
-                    // Fetch Driver
-                    let driver = { firstName: localization.getText('text_unknown'), lastName: localization.getText('text_unknown_driver') };
-                    try {
-                        const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
-                        if (driverDoc.exists()) {
-                            driver = driverDoc.data();
+                        if (!ride) {
+                            // Handle case where ride is deleted but request exists
+                            continue; 
                         }
-                    } catch (e) {
-                        // Silent fail
-                    }
 
-                    renderRequestCard(request, ride, driver);
+                        // Fetch Driver
+                        let driver = { firstName: localization.getText('text_unknown'), lastName: localization.getText('text_unknown_driver') };
+                        try {
+                            const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
+                            if (driverDoc.exists()) {
+                                driver = driverDoc.data();
+                            }
+                        } catch (e) {
+                            // Silent fail
+                        }
+
+                        renderRequestCard(request, ride, driver);
+                    } catch (err) {
+                        console.error("Error rendering request card:", err);
+                    }
+                }
+
+                if (ridesList.children.length === 0) {
+                    ridesList.innerHTML = `
+                        <div class="text-center py-12 bg-white rounded-xl border border-gray-100">
+                            <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <p class="text-gray-500 mb-4">${localization.getText('text_no_requests')}</p>
+                            <a href="search-ride.html" class="text-[#25A8D9] font-medium hover:underline">${localization.getText('link_find_ride')}</a>
+                        </div>
+                    `;
                 }
 
             } catch (error) {
