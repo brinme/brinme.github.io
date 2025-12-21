@@ -74,12 +74,20 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-500 mb-1 uppercase" data-i18n="label_package_type">Package Type (Optional)</label>
-                                <select id="searchType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9]">
+                                <select id="searchType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9] mb-2">
                                     <option value="" data-i18n="option_any">Any</option>
-                                    <option value="S" data-i18n="option_small">Small (S) - Documents, shoes, phone</option>
-                                    <option value="M" data-i18n="option_medium">Medium (M) - Computer, wheel, printer</option>
-                                    <option value="L" data-i18n="option_large">Large (L) - Sofa, window, wardrobe</option>
+                                    <option value="S" data-i18n="option_small_full">Small</option>
+                                    <option value="M" data-i18n="option_medium_full">Medium</option>
+                                    <option value="L" data-i18n="option_large_full">Large</option>
                                 </select>
+                                <div class="bg-gray-50 rounded-lg p-2 text-[10px] text-gray-500">
+                                    <p class="font-bold mb-1 text-gray-700" data-i18n="title_size_examples">Size Examples:</p>
+                                    <ul class="space-y-0.5">
+                                        <li><span class="font-bold text-gray-700" data-i18n="option_small_full">Small</span>: <span data-i18n="desc_small">Documents, shoes, phone</span></li>
+                                        <li><span class="font-bold text-gray-700" data-i18n="option_medium_full">Medium</span>: <span data-i18n="desc_medium">Computer, wheel, printer</span></li>
+                                        <li><span class="font-bold text-gray-700" data-i18n="option_large_full">Large</span>: <span data-i18n="desc_large">Sofa, window, wardrobe</span></li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="flex items-end md:col-span-2">
                                 <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-[#25A8D9] hover:bg-[#1e90c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25A8D9]" data-i18n="btn_search">

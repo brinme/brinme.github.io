@@ -126,7 +126,7 @@
     <script type="module">
         import { auth, db, functions } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
         import { LocalizationManager } from './js/localization.js';
         import { showToast } from './js/toast.js';
@@ -264,6 +264,42 @@
                         }
                     } else {
                         userData = userDoc.data();
+                        
+                        // Update Telegram user data if changed
+                        if (isTelegram) {
+                            const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+                            if (tgUser) {
+                                const firstName = tgUser.first_name || "";
+                                const lastName = tgUser.last_name || "";
+                                const photoUrl = tgUser.photo_url || "";
+                                
+                                let needsUpdate = false;
+                                const updates = {};
+
+                                if (userData.firstName !== firstName) {
+                                    updates.firstName = firstName;
+                                    needsUpdate = true;
+                                }
+                                if (userData.lastName !== lastName) {
+                                    updates.lastName = lastName;
+                                    needsUpdate = true;
+                                }
+                                if (photoUrl && (!userData.profile || userData.profile.photo !== photoUrl)) {
+                                    updates["profile.photo"] = photoUrl;
+                                    needsUpdate = true;
+                                }
+
+                                if (needsUpdate) {
+                                    await updateDoc(doc(db, "users", user.uid), updates);
+                                    // Update local userData to reflect changes immediately
+                                    userData = { ...userData, ...updates };
+                                    if (updates["profile.photo"]) {
+                                        if (!userData.profile) userData.profile = {};
+                                        userData.profile.photo = photoUrl;
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     // Profile exists -> Show Dashboard

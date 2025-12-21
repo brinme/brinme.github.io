@@ -227,6 +227,13 @@
             if (request.packageType === 'M' && segment.priceM) price = segment.priceM;
             if (request.packageType === 'L' && segment.priceL) price = segment.priceL;
 
+            const typeNames = { 
+                'S': localization.getText('option_small_full'), 
+                'M': localization.getText('option_medium_full'), 
+                'L': localization.getText('option_large_full') 
+            };
+            const typeName = typeNames[request.packageType] || request.packageType || 'S';
+
             const isMe = auth.currentUser && auth.currentUser.uid === request.userId;
 
             const card = document.createElement('div');
@@ -284,7 +291,7 @@
                 </div>
                 
                 <div class="flex justify-between items-center mb-3 p-3 bg-gray-50 rounded-lg">
-                    <span class="text-xs text-gray-500 font-medium">${localization.getText('label_parcels_simple')} (${request.packageType || 'S'})</span>
+                    <span class="text-xs text-gray-500 font-medium">${localization.getText('label_parcels_simple')} (${typeName})</span>
                     <span class="text-lg font-bold text-[#25A8D9]">${price} ${currency}</span>
                 </div>
 

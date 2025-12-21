@@ -52,7 +52,7 @@
                 <h1 class="font-bold text-lg text-gray-800" data-i18n="ride_details_title">Ride Details</h1>
             </header>
 
-            <main class="flex-1 overflow-y-auto p-4 pb-32 md:p-8 md:pb-32">
+            <main class="flex-1 overflow-y-auto p-4 pb-56 md:p-8 md:pb-32">
                 <div class="max-w-2xl mx-auto space-y-6" id="rideContent">
                     <!-- Loading State -->
                     <div class="animate-pulse space-y-4">
@@ -256,38 +256,61 @@
             const priceL = segment.priceL || 0;
 
             const packagesHtml = `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-center text-sm">
-                    <div class="flex flex-row md:flex-col items-center p-3 bg-gray-50 rounded-xl border border-gray-100 gap-3 md:gap-0">
-                        <div class="flex flex-col items-center justify-center w-16 md:w-auto shrink-0">
-                            <div class="text-[#25A8D9] mb-1 md:mb-2">
-                                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm mb-4">
+                    <!-- Small -->
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-stretch bg-gray-50 rounded-xl border border-gray-100 h-14 overflow-hidden relative">
+                            <div class="flex items-center gap-3 px-3 w-[60%]">
+                                <div class="text-[#25A8D9] shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                </div>
+                                <span class="font-bold text-gray-900 text-sm truncate">${localization.getText('option_small_full')}</span>
                             </div>
-                            <span class="font-bold text-gray-900 text-xs md:text-sm">${localization.getText('option_small_simple')}</span>
+                            <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                            <div class="flex items-center justify-center flex-1 px-2">
+                                <span class="font-bold text-[#25A8D9] text-lg">${priceS > 0 ? priceS + ' ' + currency : '-'}</span>
+                            </div>
                         </div>
-                        <div class="flex-1 flex flex-row md:flex-col items-center justify-between md:justify-center w-full pl-2 md:pl-0 border-l md:border-l-0 border-gray-200">
-                            <span class="font-bold text-[#25A8D9] text-lg">${priceS > 0 ? priceS + ' ' + currency : '-'}</span>
+                        <div class="text-xs text-gray-500 text-left px-1">
+                            ${localization.getText('desc_small')}
                         </div>
                     </div>
-                    <div class="flex flex-row md:flex-col items-center p-3 bg-gray-50 rounded-xl border border-gray-100 gap-3 md:gap-0">
-                        <div class="flex flex-col items-center justify-center w-16 md:w-auto shrink-0">
-                            <div class="text-[#25A8D9] mb-1 md:mb-2">
-                                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+
+                    <!-- Medium -->
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-stretch bg-gray-50 rounded-xl border border-gray-100 h-14 overflow-hidden relative">
+                            <div class="flex items-center gap-3 px-3 w-[60%]">
+                                <div class="text-[#25A8D9] shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <span class="font-bold text-gray-900 text-sm truncate">${localization.getText('option_medium_full')}</span>
                             </div>
-                            <span class="font-bold text-gray-900 text-xs md:text-sm">${localization.getText('option_medium_simple')}</span>
+                            <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                            <div class="flex items-center justify-center flex-1 px-2">
+                                <span class="font-bold text-[#25A8D9] text-lg">${priceM > 0 ? priceM + ' ' + currency : '-'}</span>
+                            </div>
                         </div>
-                        <div class="flex-1 flex flex-row md:flex-col items-center justify-between md:justify-center w-full pl-2 md:pl-0 border-l md:border-l-0 border-gray-200">
-                            <span class="font-bold text-[#25A8D9] text-lg">${priceM > 0 ? priceM + ' ' + currency : '-'}</span>
+                        <div class="text-xs text-gray-500 text-left px-1">
+                            ${localization.getText('desc_medium')}
                         </div>
                     </div>
-                    <div class="flex flex-row md:flex-col items-center p-3 bg-gray-50 rounded-xl border border-gray-100 gap-3 md:gap-0">
-                        <div class="flex flex-col items-center justify-center w-16 md:w-auto shrink-0">
-                            <div class="text-[#25A8D9] mb-1 md:mb-2">
-                                <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
+
+                    <!-- Large -->
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-stretch bg-gray-50 rounded-xl border border-gray-100 h-14 overflow-hidden relative">
+                            <div class="flex items-center gap-3 px-3 w-[60%]">
+                                <div class="text-[#25A8D9] shrink-0">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.184,11.019c-.043-.253-1.237-7.419-1.2-7.184A1,1,0,0,0,16,3H12a1,1,0,0,0,0,2h3.153l.586,3.517L9.566,12.505a5.106,5.106,0,1,0,1.081,1.682l5.45-3.521.113.679a5,5,0,1,0,1.974-.326ZM6,19a3,3,0,0,1,0-6,2.967,2.967,0,0,1,1.821.633L5.458,15.16a1,1,0,1,0,1.084,1.68l2.37-1.531A2.972,2.972,0,0,1,9,16,3,3,0,0,1,6,19Zm12,0a2.99,2.99,0,0,1-1.449-5.611l.463,2.776a1,1,0,1,0,1.972-.33l-.463-2.782A3,3,0,0,1,18,19ZM8.707,6.293l2,2A1,1,0,1,1,9.293,9.707L7.586,8H6A1,1,0,0,1,6,6H8A1,1,0,0,1,8.707,6.293Z"></path></svg>
+                                </div>
+                                <span class="font-bold text-gray-900 text-sm truncate">${localization.getText('option_large_full')}</span>
                             </div>
-                            <span class="font-bold text-gray-900 text-xs md:text-sm">${localization.getText('option_large_simple')}</span>
+                            <div class="absolute left-[60%] top-0 bottom-0 w-px bg-gray-200"></div>
+                            <div class="flex items-center justify-center flex-1 px-2">
+                                <span class="font-bold text-[#25A8D9] text-lg">${priceL > 0 ? priceL + ' ' + currency : '-'}</span>
+                            </div>
                         </div>
-                        <div class="flex-1 flex flex-row md:flex-col items-center justify-between md:justify-center w-full pl-2 md:pl-0 border-l md:border-l-0 border-gray-200">
-                            <span class="font-bold text-[#25A8D9] text-lg">${priceL > 0 ? priceL + ' ' + currency : '-'}</span>
+                        <div class="text-xs text-gray-500 text-left px-1">
+                            ${localization.getText('desc_large')}
                         </div>
                     </div>
                 </div>
@@ -552,25 +575,43 @@
                     // No Request - Create One
                     if (ride.status === 'IDLE') {
                         const inputGroup = document.createElement('div');
-                        inputGroup.className = 'flex gap-4 items-end';
+                        inputGroup.className = 'flex flex-col gap-4';
                         
-                        inputGroup.innerHTML = `
-                            <div class="flex-1">
-                                <label class="block text-xs text-gray-500 mb-1">${localization.getText('label_type')}</label>
-                                <select id="packageType" class="w-full px-2 py-3 border border-gray-200 rounded-xl focus:ring-[#25A8D9] focus:border-[#25A8D9]">
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                </select>
+                        let selectedType = 'S';
+
+                        const typeContainer = document.createElement('div');
+                        typeContainer.innerHTML = `
+                            <label class="block text-xs text-gray-500 mb-2">${localization.getText('label_type')}</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" data-type="S" class="package-select-btn px-1 py-3 border-2 border-[#25A8D9] bg-blue-50 text-[#25A8D9] rounded-xl text-xs md:text-sm font-bold transition-all">
+                                    ${localization.getText('option_small_full')}
+                                </button>
+                                <button type="button" data-type="M" class="package-select-btn px-1 py-3 border border-gray-200 text-gray-600 rounded-xl text-xs md:text-sm font-medium hover:bg-gray-50 transition-all">
+                                    ${localization.getText('option_medium_full')}
+                                </button>
+                                <button type="button" data-type="L" class="package-select-btn px-1 py-3 border border-gray-200 text-gray-600 rounded-xl text-xs md:text-sm font-medium hover:bg-gray-50 transition-all">
+                                    ${localization.getText('option_large_full')}
+                                </button>
                             </div>
                         `;
+                        inputGroup.appendChild(typeContainer);
+
+                        const buttons = typeContainer.querySelectorAll('.package-select-btn');
+                        buttons.forEach(btn => {
+                            btn.onclick = () => {
+                                buttons.forEach(b => {
+                                    b.className = 'package-select-btn px-1 py-3 border border-gray-200 text-gray-600 rounded-xl text-xs md:text-sm font-medium hover:bg-gray-50 transition-all';
+                                });
+                                btn.className = 'package-select-btn px-1 py-3 border-2 border-[#25A8D9] bg-blue-50 text-[#25A8D9] rounded-xl text-xs md:text-sm font-bold transition-all';
+                                selectedType = btn.getAttribute('data-type');
+                            };
+                        });
                         
                         const requestBtn = document.createElement('button');
-                        requestBtn.className = 'flex-1 py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
+                        requestBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
                         requestBtn.textContent = localization.getText('btn_request_delivery');
                         requestBtn.onclick = async () => {
-                            const type = document.getElementById('packageType').value;
-                            await createRequest(ride, currentUser, 1, type); // Default to 1 package
+                            await createRequest(ride, currentUser, 1, selectedType); 
                         };
 
                         inputGroup.appendChild(requestBtn);
