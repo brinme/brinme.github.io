@@ -148,6 +148,14 @@
         setupAutocomplete('searchFrom');
         setupAutocomplete('searchTo');
 
+        // Set default date to today
+        const dateInput = document.getElementById('searchDate');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            dateInput.min = today;
+        }
+
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 if (window.isTelegramApp) {

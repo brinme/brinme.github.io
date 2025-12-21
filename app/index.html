@@ -14,11 +14,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center hidden">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#25A8D9] mb-4"></div>
-        <p class="text-gray-500 font-medium">Loading...</p>
-    </div>
+
 
     <div class="flex h-screen overflow-hidden">
         <!-- Desktop Sidebar (Hidden on Mobile) -->
@@ -140,7 +136,6 @@
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
         const logoutBtnDesktop = document.getElementById('logoutBtnDesktop');
         const ridesList = document.getElementById('ridesList');
-        const loadingOverlay = document.getElementById('loadingOverlay');
 
         // Helper: Format Date
         const formatDate = (dateString) => {
@@ -193,8 +188,6 @@
             }
 
             if (isTelegram) {
-                loadingOverlay.classList.remove('hidden'); // Show loading immediately
-                
                 // Wait for SDK if needed
                 if (!window.Telegram || !window.Telegram.WebApp) {
                     let attempts = 0;
@@ -305,25 +298,6 @@
                     // Profile exists -> Show Dashboard
 
                     // Telegram Users: Enforce Email Collection if missing
-                    /*
-                    if (isTelegram) {
-                        if (!userData.email) {
-                            window.location.replace('register-telegram.html');
-                            return;
-                        }
-                        
-                        // Enforce Email Verification for Telegram Users
-                        if (!user.emailVerified) {
-                            window.location.replace('verify-email.html');
-                            return;
-                        }
-                    }
-                    */
-
-                    // Hide loading overlay only if we are staying on this page
-                    if (isTelegram) {
-                        loadingOverlay.classList.add('hidden');
-                    }
 
                     if(userNameElement) userNameElement.textContent = userData.firstName || user.email;
                     

@@ -57,6 +57,13 @@ export const translations = {
         "alert_review_submitted": "Review submitted!",
         "alert_error_submitting": "Error submitting review.",
         "text_all_senders_rated": "All senders rated!",
+        "role_sender": "Sender",
+        "role_driver": "Driver",
+        "text_error_loading_data": "Error loading data.",
+        "alert_request_not_found": "Request not found",
+        "text_already_rated_driver": "You have already rated the driver.",
+        "label_rating": "Rating",
+        "btn_submit_review": "Submit Review",
 
         // Chat (chat.html)
         "placeholder_message": "Type a message...",
@@ -330,6 +337,13 @@ export const translations = {
         "alert_review_submitted": "Отзыв отправлен!",
         "alert_error_submitting": "Ошибка при отправке отзыва.",
         "text_all_senders_rated": "Все отправители оценены!",
+        "role_sender": "Отправитель",
+        "role_driver": "Водитель",
+        "text_error_loading_data": "Ошибка загрузки данных.",
+        "alert_request_not_found": "Заявка не найдена",
+        "text_already_rated_driver": "Вы уже оценили водителя.",
+        "label_rating": "Оценка",
+        "btn_submit_review": "Отправить отзыв",
 
         // Chat (chat.html)
         "placeholder_message": "Введите сообщение...",

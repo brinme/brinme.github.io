@@ -96,22 +96,22 @@
                     hasUnrated = true;
 
                     const userDoc = await getDoc(doc(db, "users", req.userId));
-                    const user = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', lastName: 'User' };
+                    const user = userDoc.exists() ? userDoc.data() : { firstName: localization.getText('text_unknown'), lastName: localization.getText('text_user') };
                     const name = `${user.firstName || ''} ${user.lastName || ''}`;
                     const photo = (user.profile && user.profile.photo) ? user.profile.photo : `https://ui-avatars.com/api/?name=${name}&background=random`;
 
-                    html += createRatingCard(req.userId, req.id, 'sender', name, photo, 'Sender');
+                    html += createRatingCard(req.userId, req.id, 'sender', name, photo, localization.getText('role_sender'));
                 }
                 html += '</div>';
 
                 if (!hasUnrated) {
-                    mainContent.innerHTML = '<div class="text-center py-10 text-gray-500">All senders rated!</div>';
+                    mainContent.innerHTML = `<div class="text-center py-10 text-gray-500">${localization.getText('text_all_senders_rated')}</div>`;
                 } else {
                     mainContent.innerHTML = html;
                 }
 
             } catch (error) {
-                mainContent.innerHTML = '<div class="text-center py-10 text-red-500">Error loading data.</div>';
+                mainContent.innerHTML = `<div class="text-center py-10 text-red-500">${localization.getText('text_error_loading_data')}</div>`;
             }
         }
 
@@ -120,12 +120,12 @@
                 // Check if already rated
                 const reqDoc = await getDoc(doc(db, "requests", requestId));
                 if (!reqDoc.exists()) {
-                    alert("Request not found");
+                    alert(localization.getText('alert_request_not_found'));
                     return;
                 }
                 const reqData = reqDoc.data();
                 if (reqData.senderRated) {
-                    mainContent.innerHTML = '<div class="text-center py-10 text-gray-500">You have already rated the driver.</div>';
+                    mainContent.innerHTML = `<div class="text-center py-10 text-gray-500">${localization.getText('text_already_rated_driver')}</div>`;
                     return;
                 }
 
@@ -134,14 +134,14 @@
                 const ride = rideDoc.data();
 
                 const driverDoc = await getDoc(doc(db, "users", ride.ownerId));
-                const driver = driverDoc.exists() ? driverDoc.data() : { firstName: 'Unknown', lastName: 'Driver' };
+                const driver = driverDoc.exists() ? driverDoc.data() : { firstName: localization.getText('text_unknown'), lastName: localization.getText('role_driver') };
                 const name = `${driver.firstName || ''} ${driver.lastName || ''}`;
                 const photo = (driver.profile && driver.profile.photo) ? driver.profile.photo : `https://ui-avatars.com/api/?name=${name}&background=random`;
 
-                mainContent.innerHTML = createRatingCard(ride.ownerId, requestId, 'driver', name, photo, 'Driver');
+                mainContent.innerHTML = createRatingCard(ride.ownerId, requestId, 'driver', name, photo, localization.getText('role_driver'));
 
             } catch (error) {
-                mainContent.innerHTML = '<div class="text-center py-10 text-red-500">Error loading data.</div>';
+                mainContent.innerHTML = `<div class="text-center py-10 text-red-500">${localization.getText('text_error_loading_data')}</div>`;
             }
         }
 
@@ -157,7 +157,7 @@
                     </div>
                     
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Rating</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">${localization.getText('label_rating')}</label>
                         <div class="flex gap-2">
                             ${[1, 2, 3, 4, 5].map(star => `
                                 <button onclick="setRating('${uniqueId}', ${star})" class="text-gray-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors star-btn-${uniqueId}" data-val="${star}">
@@ -168,11 +168,11 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Comment</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">${localization.getText('label_comment_simple')}</label>
                         <textarea id="comment-${uniqueId}" rows="3" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-gray-50" placeholder="${localization.getText('placeholder_review')}"></textarea>
                     </div>
 
-                    <button onclick="submitRating('${targetUserId}', '${uniqueId}', '${type}')" class="w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors">Submit Review</button>
+                    <button onclick="submitRating('${targetUserId}', '${uniqueId}', '${type}')" class="w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors">${localization.getText('btn_submit_review')}</button>
                 </div>
             `;
         }
@@ -205,12 +205,12 @@
 
             try {
                 // Fetch current user details for denormalization
-                let authorName = "Anonymous";
+                let authorName = localization.getText('text_anonymous');
                 try {
                     const currentUserDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
                     if (currentUserDoc.exists()) {
                         const d = currentUserDoc.data();
-                        authorName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || "Anonymous";
+                        authorName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || localization.getText('text_anonymous');
                     }
                 } catch (e) {
                     // Silent fail
