@@ -243,10 +243,12 @@
                             const firstName = tgUser?.first_name || "Telegram";
                             const lastName = tgUser?.last_name || "User";
                             const photoUrl = tgUser?.photo_url || "";
+                            const username = tgUser?.username || "";
                             
                             const newUser = createUser(user.uid, null, firstName, lastName);
                             newUser.telegramId = tgUser?.id;
                             if (photoUrl) newUser.profile.photo = photoUrl;
+                            if (username) newUser.profile.media = username;
                             
                             await setDoc(doc(db, "users", user.uid), newUser);
                             userData = newUser;
@@ -265,6 +267,8 @@
                                 const firstName = tgUser.first_name || "";
                                 const lastName = tgUser.last_name || "";
                                 const photoUrl = tgUser.photo_url || "";
+                                const username = tgUser.username || "";
+                                const tgMediaLink = username || "";
                                 
                                 let needsUpdate = false;
                                 const updates = {};
@@ -281,14 +285,19 @@
                                     updates["profile.photo"] = photoUrl;
                                     needsUpdate = true;
                                 }
+                                if (tgMediaLink && (!userData.profile || userData.profile.media !== tgMediaLink)) {
+                                    updates["profile.media"] = tgMediaLink;
+                                    needsUpdate = true;
+                                }
 
                                 if (needsUpdate) {
                                     await updateDoc(doc(db, "users", user.uid), updates);
                                     // Update local userData to reflect changes immediately
                                     userData = { ...userData, ...updates };
-                                    if (updates["profile.photo"]) {
+                                    if (updates["profile.photo"] || updates["profile.media"]) {
                                         if (!userData.profile) userData.profile = {};
-                                        userData.profile.photo = photoUrl;
+                                        if (updates["profile.photo"]) userData.profile.photo = photoUrl;
+                                        if (updates["profile.media"]) userData.profile.media = tgMediaLink;
                                     }
                                 }
                             }

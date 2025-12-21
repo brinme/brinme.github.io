@@ -28,6 +28,7 @@ export const translations = {
         "text_no_offered_rides": "You haven't offered any rides yet.",
         "link_offer_first_ride": "Offer your first ride",
         "text_no_requests": "You haven't made any requests yet.",
+        "text_no_other_requests": "No requests yet.",
         "link_find_ride": "Find a ride",
         
         // Profile (profile.html)
@@ -151,6 +152,7 @@ export const translations = {
         "error_city_not_supported": "City '{city}' is not in our supported list. Please select from the suggestions.",
         "error_specify_capacity": "Please specify capacity for at least one package type.",
         "error_no_price_specified": "Please specify a price for at least one package type.",
+        "error_cannot_request_size": "Cannot request this size.",
         "error_creating_ride": "Error creating ride: ",
         "error_invalid_chat_user": "Invalid chat user.",
         "error_send_message": "Failed to send message",
@@ -308,6 +310,7 @@ export const translations = {
         "text_no_offered_rides": "Вы еще не создали ни одной поездки",
         "link_offer_first_ride": "Создать поездку",
         "text_no_requests": "Вы еще не оставляли заявок",
+        "text_no_other_requests": "Еще нет заявок",
         "link_find_ride": "Найти перевозчика",
         
         // Profile (profile.html)
@@ -430,6 +433,7 @@ export const translations = {
         "error_city_not_supported": "Город '{city}' не найден в нашем списке. Пожалуйста, выберите из предложенных вариантов.",
         "error_specify_capacity": "Пожалуйста, укажите вместимость хотя бы для одного типа посылок.",
         "error_no_price_specified": "Пожалуйста, укажите цену хотя бы для одного типа посылки.",
+        "error_cannot_request_size": "Нельзя выбрать этот размер.",
         "error_creating_ride": "Ошибка создания поездки: ",
         "error_invalid_chat_user": "Неверный пользователь чата.",
         "error_send_message": "Не удалось отправить сообщение",

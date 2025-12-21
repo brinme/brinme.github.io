@@ -611,6 +611,16 @@
                         requestBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
                         requestBtn.textContent = localization.getText('btn_request_delivery');
                         requestBtn.onclick = async () => {
+                            // Validate Price
+                            const segment = ride.rideSegments[0] || {};
+                            const priceKey = 'price' + selectedType;
+                            const price = segment[priceKey] || 0;
+
+                            if (price <= 0) {
+                                alert(localization.getText('error_cannot_request_size'));
+                                return;
+                            }
+
                             await createRequest(ride, currentUser, 1, selectedType); 
                         };
 
