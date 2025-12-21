@@ -337,8 +337,8 @@
                             </div>
                             
                             <!-- Name & Info -->
-                            <div class="flex-1 min-w-0">
-                                <h2 class="text-lg md:text-2xl font-bold text-gray-900 overflow-x-auto whitespace-nowrap no-scrollbar">${driverName}</h2>
+                            <div class="flex-1 min-w-0 overflow-hidden">
+                                <h2 id="driver-name" class="text-lg md:text-2xl font-bold text-gray-900 whitespace-nowrap inline-block">${driverName}</h2>
                                 <p class="text-gray-500 text-sm mb-1 truncate">${driver.email || ''}</p>
                                 
                                 ${!isOwner ? `
@@ -466,6 +466,26 @@
 
             // --- Render Action Bar ---
             renderActionBar(isOwner, ride, myRequest, currentUser);
+
+            // --- Auto Scroll Name ---
+            setTimeout(() => {
+                const nameEl = document.getElementById('driver-name');
+                if (nameEl && nameEl.scrollWidth > nameEl.parentElement.clientWidth) {
+                    const distance = nameEl.scrollWidth - nameEl.parentElement.clientWidth;
+                    const duration = distance * 40 + 2000; // Speed + base time
+                    
+                    nameEl.animate([
+                        { transform: 'translateX(0)' },
+                        { transform: `translateX(-${distance}px)` }
+                    ], {
+                        duration: duration,
+                        iterations: Infinity,
+                        direction: 'alternate',
+                        easing: 'ease-in-out',
+                        delay: 1000
+                    });
+                }
+            }, 100);
         }
 
         function renderActionBar(isOwner, ride, myRequest, currentUser) {
