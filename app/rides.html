@@ -513,6 +513,8 @@
                 'CANCELLED': 'bg-gray-100 text-gray-800'
             };
             const statusClass = statusColors[request.status] || 'bg-gray-100 text-gray-800';
+            const statusKey = 'status_' + request.status.toLowerCase();
+            const statusLabel = localization.getText(statusKey) || request.status;
 
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow';
@@ -528,7 +530,7 @@
                 <!-- Header: Status & Cancel -->
                 <div class="flex justify-between items-center mb-6">
                     <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">
-                        ${request.status}
+                        ${statusLabel}
                     </span>
                 </div>
 
@@ -546,7 +548,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">From</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_from')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${fromPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${fromTime}</p>
@@ -563,7 +565,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">Stops</p>
+                            <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_stops_simple')}</p>
                             <p class="text-sm text-gray-700 leading-relaxed">${stops}</p>
                         </div>
                     </div>
@@ -579,7 +581,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">To</p>
+                                    <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
                                 <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>

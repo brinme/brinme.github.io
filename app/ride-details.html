@@ -165,7 +165,23 @@
                             myRequest.id = requestSnapshot.docs[0].id;
                         }
 
-                        renderRideDetails(user, ride, driver, myRequest);
+                        // 4. Fetch All Requests (if Owner and Ended)
+                        let allRequests = [];
+                        if (user.uid === ride.ownerId && ride.status === 'ENDED') {
+                            try {
+                                const qAll = query(collection(db, "requests"), where("rideId", "==", rideId));
+                                const allSnap = await getDocs(qAll);
+                                allSnap.forEach(d => {
+                                    const data = d.data();
+                                    data.id = d.id;
+                                    allRequests.push(data);
+                                });
+                            } catch (e) {
+                                console.error("Error fetching all requests:", e);
+                            }
+                        }
+
+                        renderRideDetails(user, ride, driver, myRequest, allRequests);
                     } catch (error) {
                         console.error(error);
                         showToast('text_error_loading', 'error');
@@ -197,7 +213,7 @@
             }
         }
 
-        function renderRideDetails(currentUser, ride, driver, myRequest) {
+        function renderRideDetails(currentUser, ride, driver, myRequest, allRequests = []) {
             currentRideData = ride;
             currentDriverData = driver;
             currentRequestData = myRequest;
@@ -465,7 +481,7 @@
             `;
 
             // --- Render Action Bar ---
-            renderActionBar(isOwner, ride, myRequest, currentUser);
+            renderActionBar(isOwner, ride, myRequest, currentUser, allRequests);
 
             // --- Auto Scroll Name ---
             setTimeout(() => {
@@ -488,7 +504,7 @@
             }, 100);
         }
 
-        function renderActionBar(isOwner, ride, myRequest, currentUser) {
+        function renderActionBar(isOwner, ride, myRequest, currentUser, allRequests = []) {
             actionBar.innerHTML = '';
             const container = document.createElement('div');
             container.className = 'max-w-2xl mx-auto flex flex-col gap-3';
@@ -532,8 +548,20 @@
                 } else if (ride.status === 'ENDED') {
                     const rateBtn = document.createElement('button');
                     rateBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
-                    rateBtn.textContent = localization.getText('btn_rate_senders');
-                    rateBtn.onclick = () => window.location.href = `rate.html?rideId=${ride.rideId}&mode=senders`;
+                    
+                    // Check if all accepted requests are rated
+                    const acceptedRequests = allRequests.filter(r => r.status === 'ACCEPTED');
+                    const allRated = acceptedRequests.length > 0 && acceptedRequests.every(r => r.driverRated);
+                    
+                    if (allRated) {
+                        rateBtn.textContent = localization.getText('btn_senders_rated');
+                        rateBtn.disabled = true;
+                        rateBtn.className = 'w-full py-3 bg-gray-300 text-white font-bold rounded-xl cursor-not-allowed';
+                    } else {
+                        rateBtn.textContent = localization.getText('btn_rate_senders');
+                        rateBtn.onclick = () => window.location.href = `rate.html?rideId=${ride.rideId}&mode=senders`;
+                    }
+                    
                     container.appendChild(rateBtn);
                 }
 
