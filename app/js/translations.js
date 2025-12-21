@@ -272,8 +272,8 @@ export const translations = {
         
         // Dashboard (index.html)
         "hello": "Привет",
-        "dashboard_subtitle": "Сэкономь на отправке посылки или заработай подвезя чью-то!",
-        "btn_find_ride": "Найти поездку",
+        "dashboard_subtitle": "Отправляй посылки с теми, кто едет по пути. Или зарабатывай, подвозя чужие 📦",
+        "btn_find_ride": "Найти перевозчика",
         "desc_find_ride": "Найти место для посылки",
         "btn_offer_ride": "Создать поездку",
         "desc_offer_ride": "Подвезти чью-то посылку",
@@ -292,7 +292,7 @@ export const translations = {
         "text_no_offered_rides": "Вы еще не создали ни одной поездки",
         "link_offer_first_ride": "Создать поездку",
         "text_no_requests": "Вы еще не оставляли заявок",
-        "link_find_ride": "Найти поездку",
+        "link_find_ride": "Найти перевозчика",
         
         // Profile (profile.html)
         "stat_rides": "Поездки",
@@ -339,7 +339,7 @@ export const translations = {
         "btn_save_changes": "Сохранить изменения",
 
         // Search (search-ride.html)
-        "title_find_ride": "Найти поездку",
+        "title_find_ride": "Найти перевозчика",
         "label_from": "Откуда",
         "label_to": "Куда",
         "label_date": "Дата",
