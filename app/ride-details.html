@@ -113,6 +113,15 @@
             return `${month} ${day}, ${year}. ${hours}:${minutes}`;
         };
 
+        const formatDateOnly = (dateString) => {
+            if (!dateString) return localization.getText('text_unknown_date');
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.toLocaleString(localization.currentLang, { month: 'short' });
+            const year = date.getFullYear();
+            return `${month} ${day}, ${year}`;
+        };
+
         // Helper: Render Stars
         const getStarsHTML = (rating) => {
             let html = '<div class="flex text-yellow-400 text-xs">';
@@ -250,11 +259,40 @@
             const packagesCount = (driver.statistics && driver.statistics[1]) || 0;
 
             // --- Route Info ---
-            const fromPoint = ride.points[0];
-            const toPoint = ride.points[ride.points.length - 1];
-            const fromTime = formatDate(ride.times[0]);
-            const toTime = formatDate(ride.times[ride.times.length - 1]);
-            const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
+            // Determine display points based on URL params (if available)
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromQuery = urlParams.get('from');
+            const toQuery = urlParams.get('to');
+            const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+            let displayFromIndex = 0;
+            let displayToIndex = ride.points.length - 1;
+
+            if (fromQuery) {
+                const foundIndex = ride.points.findIndex(p => normalize(p.name).includes(normalize(fromQuery)));
+                if (foundIndex !== -1) displayFromIndex = foundIndex;
+            }
+            
+            if (toQuery) {
+                const foundIndex = ride.points.findIndex(p => normalize(p.name).includes(normalize(toQuery)));
+                if (foundIndex !== -1) displayToIndex = foundIndex;
+            }
+
+            const fromPoint = ride.points[displayFromIndex];
+            const toPoint = ride.points[displayToIndex];
+            
+            let fromTime = "";
+            if (displayFromIndex === 0 && ride.times && ride.times[0]) {
+                fromTime = formatDate(ride.times[0]);
+            } else {
+                const dateSource = ride.date || (ride.times && ride.times[0]);
+                if (dateSource) {
+                    fromTime = formatDateOnly(dateSource);
+                }
+            }
+
+            const toTime = formatDate(ride.times[displayToIndex]);
+            const stops = ride.points.slice(displayFromIndex + 1, displayToIndex).map(p => p.name).join(', ');
 
             // --- Details ---
             const segment = ride.rideSegments[0] || {};
@@ -443,7 +481,6 @@
                                         <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to_simple')}</p>
                                         <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                     </div>
-                                    <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
                                 </div>
                             </div>
                         </div>
@@ -465,12 +502,15 @@
                 </div>
 
                 <!-- Additional Info Card -->
+                ${(ride.plate || ride.comment) ? `
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
                     <h3 class="font-bold text-gray-900 mb-4">${localization.getText('title_additional_info')}</h3>
+                    ${ride.plate ? `
                     <div class="flex justify-between items-center border-b border-gray-100 pb-4">
                         <span class="text-gray-600">${localization.getText('label_car_plate_simple')}</span>
-                        <span class="font-mono bg-gray-100 px-2 py-1 rounded text-gray-800 font-bold">${ride.plate || localization.getText('text_na')}</span>
+                        <span class="font-mono bg-gray-100 px-2 py-1 rounded text-gray-800 font-bold">${ride.plate}</span>
                     </div>
+                    ` : ''}
                     ${ride.comment ? `
                     <div class="pt-2">
                         <p class="text-xs text-gray-500 uppercase mb-2">${localization.getText('label_comment_simple')}</p>
@@ -478,6 +518,7 @@
                     </div>
                     ` : ''}
                 </div>
+                ` : ''}
             `;
 
             // --- Render Action Bar ---
@@ -513,44 +554,34 @@
                 // --- Owner Actions ---
                 
                 // Status Actions
-                if (ride.status === 'IDLE') {
+                if (ride.status === 'IDLE' || ride.status === 'STARTED') {
                     const startTime = new Date(ride.times[0]);
                     const now = new Date();
-                    
+
+                    // Show End Ride Button (Simplified Flow) - Only if time >= start time
                     if (now >= startTime) {
-                        // Show Start Button
-                        const startBtn = document.createElement('button');
-                        startBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
-                        startBtn.textContent = localization.getText('btn_start_ride');
-                        startBtn.onclick = () => updateRideStatus(ride.rideId, 'STARTED');
-                        container.appendChild(startBtn);
-                    } else {
-                        // Show Cancel Button
+                        const endBtn = document.createElement('button');
+                        endBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors';
+                        endBtn.textContent = localization.getText('btn_end_ride');
+                        endBtn.onclick = () => updateRideStatus(ride.rideId, 'ENDED');
+                        container.appendChild(endBtn);
+                    }
+
+                    // Show Cancel Button (Secondary) - Only if not started yet (time-wise)
+                    if (now < startTime) {
                         const cancelBtn = document.createElement('button');
                         cancelBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
                         cancelBtn.textContent = localization.getText('btn_cancel_ride');
                         cancelBtn.onclick = () => deleteRide(ride.rideId);
                         container.appendChild(cancelBtn);
-                        
-                        // Optional: Show countdown or message
-                        const msg = document.createElement('div');
-                        msg.className = 'text-center text-xs text-gray-400';
-                        msg.textContent = localization.getText('text_start_ride_hint');
-                        container.appendChild(msg);
                     }
 
-                } else if (ride.status === 'STARTED') {
-                    const endBtn = document.createElement('button');
-                    endBtn.className = 'w-full py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-900 transition-colors';
-                    endBtn.textContent = localization.getText('btn_end_ride');
-                    endBtn.onclick = () => updateRideStatus(ride.rideId, 'ENDED');
-                    container.appendChild(endBtn);
                 } else if (ride.status === 'ENDED') {
                     const rateBtn = document.createElement('button');
                     rateBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
                     
                     // Check if all accepted requests are rated
-                    const acceptedRequests = allRequests.filter(r => r.status === 'ACCEPTED');
+                    const acceptedRequests = allRequests.filter(r => r.status === 'ACCEPTED' || r.status === 'DELIVERED');
                     const allRated = acceptedRequests.length > 0 && acceptedRequests.every(r => r.driverRated);
                     
                     if (allRated) {
@@ -590,6 +621,7 @@
                     if (myRequest.status === 'PENDING') statusColorClass = 'bg-orange-100 text-orange-600';
                     else if (myRequest.status === 'ACCEPTED') statusColorClass = 'bg-green-100 text-green-600';
                     else if (myRequest.status === 'REJECTED') statusColorClass = 'bg-red-100 text-red-600';
+                    else if (myRequest.status === 'DELIVERED') statusColorClass = 'bg-blue-100 text-blue-600';
 
                     statusBadge.className = `px-4 py-2 rounded-full text-sm font-bold ${statusColorClass}`;
                     const statusKey = 'status_' + myRequest.status.toLowerCase();
@@ -599,13 +631,6 @@
                     statusDiv.appendChild(statusBadge);
                     container.appendChild(statusDiv);
 
-                    if (ride.status === 'STARTED') {
-                        const rideStatusDiv = document.createElement('div');
-                        rideStatusDiv.className = 'mt-2 text-center text-green-600 font-bold animate-pulse';
-                        rideStatusDiv.textContent = localization.getText('text_ride_in_progress');
-                        container.appendChild(rideStatusDiv);
-                    }
-
                     if ((myRequest.status === 'PENDING' || myRequest.status === 'ACCEPTED') && ride.status === 'IDLE') {
                         const cancelReqBtn = document.createElement('button');
                         cancelReqBtn.className = 'w-full py-3 bg-red-50 text-red-500 font-bold rounded-xl hover:bg-red-100 transition-colors';
@@ -614,9 +639,19 @@
                         container.appendChild(cancelReqBtn);
                     }
                     
-                    if (ride.status === 'ENDED' && myRequest.status === 'ACCEPTED') {
+                    // Received Package Action
+                    if (myRequest.status === 'ACCEPTED') {
+                        const receivedBtn = document.createElement('button');
+                        receivedBtn.className = 'w-full py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors mt-2';
+                        receivedBtn.textContent = localization.getText('btn_received_package');
+                        receivedBtn.onclick = () => updateRequestStatus(myRequest.id, 'DELIVERED');
+                        container.appendChild(receivedBtn);
+                    }
+
+                    // Rate Driver Action (After Delivered)
+                    if (myRequest.status === 'DELIVERED') {
                          const rateDriverBtn = document.createElement('button');
-                        rateDriverBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors';
+                        rateDriverBtn.className = 'w-full py-3 bg-yellow-400 text-white font-bold rounded-xl hover:bg-yellow-500 transition-colors mt-2';
                         rateDriverBtn.textContent = localization.getText('btn_rate_driver');
                         if (myRequest.senderRated) {
                             rateDriverBtn.textContent = localization.getText('btn_driver_rated');
@@ -630,7 +665,7 @@
 
                 } else {
                     // No Request - Create One
-                    if (ride.status === 'IDLE') {
+                    if (ride.status === 'IDLE' || ride.status === 'STARTED') {
                         const inputGroup = document.createElement('div');
                         inputGroup.className = 'flex flex-col gap-4';
                         
@@ -683,11 +718,6 @@
 
                         inputGroup.appendChild(requestBtn);
                         container.appendChild(inputGroup);
-                    } else if (ride.status === 'STARTED') {
-                        const msg = document.createElement('div');
-                        msg.className = 'text-center text-green-600 font-bold text-lg animate-pulse';
-                        msg.textContent = localization.getText('text_ride_in_progress');
-                        container.appendChild(msg);
                     } else {
                         const msg = document.createElement('div');
                         msg.className = 'text-center text-gray-500 font-medium';
@@ -698,6 +728,15 @@
             }
 
             actionBar.appendChild(container);
+        }
+
+        async function updateRequestStatus(requestId, status) {
+            try {
+                await updateDoc(doc(db, "requests", requestId), { status: status });
+                window.location.reload();
+            } catch (e) {
+                showToast('alert_status_update_error', 'error');
+            }
         }
 
         async function deleteRide(rideId) {
@@ -776,6 +815,10 @@
 
         async function createRequest(ride, user, packages, packageType) {
             try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const fromCity = urlParams.get('from');
+                const toCity = urlParams.get('to');
+
                 // Create Request Document
                 const requestData = {
                     rideId: ride.rideId,
@@ -785,6 +828,9 @@
                     status: 'PENDING',
                     createdAt: new Date().toISOString()
                 };
+
+                if (fromCity) requestData.fromLocation = fromCity;
+                if (toCity) requestData.toLocation = toCity;
                 
                 const docRef = await addDoc(collection(db, "requests"), requestData);
                 

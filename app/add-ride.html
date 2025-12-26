@@ -66,38 +66,43 @@
                                 <svg class="w-5 h-5 text-[#25A8D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7m0 0L9 7"></path></svg>
                                 <span data-i18n="subtitle_itinerary">Itinerary</span>
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-6">
+                                <!-- Departure Time -->
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_departure">Departure Time</label>
+                                    <input type="datetime-local" id="departureTime" required class="w-full px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                </div>
+
                                 <!-- From -->
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_from_city">From (City)</label>
-                                        <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <div class="w-2 h-2 rounded-full bg-[#25A8D9]"></div>
-                                            </div>
-                                            <input type="text" id="fromLocation" required placeholder="e.g. Warszawa" data-i18n="placeholder_city_example_from" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_from_city">From (City)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div class="w-2 h-2 rounded-full bg-[#25A8D9]"></div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_departure">Departure Time</label>
-                                        <input type="datetime-local" id="departureTime" required class="w-full px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                        <input type="text" id="fromLocation" required placeholder="e.g. Warszawa" data-i18n="placeholder_city_example_from" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
                                     </div>
                                 </div>
 
+                                <!-- Add Stop Button -->
+                                <div>
+                                    <button type="button" id="addStopBtn" class="text-[#25A8D9] font-bold text-sm flex items-center gap-2 hover:text-[#1e90c7] transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                        <span data-i18n="btn_add_stop">Add Stop</span>
+                                    </button>
+                                </div>
+
+                                <!-- Stops Container -->
+                                <div id="stopsContainer" class="space-y-6"></div>
+
                                 <!-- To -->
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_to_city">To (City)</label>
-                                        <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                            </div>
-                                            <input type="text" id="toLocation" required placeholder="e.g. Kraków" data-i18n="placeholder_city_example_to" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_to_city">To (City)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_arrival">Arrival Time</label>
-                                        <input type="datetime-local" id="arrivalTime" required class="w-full px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
+                                        <input type="text" id="toLocation" required placeholder="e.g. Kraków" data-i18n="placeholder_city_example_to" class="w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white">
                                     </div>
                                 </div>
                             </div>
@@ -108,9 +113,9 @@
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                                     <svg class="w-5 h-5 text-[#25A8D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                                    <span data-i18n="stat_packages">Packages</span>
+                                    <span data-i18n="stat_packages">Packages and Prices</span>
                                 </h3>
-                                <div class="w-32">
+                                <div class="w-24">
                                     <select id="currency" class="w-full px-2 py-1 border border-gray-200 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9] text-sm bg-white">
                                         <option value="PLN" selected>PLN (zł)</option>
                                         <option value="EUR">EUR (€)</option>
@@ -229,11 +234,12 @@
     <script type="module">
         import { auth, db } from './js/firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { createRide, createLocation, createRideSegment } from './js/models.js';
         import { setupAutocomplete } from './js/autocomplete.js';
         import { LocalizationManager } from './js/localization.js';
         import { getAllCities } from './js/cities.js';
+        import { showToast } from './js/toast.js';
 
         // Initialize localization
         const localization = new LocalizationManager();
@@ -243,11 +249,49 @@
         const errorMessage = document.getElementById('errorMessage');
         const logoutBtnDesktop = document.getElementById('logoutBtnDesktop');
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+        const addStopBtn = document.getElementById('addStopBtn');
+        const stopsContainer = document.getElementById('stopsContainer');
         let currentUser = null;
+        let stopCount = 0;
 
         // Initialize Autocomplete
         setupAutocomplete('fromLocation');
         setupAutocomplete('toLocation');
+
+        // Add Stop Logic
+        addStopBtn.addEventListener('click', () => {
+            if (stopCount >= 3) {
+                showToast(localization.getText('error_max_stops_reached') || 'Max 3 stops allowed', 'error');
+                return;
+            }
+            stopCount++;
+            const stopId = `stop-${Date.now()}`;
+            
+            const stopDiv = document.createElement('div');
+            stopDiv.className = "relative bg-white p-4 rounded-lg border border-gray-200";
+            stopDiv.id = stopId;
+            stopDiv.innerHTML = `
+                <button type="button" class="remove-stop-btn absolute top-2 right-2 text-gray-400 hover:text-red-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_stop_city">Stop City</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                        </div>
+                        <input type="text" class="stop-location w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white" placeholder="e.g. Lodz" id="${stopId}-loc">
+                    </div>
+                </div>
+            `;
+            stopsContainer.appendChild(stopDiv);
+            setupAutocomplete(`${stopId}-loc`);
+            
+            stopDiv.querySelector('.remove-stop-btn').addEventListener('click', () => {
+                stopDiv.remove();
+                stopCount--;
+            });
+        });
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -272,12 +316,13 @@
                 
                 // Validate Cities & Canonicalize
                 const allCities = getAllCities();
-                const normalizeForCheck = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                // Helper for normalization - defined at top to be available for stops loop
+                const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
                 
                 const getCityObject = (cityName) => {
-                    const normalizedInput = normalizeForCheck(cityName);
+                    const normalizedInput = normalize(cityName);
                     return allCities.find(city => 
-                        city.names.some(name => normalizeForCheck(name) === normalizedInput)
+                        city.names.some(name => normalize(name) === normalizedInput)
                     );
                 };
 
@@ -298,13 +343,27 @@
                 toName = toCityObj.name;
 
                 const departureTime = document.getElementById('departureTime').value;
-                const arrivalTime = document.getElementById('arrivalTime').value;
-                
-                const maxPackagesS = 0;
-                const maxPackagesM = 0;
-                const maxPackagesL = 0;
-                const maxPackages = 0;
 
+                // Collect Stops
+                const stops = [];
+                const stopDivs = stopsContainer.querySelectorAll('div[id^="stop-"]');
+                for (const div of stopDivs) {
+                    const locInput = div.querySelector('.stop-location');
+                    const stopName = locInput.value;
+
+                    if (stopName) {
+                        const stopCityObj = getCityObject(stopName);
+                        if (!stopCityObj) {
+                            const msg = localization.getText('error_city_not_supported').replace('{city}', stopName);
+                            throw new Error(msg);
+                        }
+                        stops.push({
+                            location: createLocation(stopCityObj.name),
+                            normalizedName: normalize(stopCityObj.name)
+                        });
+                    }
+                }
+                
                 const priceS = parseFloat(document.getElementById('priceS').value) || 0;
                 const priceM = parseFloat(document.getElementById('priceM').value) || 0;
                 const priceL = parseFloat(document.getElementById('priceL').value) || 0;
@@ -322,31 +381,35 @@
                 // Create Objects
                 const fromLoc = createLocation(fromName);
                 const toLoc = createLocation(toName);
-                const segment = createRideSegment([], currency, maxPackagesS, maxPackagesM, maxPackagesL, priceS, priceM, priceL);
+                const segment = createRideSegment([], currency, priceS, priceM, priceL);
                 
                 // Create Ride Object
                 // Note: rideId will be generated by Firestore
                 
-                // Helper for normalization
-                const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
                 const dateStr = departureTime.split('T')[0]; // YYYY-MM-DD
 
+                const points = [fromLoc, ...stops.map(s => s.location), toLoc];
+                const times = [departureTime]; // Only departure time
+
+                // Generate ID first
+                const newRideRef = doc(collection(db, "rides"));
+
                 const newRide = createRide(
-                    null, // rideId placeholder
+                    newRideRef.id, // Pass generated ID
                     currentUser.uid,
-                    [fromLoc, toLoc],
-                    [departureTime, arrivalTime],
+                    points,
+                    times,
                     [segment],
                     plate,
                     comment
                 );
 
                 // Add search fields directly to the ride document
-                newRide.pickupLocations = [normalize(fromName)]; // Array for future stops support
+                newRide.pickupLocations = [normalize(fromName), ...stops.map(s => s.normalizedName)]; // Array for future stops support
                 newRide.date = dateStr;
 
                 // Save to Firestore
-                const docRef = await addDoc(collection(db, "rides"), newRide);
+                await setDoc(newRideRef, newRide);
                 
                 window.location.href = 'rides.html';
 

@@ -10,6 +10,7 @@ export const RequestStatus = {
     PENDING: "PENDING",
     ACCEPTED: "ACCEPTED",
     REJECTED: "REJECTED",
+    DELIVERED: "DELIVERED",
     RATED: "RATED"
 };
 
@@ -39,13 +40,10 @@ export function createUser(userId, email, firstName = "", lastName = "") {
     };
 }
 
-export function createRideSegment(packages = [], currency = "", maxS = 0, maxM = 0, maxL = 0, priceS = 0, priceM = 0, priceL = 0) {
+export function createRideSegment(packages = [], currency = "", priceS = 0, priceM = 0, priceL = 0) {
     return {
         packages,
         currency,
-        maxS,
-        maxM,
-        maxL,
         priceS,
         priceM,
         priceL

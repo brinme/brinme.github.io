@@ -80,6 +80,9 @@
                             <div class="h-32 bg-gray-200 rounded-xl"></div>
                         </div>
                     </div>
+
+                    <p class="text-xs text-gray-400 text-center mt-8 italic px-4" data-i18n="text_ride_deletion_warning">
+                        Rides are deleted from the database 24-48 hours after completion - make sure to rate senders/driver during this time.                    </p>
                 </div>
             </main>
 
@@ -219,8 +222,7 @@
                     // Points & Times
                     const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
                     const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
-                    const fromTime = formatDate(ride.times[0]);
-                    const toTime = formatDate(ride.times[ride.times.length - 1]);
+                    const fromTime = (ride.times && ride.times[0]) ? formatDate(ride.times[0]) : "";
                     
                     // Stops (intermediate points)
                     const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
@@ -388,7 +390,6 @@
                                             <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                             <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                         </div>
-                                        <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
                                     </div>
                                 </div>
                             </div>
@@ -487,8 +488,7 @@
             // Route Info
             const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
             const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
-            const fromTime = formatDate(ride.times[0]);
-            const toTime = formatDate(ride.times[ride.times.length - 1]);
+            const fromTime = (ride.times && ride.times[0]) ? formatDate(ride.times[0]) : "";
             const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
 
             // Price Info
@@ -584,7 +584,6 @@
                                     <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
-                                <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
                             </div>
                         </div>
                     </div>

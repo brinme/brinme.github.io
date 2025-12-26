@@ -317,7 +317,7 @@
                         type: 'offered',
                         id: doc.id,
                         ...doc.data(),
-                        sortDate: new Date(doc.data().times[0])
+                        sortDate: (doc.data().times && doc.data().times[0]) ? new Date(doc.data().times[0]) : new Date(doc.data().date)
                     }));
 
                     // 2. Fetch Requests
@@ -338,7 +338,7 @@
                                     id: reqDoc.id,
                                     request: request,
                                     ride: ride,
-                                    sortDate: new Date(ride.times[0])
+                                    sortDate: (ride.times && ride.times[0]) ? new Date(ride.times[0]) : new Date(ride.date)
                                 });
                             }
                         } catch (e) {
@@ -401,8 +401,7 @@
             // Points & Times
             const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
             const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
-            const fromTime = formatDate(ride.times[0]);
-            const toTime = formatDate(ride.times[ride.times.length - 1]);
+            const fromTime = (ride.times && ride.times[0]) ? formatDate(ride.times[0]) : "";
             const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
 
             // Segment Info
@@ -578,7 +577,6 @@
                                     <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
-                                <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
                             </div>
                         </div>
                     </div>
@@ -606,8 +604,7 @@
             // Route Info
             const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
             const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
-            const fromTime = formatDate(ride.times[0]);
-            const toTime = formatDate(ride.times[ride.times.length - 1]);
+            const fromTime = (ride.times && ride.times[0]) ? formatDate(ride.times[0]) : "";
             const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
 
             // Price Info
@@ -694,7 +691,6 @@
                                     <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-wide">${localization.getText('label_to')}</p>
                                     <p class="font-bold text-lg text-gray-900 leading-tight">${toPoint.name}</p>
                                 </div>
-                                <p class="text-sm text-gray-500 font-medium text-right">${toTime}</p>
                             </div>
                         </div>
                     </div>

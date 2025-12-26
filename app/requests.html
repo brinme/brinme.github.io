@@ -236,6 +236,19 @@
 
             const isMe = auth.currentUser && auth.currentUser.uid === request.userId;
 
+            // Format Date
+            const formatDateOnly = (dateString) => {
+                if (!dateString) return "";
+                const date = new Date(dateString);
+                const day = date.getDate();
+                const month = date.toLocaleString(localization.currentLang, { month: 'short' });
+                const year = date.getFullYear();
+                return `${month} ${day}, ${year}`;
+            };
+            
+            const rideDate = ride.date || (ride.times && ride.times[0]);
+            const dateDisplay = rideDate ? formatDateOnly(rideDate) : "";
+
             const card = document.createElement('div');
             card.className = 'bg-white p-4 rounded-xl shadow-sm border border-gray-100';
             
@@ -261,7 +274,7 @@
             }
 
             card.innerHTML = `
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex justify-between items-start mb-3">
                     <div class="flex items-center gap-3">
                         <img src="${photo}" alt="${name}" class="w-10 h-10 rounded-full object-cover border-2 border-gray-100">
                         <div>
@@ -283,15 +296,27 @@
                             ` : ''}
                         </div>
                     </div>
-                    ${!isMe ? `
-                    <button onclick="openChat('${request.userId}', '${(requester.profile && requester.profile.media) ? requester.profile.media : ''}')" class="p-2 text-[#25A8D9] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                    </button>
-                    ` : ''}
+                    <div class="flex flex-col items-end gap-2">
+                        ${dateDisplay ? `<span class="text-xs font-bold text-gray-500 bg-gray-50 px-2 py-1 rounded-lg whitespace-nowrap">${dateDisplay}</span>` : ''}
+                        ${!isMe ? `
+                        <button onclick="openChat('${request.userId}', '${(requester.profile && requester.profile.media) ? requester.profile.media : ''}')" class="p-2 text-[#25A8D9] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </button>
+                        ` : ''}
+                    </div>
                 </div>
                 
                 <div class="flex justify-between items-center mb-3 p-3 bg-gray-50 rounded-lg">
-                    <span class="text-xs text-gray-500 font-medium">${localization.getText('label_parcels_simple')} (${typeName})</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-500 font-medium">${localization.getText('label_parcels_simple')} (${typeName})</span>
+                        ${request.fromLocation && request.toLocation ? `
+                            <div class="flex items-center gap-1 mt-1 text-xs text-gray-700 font-medium">
+                                <span>${request.fromLocation}</span>
+                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                <span>${request.toLocation}</span>
+                            </div>
+                        ` : ''}
+                    </div>
                     <span class="text-lg font-bold text-[#25A8D9]">${price} ${currency}</span>
                 </div>
 

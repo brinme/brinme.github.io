@@ -233,13 +233,15 @@
                 const filteredRides = rides.filter(ride => {
                     if (!ride.points || ride.points.length < 2) return false;
                     
-                    // fromQuery is handled by startPoints query (exact match), 
-                    // but we keep the check for the fallback case or if data is inconsistent
-                    const fromCity = normalize(ride.points[0].name);
-                    const toCity = normalize(ride.points[ride.points.length - 1].name);
+                    // Check route order: From index < To index
+                    const fromIndex = !fromQuery ? 0 : ride.points.findIndex(p => normalize(p.name).includes(fromQuery));
+                    const toIndex = !toQuery ? ride.points.length - 1 : ride.points.findIndex(p => normalize(p.name).includes(toQuery));
                     
-                    const matchFrom = !fromQuery || fromCity.includes(fromQuery);
-                    const matchTo = !toQuery || toCity.includes(toQuery);
+                    const matchFrom = fromIndex !== -1;
+                    const matchTo = toIndex !== -1;
+                    const matchOrder = fromIndex < toIndex;
+                    
+                    if (!matchFrom || !matchTo || !matchOrder) return false;
                     
                     // Date check for fallback/all rides case
                     let matchDate = true;
@@ -253,28 +255,14 @@
                     if (typeQuery) {
                         const segment = ride.rideSegments[0] || {};
                         
-                        // Calculate current usage
-                        let currentS = 0, currentM = 0, currentL = 0;
-                        if (segment.packages) {
-                            segment.packages.forEach(p => {
-                                if (p.type === 'S') currentS++;
-                                else if (p.type === 'M') currentM++;
-                                else if (p.type === 'L') currentL++;
-                                else currentS++; 
-                            });
-                        }
-
                         if (typeQuery === 'S') {
-                            if (!segment.maxS || segment.maxS <= 0) matchType = false;
-                            else if (currentS >= segment.maxS) matchType = false; // Full
+                            if (!segment.priceS || segment.priceS <= 0) matchType = false;
                         }
                         if (typeQuery === 'M') {
-                            if (!segment.maxM || segment.maxM <= 0) matchType = false;
-                            else if (currentM >= segment.maxM) matchType = false; // Full
+                            if (!segment.priceM || segment.priceM <= 0) matchType = false;
                         }
                         if (typeQuery === 'L') {
-                            if (!segment.maxL || segment.maxL <= 0) matchType = false;
-                            else if (currentL >= segment.maxL) matchType = false; // Full
+                            if (!segment.priceL || segment.priceL <= 0) matchType = false;
                         }
                     }
 
@@ -303,32 +291,64 @@
                         return `${month} ${day}, ${year}. ${hours}:${minutes}`;
                     };
 
+                    const formatDateOnly = (dateString) => {
+                        if (!dateString) return localization.getText('text_unknown_date');
+                        const date = new Date(dateString);
+                        const day = date.getDate();
+                        const month = date.toLocaleString(localization.currentLang, { month: 'short' });
+                        const year = date.getFullYear();
+                        return `${month} ${day}, ${year}`;
+                    };
+
                     filteredRides.forEach(ride => {
-                        const fromPoint = ride.points[0] || { name: localization.getText('text_unknown') };
-                        const toPoint = ride.points[ride.points.length - 1] || { name: localization.getText('text_unknown') };
-                        const fromTime = formatDate(ride.times[0]);
-                        const toTime = formatDate(ride.times[ride.times.length - 1]);
+                        // Determine display points based on search query
+                        let displayFromIndex = 0;
+                        let displayToIndex = ride.points.length - 1;
+
+                        if (fromQuery) {
+                            const foundIndex = ride.points.findIndex(p => normalize(p.name).includes(fromQuery));
+                            if (foundIndex !== -1) displayFromIndex = foundIndex;
+                        }
                         
-                        const stops = ride.points.slice(1, -1).map(p => p.name).join(', ');
+                        if (toQuery) {
+                            const foundIndex = ride.points.findIndex(p => normalize(p.name).includes(toQuery));
+                            if (foundIndex !== -1) displayToIndex = foundIndex;
+                        }
+
+                        const fromPoint = ride.points[displayFromIndex] || { name: localization.getText('text_unknown') };
+                        const toPoint = ride.points[displayToIndex] || { name: localization.getText('text_unknown') };
+                        
+                        // Show time if start point, otherwise show date
+                        let fromTime = "";
+                        if (displayFromIndex === 0 && ride.times && ride.times[0]) {
+                            fromTime = formatDate(ride.times[0]);
+                        } else {
+                            // Try to get date from ride.date or ride.times[0]
+                            const dateSource = ride.date || (ride.times && ride.times[0]);
+                            if (dateSource) {
+                                fromTime = formatDateOnly(dateSource);
+                            }
+                        }
+                        
+                        // We don't have arrival times anymore
+                        const toTime = "";
+                        
+                        // Stops between selected points
+                        const stopsList = ride.points.slice(displayFromIndex + 1, displayToIndex);
+                        const stops = stopsList.map(p => p.name).join(', ');
 
                         const segment = ride.rideSegments[0] || {};
                         const currency = segment.currency || "";
-                        
-                        const maxS = segment.maxS || 0;
-                        const maxM = segment.maxM || 0;
-                        const maxL = segment.maxL || 0;
                         
                         const priceS = segment.priceS || 0;
                         const priceM = segment.priceM || 0;
                         const priceL = segment.priceL || 0;
 
                         // Package Info Grid
-                        let packagesHtml = '';
-                        if (maxS > 0 || maxM > 0 || maxL > 0 || true) { // Always show grid
-                            packagesHtml = '<div class="grid grid-cols-3 gap-2 border-t border-gray-100 pt-4 mt-2">';
+                        let packagesHtml = '<div class="grid grid-cols-3 gap-2 border-t border-gray-100 pt-4 mt-2">';
                             
-                            // S
-                            if (priceS > 0) {
+                        // S
+                        if (priceS > 0) {
                                 packagesHtml += `
                                     <div class="text-center border-r border-gray-100 last:border-0">
                                         <div class="text-xs font-bold text-gray-400 mb-1">${localization.getText('option_small_simple')}</div>
@@ -378,8 +398,7 @@
                                 `;
                             }
                             
-                            packagesHtml += '</div>';
-                        }
+                        packagesHtml += '</div>';
 
                         const rideEl = document.createElement('div');
                         rideEl.className = 'bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow';
@@ -441,8 +460,8 @@
 
                             ${packagesHtml}
                             
-                            <button onclick="window.location.href='ride-details.html?id=${ride.rideId}'" class="w-full mt-6 py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors shadow-sm">
-                                ${localization.getText('btn_request_delivery')}
+                            <button onclick="window.location.href='ride-details.html?id=${ride.rideId}&from=${encodeURIComponent(fromCanonical || "")}&to=${encodeURIComponent(toCanonical || "")}'" class="w-full mt-6 py-3 bg-[#25A8D9] text-white font-bold rounded-xl hover:bg-[#1e90c7] transition-colors shadow-sm">
+                                ${localization.getText('btn_view_details')}
                             </button>
                         `;
                         resultsList.appendChild(rideEl);
@@ -450,8 +469,9 @@
                 }
 
             } catch (error) {
+                console.error(error);
                 showToast('error_generic', 'error');
-                resultsList.innerHTML = `<p class="text-red-500 text-center">Error loading rides.</p>`;
+                resultsList.innerHTML = `<p class="text-red-500 text-center">Error loading rides: ${error.message}</p>`;
             }
         });
 
