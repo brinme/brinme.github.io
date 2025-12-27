@@ -240,8 +240,8 @@
                         if (isTelegram) {
                             // Auto-create profile for Telegram users
                             const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-                            const firstName = tgUser?.first_name || "Telegram";
-                            const lastName = tgUser?.last_name || "User";
+                            const firstName = tgUser?.first_name || "User";
+                            const lastName = tgUser?.last_name || "";
                             const photoUrl = tgUser?.photo_url || "";
                             const username = tgUser?.username || "";
                             
