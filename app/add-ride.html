@@ -113,7 +113,7 @@
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                                     <svg class="w-5 h-5 text-[#25A8D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                                    <span data-i18n="stat_packages">Packages and Prices</span>
+                                    <span data-i18n="packages_prices_text">Packages and Prices</span>
                                 </h3>
                                 <div class="w-24">
                                     <select id="currency" class="w-full px-2 py-1 border border-gray-200 rounded-lg focus:ring-[#25A8D9] focus:border-[#25A8D9] text-sm bg-white">
@@ -275,12 +275,12 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" data-i18n="label_stop_city">Stop City</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">${localization.getText('label_stop_city')}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
                         </div>
-                        <input type="text" class="stop-location w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white" placeholder="e.g. Lodz" id="${stopId}-loc">
+                        <input type="text" class="stop-location w-full pl-8 px-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#25A8D9] focus:border-transparent transition-all bg-white" placeholder="${localization.getText('placeholder_city')}" id="${stopId}-loc">
                     </div>
                 </div>
             `;
