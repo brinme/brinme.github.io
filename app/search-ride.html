@@ -166,8 +166,7 @@
             }
         });
 
-        searchForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        const executeSearch = async () => {
             const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
             
             // Canonicalize inputs
@@ -214,7 +213,6 @@
                     q = query(collection(db, "rides"), ...constraints);
                 } else {
                     // Fallback: Fetch all rides if no start city specified
-                    // (Ideally should limit this or require at least one filter)
                     const constraints = [];
                     if (dateQuery) {
                         constraints.push(where("date", "==", dateQuery));
@@ -250,7 +248,7 @@
                         matchDate = rideDate === dateQuery;
                     }
 
-                    // Type check
+                    // Answer: Type check
                     let matchType = true;
                     if (typeQuery) {
                         const segment = ride.rideSegments[0] || {};
@@ -269,15 +267,43 @@
                     return matchFrom && matchTo && matchDate && matchType;
                 });
 
+                resultsList.innerHTML = '';
+
+                // Render Date Navigation
+                if (dateQuery) {
+                    const dateObj = new Date(dateQuery);
+                    const day = dateObj.getDate();
+                    const month = dateObj.toLocaleString(localization.currentLang, { month: 'short' });
+                    const year = dateObj.getFullYear();
+                    const displayDate = `${month} ${day}, ${year}`;
+
+                    const navDiv = document.createElement('div');
+                    navDiv.className = "flex items-center justify-between mb-4 bg-white p-3 rounded-xl shadow-sm border border-gray-100";
+                    navDiv.innerHTML = `
+                        <button id="prevDateBtn" type="button" class="p-2 text-gray-500 hover:text-[#25A8D9] transition-colors rounded-full hover:bg-gray-50">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        <div class="font-bold text-gray-800 text-lg">${displayDate}</div>
+                        <button id="nextDateBtn" type="button" class="p-2 text-gray-500 hover:text-[#25A8D9] transition-colors rounded-full hover:bg-gray-50">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    `;
+                    resultsList.appendChild(navDiv);
+
+                    // Add listeners for date navigation
+                    document.getElementById('prevDateBtn').onclick = () => changeDate(-1);
+                    document.getElementById('nextDateBtn').onclick = () => changeDate(1);
+                }
+
                 if (filteredRides.length === 0) {
-                    resultsList.innerHTML = `
+                    const noResults = document.createElement('div');
+                    noResults.innerHTML = `
                         <div class="text-center py-8 text-gray-500">
                             <p>${localization.getText('text_no_rides_found_criteria')}</p>
                         </div>
                     `;
+                    resultsList.appendChild(noResults);
                 } else {
-                    resultsList.innerHTML = '';
-
                     // Helper for date formatting
                     const formatDate = (dateString) => {
                         if (!dateString) return localization.getText('text_unknown_date');
@@ -473,6 +499,20 @@
                 showToast('error_generic', 'error');
                 resultsList.innerHTML = `<p class="text-red-500 text-center">Error loading rides: ${error.message}</p>`;
             }
+        };
+
+        const changeDate = (days) => {
+            const dateInput = document.getElementById('searchDate');
+            if (!dateInput.value) return;
+            const current = new Date(dateInput.value);
+            current.setDate(current.getDate() + days);
+            dateInput.value = current.toISOString().split('T')[0];
+            executeSearch();
+        };
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            executeSearch();
         });
 
         const handleLogout = async () => {
